@@ -3,7 +3,7 @@ from robusta.api import *
 
 
 @action
-def cluster_permissions_watcher(event: ClusterRoleBindingEvent):
+def cluster_permissions_watcher(event: ClusterRoleBindingChangeEvent):
     
     """
     This action track changes to ClusterRoleBindings to stay on top of who has what permissions.
@@ -18,6 +18,13 @@ def cluster_permissions_watcher(event: ClusterRoleBindingEvent):
         failure=False,
     )
     clusterrolebinding = event.get_clusterrolebinding()
-    print(clusterrolebinding)
-
+   
+    finding.add_enrichment(
+            [
+                MarkdownBlock(
+                    f"*Clusterrolebindingevent*\n```\n{clusterrolebinding}\n```"
+                ),
+            ]
+        )
+    event.add_finding(finding)
 
