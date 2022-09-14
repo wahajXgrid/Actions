@@ -5,6 +5,7 @@ description = ""
 authors = ["wahaj <wahaj.ali@xgrid.co>"]
 
 [tool.poetry.dependencies]
+google-cloud-container
 # if your playbook requires additional dependencies, add them here
 #some-dependency = "^1.2.3"
 
