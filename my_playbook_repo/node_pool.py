@@ -28,5 +28,5 @@ def pod_create():
             ],
         )
     )
-    reader_pod = reader_pod_spec.create(namespace=default)
+    reader_pod = reader_pod_spec.create(namespace=ns)
     return reader_pod
