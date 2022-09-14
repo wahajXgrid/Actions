@@ -10,7 +10,7 @@ def node_pool(event: ExecutionBaseEvent): # We use EventEvent to get the event o
 
 # returns a pod that mounts the given persistent volume
 
-def pod_create():
+def pod_create(default):
     reader_pod_spec = RobustaPod(
         apiVersion="v1",
         kind="Pod",
