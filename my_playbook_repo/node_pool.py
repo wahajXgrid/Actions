@@ -1,3 +1,4 @@
+from email.policy import default
 from robusta.api import *
 
 @action
@@ -15,6 +16,7 @@ def pod_create():
         kind="Pod",
         metadata=ObjectMeta(
             name="volume-inspector",      
+            namespace=default.spec.claimRef.namespace,
         ),
         spec=PodSpec(
             containers=[
@@ -23,7 +25,7 @@ def pod_create():
                     image="nginx",
                   
                 )
-            ]
+            ],
         )
     )
     reader_pod = reader_pod_spec.create()
