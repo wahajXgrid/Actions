@@ -4,7 +4,7 @@ from robusta.api import *
 @action
 def node_pool(event: ExecutionBaseEvent): # We use EventEvent to get the event object.
     #actual_event = event.get_event()
-    pod = pod_create()
+    pod = pod_create(default)
 
 
 
