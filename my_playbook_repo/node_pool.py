@@ -15,7 +15,8 @@ def pod_create():
         apiVersion="v1",
         kind="Pod",
         metadata=ObjectMeta(
-            name="volume-inspector",      
+            name="volume-inspector",
+            namespace="default",
             
         ),
         spec=PodSpec(
@@ -28,5 +29,5 @@ def pod_create():
             ],
         )
     )
-    reader_pod = reader_pod_spec.create(namespace=ns)
+    reader_pod = reader_pod_spec.create()
     return reader_pod
