@@ -16,7 +16,7 @@ def pod_create():
         kind="Pod",
         metadata=ObjectMeta(
             name="volume-inspector",      
-            namespace=default.spec.claimRef.namespace,
+            namespace=default,
         ),
         spec=PodSpec(
             containers=[
