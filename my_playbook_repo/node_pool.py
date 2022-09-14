@@ -4,13 +4,13 @@ from robusta.api import *
 @action
 def node_pool(event: ExecutionBaseEvent): # We use EventEvent to get the event object.
     #actual_event = event.get_event()
-    pod = pod_create(default=default)
+    pod = pod_create()
 
 
 
 # returns a pod that mounts the given persistent volume
 
-def pod_create(default):
+def pod_create():
     reader_pod_spec = RobustaPod(
         apiVersion="v1",
         kind="Pod",
@@ -28,5 +28,5 @@ def pod_create(default):
             ],
         )
     )
-    reader_pod = reader_pod_spec.create()
+    reader_pod = reader_pod_spec.create(default)
     return reader_pod
