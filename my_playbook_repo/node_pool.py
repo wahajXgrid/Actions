@@ -1,14 +1,19 @@
 
 from robusta.api import *
-
+import google.auth
 from google.cloud.container_v1beta1 import ClusterManagerClient, GetClusterRequest
 from kubernetes import client
 
 
 @action
 def node_pool(event: ExecutionBaseEvent):
+
+    credentials, project = google.auth.default(
+    scopes=['https://www.googleapis.com/auth/cloud-platform',])
+
+    credentials.refresh(google.auth.transport.requests.Request())
     # Create a client
-    client = ClusterManagerClient()
+    client = ClusterManagerClient(credentials=credentials)
 
     # Initialize request argument(s)
     request = GetClusterRequest(
