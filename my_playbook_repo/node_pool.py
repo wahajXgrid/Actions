@@ -6,10 +6,8 @@ import google.auth
 
 
 @action
-# We use EventEvent to get the event object.
 def node_pool(event: ExecutionBaseEvent):
-    #actual_event = event.get_event()
-    nodepool = GetNodePoolRequest()
+    
     g_creds = google.auth.default()
     service = discovery.build('container', 'v1', credentials=g_creds)
 
