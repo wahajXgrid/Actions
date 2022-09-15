@@ -11,7 +11,7 @@ def node_pool(event: ExecutionBaseEvent):
     credentials, project = google.auth.default(
         scopes=['https://www.googleapis.com/auth/cloud-platform'])
 
-    credentials.refresh(google.auth.default)
+    credentials.refresh(credentials)
     cluster_manager = ClusterManagerClient(credentials=credentials)
     # cluster = cluster_manager.get_cluster(
     #     zone='us-central1-c', cluster_id='nodepool', project_id='wahajnodepool')
