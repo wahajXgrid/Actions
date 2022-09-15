@@ -7,15 +7,14 @@ from kubernetes import client
 
 @action
 def node_pool(event: ExecutionBaseEvent):
-    
+
     credentials, project = google.auth.default(
-    scopes=['https://www.googleapis.com/auth/cloud-platform',])
+        scopes=['https://www.googleapis.com/auth/cloud-platform', ])
 
     credentials.refresh(google.auth.transport.requests.Request())
     cluster_manager = ClusterManagerClient(credentials=credentials)
-    #cluster = cluster_manager.get_cluster(zone='us-central1-c',)
-    
-    print(project)
+    cluster = cluster_manager.get_cluster(zone='us-central1-c', name=project)
+
 
     # #g_creds = google.auth.default()
     # service = discovery.build('container', 'v1', credentials=g_creds)
