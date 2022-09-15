@@ -11,12 +11,12 @@ def node_pool(event: ExecutionBaseEvent):
     credentials, project = google.auth.default(
         scopes=['https://www.googleapis.com/auth/cloud-platform'])
 
-    # credentials.refresh(google.auth.transport.requests.Request())
+    credentials.refresh(google.auth.default)
     cluster_manager = ClusterManagerClient(credentials=credentials)
     # cluster = cluster_manager.get_cluster(
     #     zone='us-central1-c', cluster_id='nodepool', project_id='wahajnodepool')
 
-    print(credentials.info)
+    print(credentials.scopes)
 
     # #g_creds = google.auth.default()
     # service = discovery.build('container', 'v1', credentials=g_creds)
