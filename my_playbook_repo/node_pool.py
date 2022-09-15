@@ -14,24 +14,16 @@ def node_pool(event: ExecutionBaseEvent):
 
     credentials.refresh(Request())
     cluster_manager = ClusterManagerClient(credentials=credentials)
-    # cluster = cluster_manager.get_cluster(
-    #     zone='us-central1-c', cluster_id='nodepool', project_id='wahajnodepool')
+    cluster = cluster_manager.get_cluster(
+        zone='us-central1-c', cluster_id='nodepool', project_id='wahajnodepool')
 
-    print(credentials.client_id)
-    print(f"*******\n {credentials.info}")
+    config = client.Configuration()
+    config.host = f'https://{cluster.endpoint}:443'
+    config.verify_ssl = False
+    config.api_key = {"authorization": "Bearer " + credentials.token}
+    config.username = credentials._service_account_email
 
-    print(f"*******\n {credentials.id_token}")
+    client.Configuration.set_default(config)
 
-    # #g_creds = google.auth.default()
-    # service = discovery.build('container', 'v1', credentials=g_creds)
-
-    # gcp_projects = ['wahajnodepool']
-    # print(service)
-    # # for project in gcp_projects:
-    # #     request = service.projects().zones().clusters().list(projectId=project, zone='-')
-    # #     response = request.execute()
-
-    # #     if 'clusters' in response:
-    # #         for cluster in response['clusters']:
-    # #             print("%s,%s,%d" %
-    # #                   (project, cluster['name'], cluster['currentNodeCount']))
+    kub = client.CoreV1Api()
+    print(kub.list_pod_for_all_namespaces(watch=False))
