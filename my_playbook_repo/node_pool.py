@@ -9,7 +9,7 @@ from kubernetes import client
 def node_pool(event: ExecutionBaseEvent):
 
     credentials, project = google.auth.default(
-        scopes=['https://www.googleapis.com/auth/cloud-platform', ])
+        scopes=['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/devstorage.read_only'])
 
     credentials.refresh(google.auth.transport.requests.Request())
     cluster_manager = ClusterManagerClient(credentials=credentials)
