@@ -1,6 +1,7 @@
 
 from robusta.api import *
-import google.auth
+from google.auth import default
+from google.auth.transport.requests import Request
 from google.cloud.container_v1 import ClusterManagerClient
 from kubernetes import client
 
@@ -8,10 +9,10 @@ from kubernetes import client
 @action
 def node_pool(event: ExecutionBaseEvent):
 
-    credentials, project = google.auth.default(
+    credentials, project = default(
         scopes=['https://www.googleapis.com/auth/cloud-platform'])
 
-    credentials.refresh(credentials)
+    credentials.refresh(Request())
     cluster_manager = ClusterManagerClient(credentials=credentials)
     # cluster = cluster_manager.get_cluster(
     #     zone='us-central1-c', cluster_id='nodepool', project_id='wahajnodepool')
