@@ -18,6 +18,9 @@ def node_pool(event: ExecutionBaseEvent):
         zone='us-central1-c', cluster_id='nodepool', project_id='wahajnodepool')
 
     print(credentials.client_id)
+    print(f"*******\n {credentials.info}")
+
+    print(f"*******\n {credentials.id_token}")
 
     # #g_creds = google.auth.default()
     # service = discovery.build('container', 'v1', credentials=g_creds)
