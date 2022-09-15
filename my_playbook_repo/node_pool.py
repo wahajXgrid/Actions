@@ -1,22 +1,31 @@
 
 from robusta.api import *
-from googleapiclient import discovery
 import google.auth
+from google.cloud.container_v1 import ClusterManagerClient
+from kubernetes import client
 
 
 @action
 def node_pool(event: ExecutionBaseEvent):
     
-    g_creds = google.auth.default()
-    service = discovery.build('container', 'v1', credentials=g_creds)
+    credentials, project = google.auth.default(
+    scopes=['https://www.googleapis.com/auth/cloud-platform',])
 
-    gcp_projects = ['wahajnodepool']
-    print(service)
-    # for project in gcp_projects:
-    #     request = service.projects().zones().clusters().list(projectId=project, zone='-')
-    #     response = request.execute()
+    credentials.refresh(google.auth.transport.requests.Request())
+    print(credentials)
 
-    #     if 'clusters' in response:
-    #         for cluster in response['clusters']:
-    #             print("%s,%s,%d" %
-    #                   (project, cluster['name'], cluster['currentNodeCount']))
+
+
+    # #g_creds = google.auth.default()
+    # service = discovery.build('container', 'v1', credentials=g_creds)
+
+    # gcp_projects = ['wahajnodepool']
+    # print(service)
+    # # for project in gcp_projects:
+    # #     request = service.projects().zones().clusters().list(projectId=project, zone='-')
+    # #     response = request.execute()
+
+    # #     if 'clusters' in response:
+    # #         for cluster in response['clusters']:
+    # #             print("%s,%s,%d" %
+    # #                   (project, cluster['name'], cluster['currentNodeCount']))
