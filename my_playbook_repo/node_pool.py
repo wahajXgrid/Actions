@@ -9,10 +9,9 @@ from google.oauth2 import service_account
 @action
 def node_pool(event: ExecutionBaseEvent):
 
-    credentials = service_account.Credentials \
-        .from_service_account_file('wahajnodepool-4be11b978d12.json')
+    credentials = service_account.Credentials.from_service_account_file('wahajnodepool-4be11b978d12.json')
 
-
+    
     # credentials, project = google.auth.default(
     # scopes=['https://www.googleapis.com/auth/cloud-platform',])
 
