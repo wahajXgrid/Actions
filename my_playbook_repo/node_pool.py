@@ -1,7 +1,7 @@
 
 from robusta.api import *
 import google.auth
-from google.cloud.container_v1 import ClusterManagerClient
+
 from kubernetes import client
 
 
