@@ -14,8 +14,8 @@ def node_pool(event: ExecutionBaseEvent):
 
     credentials.refresh(Request())
     cluster_manager = ClusterManagerClient(credentials=credentials)
-    cluster = cluster_manager.get_cluster(
-        zone='us-central1-c', cluster_id='nodepool', project_id='wahajnodepool')
+    # cluster = cluster_manager.get_cluster(
+    #     zone='us-central1-c', cluster_id='nodepool', project_id='wahajnodepool')
 
     print(credentials.client_id)
     print(f"*******\n {credentials.info}")
