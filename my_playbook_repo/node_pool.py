@@ -1,6 +1,5 @@
 
 from robusta.api import *
-from google.cloud.container import NodePool, GetClusterRequest, GetServerConfigRequest, GetNodePoolRequest
 from googleapiclient import discovery
 import google.auth
 
