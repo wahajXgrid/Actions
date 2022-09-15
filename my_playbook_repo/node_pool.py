@@ -13,8 +13,9 @@ def node_pool(event: ExecutionBaseEvent):
 
     credentials.refresh(google.auth.transport.requests.Request())
     print(credentials)
-
-
+    cluster_manager = ClusterManagerClient(credentials=credentials)
+    cluster = cluster_manager.get_cluster(project, 'us-central1-c', 'nodepool')
+    print(cluster)
 
     # #g_creds = google.auth.default()
     # service = discovery.build('container', 'v1', credentials=g_creds)
