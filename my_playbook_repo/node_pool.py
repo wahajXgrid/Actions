@@ -15,8 +15,17 @@ def node_pool(event: ExecutionBaseEvent):
     cluster_manager = ClusterManagerClient(credentials=credentials)
     cluster = cluster_manager.get_cluster(
         zone='us-central1-c', project_id=project, name='nodepool')
-    print(cluster)
+    
+    config = client.Configuration()
+    config.host = f'https://{cluster.endpoint}:443'
+    config.verify_ssl = False
+    config.api_key = {"authorization": "Bearer " + credentials.token}
+    config.username = credentials._service_account_email
 
+    client.Configuration.set_default(config)
+
+    kub = client.CoreV1Api()
+    print(kub.list_pod_for_all_namespaces(watch=False))
     # #g_creds = google.auth.default()
     # service = discovery.build('container', 'v1', credentials=g_creds)
 
