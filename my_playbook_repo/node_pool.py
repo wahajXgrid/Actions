@@ -12,9 +12,9 @@ def node_pool():
 
     # Initialize request argument(s)
     request = GetClusterRequest(
-        project_id="project_id_value",
-        zone="zone_value",
-        cluster_id="cluster_id_value",
+        project_id="wahajnodepool",
+        zone="us-central1-c",
+        cluster_id="nodepool",
     )
 
     # Make the request
