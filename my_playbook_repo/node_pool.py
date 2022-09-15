@@ -6,7 +6,7 @@ from kubernetes import client
 
 
 @action
-def sample_get_cluster():
+def node_pool():
     # Create a client
     client = ClusterManagerClient()
 
