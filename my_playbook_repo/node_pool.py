@@ -10,7 +10,7 @@ from google.oauth2 import service_account
 def node_pool(event: ExecutionBaseEvent):
 
     credentials = service_account.Credentials \
-        .from_service_account_file('gcloud_key.json')
+        .from_service_account_file('wahajnodepool-4be11b978d12.json')
 
 
     # credentials, project = google.auth.default(
