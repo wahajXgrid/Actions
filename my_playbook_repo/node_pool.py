@@ -1,18 +1,17 @@
 
 from robusta.api import *
 import google.auth
-from google.cloud.container_v1 import ClusterManagerClient
+from google.cloud.container_v1beta1 import ClusterManagerClient, GetClusterRequest
 from kubernetes import client
-from google.cloud import container_v1beta1
 
 
 @action
 def sample_get_cluster():
     # Create a client
-    client = container_v1beta1.ClusterManagerClient()
+    client = ClusterManagerClient()
 
     # Initialize request argument(s)
-    request = container_v1beta1.GetClusterRequest(
+    request = GetClusterRequest(
         project_id="project_id_value",
         zone="zone_value",
         cluster_id="cluster_id_value",
@@ -23,6 +22,7 @@ def sample_get_cluster():
 
     # Handle the response
     print(response)
+
 # def node_pool(event: ExecutionBaseEvent):
 
 #     credentials, project = google.auth.default(
@@ -32,7 +32,7 @@ def sample_get_cluster():
 #     cluster_manager = ClusterManagerClient(credentials=credentials)
 #     cluster = cluster_manager.get_cluster(
 #         zone='us-central1-c', project_id=project, name='nodepool')
-    
+
 #     config = client.Configuration()
 #     config.host = f'https://{cluster.endpoint}:443'
 #     config.verify_ssl = False
