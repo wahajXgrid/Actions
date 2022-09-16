@@ -7,14 +7,14 @@ from kubernetes import client, config
 @action
 def node_pool(event: ExecutionBaseEvent):
     project_id = 'wahajnodepool'
-    zone = 'us-central1-c	'
+    zone = 'us-central1-c'
     cluster_id = 'nodepool'
 
     credentials = compute_engine.Credentials()
 
     gclient: ClusterManagerClient = container.ClusterManagerClient(credentials=credentials)
 
-    cluster = gclient.get_cluster('wahajnodepool','us-central1-c','nodepool')
+    cluster = gclient.get_cluster(cluster_id='nodepool',zone='us-central1-c',project_id='wahajnodepool')
     cluster_endpoint = cluster.endpoint
     print("*** CLUSTER ENDPOINT ***")
     print(cluster_endpoint)
