@@ -14,7 +14,7 @@ def node_pool(event: ExecutionBaseEvent):
 
     gclient: ClusterManagerClient = container.ClusterManagerClient(credentials=credentials)
 
-    cluster = gclient.get_cluster(project_id,zone,cluster_id)
+    cluster = gclient.get_cluster('wahajnodepool','us-central1-c','nodepool')
     cluster_endpoint = cluster.endpoint
     print("*** CLUSTER ENDPOINT ***")
     print(cluster_endpoint)
