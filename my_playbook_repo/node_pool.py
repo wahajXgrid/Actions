@@ -4,7 +4,7 @@ from google.cloud.container_v1 import ClusterManagerClient
 from kubernetes import client
 
 @action
-def test_gke(request,event: ExecutionBaseEvent):
+def test_gke(event: ExecutionBaseEvent):
     project_id = "wahajnodepool"
     zone = "us-central1-c"
     cluster_id = "nodepool"
