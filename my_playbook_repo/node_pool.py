@@ -19,14 +19,6 @@ def node_pool(event: ExecutionBaseEvent):
     print("*** CLUSTER ENDPOINT ***")
     print(cluster_endpoint)
 
-    cluster_master_auth = cluster.master_auth
-    print("*** CLUSTER MASTER USERNAME PWD ***")
-    cluster_username = cluster_master_auth.username
-    cluster_password = cluster_master_auth.password
-    print("USERNAME : %s - PASSWORD : %s" % (cluster_username, cluster_password))
-
-
-
 
 
 
