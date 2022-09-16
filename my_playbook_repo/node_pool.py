@@ -63,13 +63,14 @@ def node_pool(event: ExecutionBaseEvent):
     cluster_id = 'nodepool'
 
     credentials = compute_engine.Credentials()
+    print("****",credentials)
+    
+    # gclient: ClusterManagerClient = container.ClusterManagerClient(credentials=credentials)
 
-    gclient: ClusterManagerClient = container.ClusterManagerClient(credentials=credentials)
-
-    cluster = gclient.get_cluster(cluster_id='nodepool',zone='us-central1-c',project_id='wahajnodepool')
-    cluster_endpoint = cluster.endpoint
-    print("*** CLUSTER ENDPOINT ***")
-    print(cluster_endpoint)
+    # cluster = gclient.get_cluster(cluster_id='nodepool',zone='us-central1-c',project_id='wahajnodepool')
+    # cluster_endpoint = cluster.endpoint
+    # print("*** CLUSTER ENDPOINT ***")
+    # print(cluster_endpoint)
 
 
 
