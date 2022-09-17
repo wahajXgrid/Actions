@@ -1,6 +1,6 @@
 import gcloud_config_helper
 from robusta.api import *
-from google.auth import compute_v1
+from google.cloud import compute_v1
 # import pulumi
 # import pulumi_gcp as gcp
 
