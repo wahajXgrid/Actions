@@ -11,6 +11,7 @@ google-cloud-container = "^2.11.2"
 pulumi = "^3.40.0"
 pulumi-gcp = "^6.37.0"
 gcloud-config-helper = "^0.3.1"
+google-cloud-compute = "^1.5.2"
 # if your playbook requires additional dependencies, add them here
 #some-dependency = "^1.2.3"
 
