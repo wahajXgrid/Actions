@@ -4,4 +4,5 @@ from robusta.api import *
 def job_restart(event: JobEvent):
     job_event = event.get_job()
     job_event.delete()
-    
+    print(job_event)
+
