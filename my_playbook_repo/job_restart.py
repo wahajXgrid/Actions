@@ -27,6 +27,7 @@ def job_restart(event: JobEvent):
                         image=job_event.spec.template.spec.containers[0].image,
                     ),
                     ],
+                restartPolicy= job_event.spec.template.spec.restartPolicy
                 ),
             ),
 
