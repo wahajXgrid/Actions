@@ -4,14 +4,8 @@ from robusta.api import *
 
 
 @action
-def job_restart(event: JobEvent):
+def job_restart(event: JobChangeEvent):
     job_event = event.get_job()
-
-    # deep_copy = deepcopy(job_event)
-    # job_event.delete()
-    # print('*******')
-    # print(deep_copy)
-    # deep_copy.create()
     job_spec = RobustaJob(
         metadata=ObjectMeta(
             name=job_event.metadata.name,
@@ -19,12 +13,20 @@ def job_restart(event: JobEvent):
             labels=job_event.metadata.labels,
         ),
         spec=JobSpec(
+            completions=job_event.spec.completions,
+            parallelism=job_event.spec.parallelism,
             backoffLimit=job_event.spec.backoffLimit,
+            manualSelector=job_event.spec.manualSelector,
+            activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
+            selector=job_event.spec.selector,
+            ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
+            
             template=PodTemplateSpec(
                 spec=PodSpec(
                     containers=[Container(
                         name=job_event.spec.template.spec.containers[0].name,
                         image=job_event.spec.template.spec.containers[0].image,
+
                     ),
                     ],
                 restartPolicy= job_event.spec.template.spec.restartPolicy
@@ -33,10 +35,6 @@ def job_restart(event: JobEvent):
 
         ),
     )
-    job_event.delete()
-    print(job_spec)
-    print('*******')
-    print('*******')
-    print('*******')
+    job_event.delete() 
     job_spec.create()
-    print(job_spec)
+
