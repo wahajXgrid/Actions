@@ -16,16 +16,20 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
             completions=job_event.spec.completions,
             parallelism=job_event.spec.parallelism,
             backoffLimit=job_event.spec.backoffLimit,
-            manualSelector=job_event.spec.manualSelector,
+           
             activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
-            selector=job_event.spec.selector,
+            
             ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
             template=PodTemplateSpec(
                 spec=PodSpec(
                     containers=[Container(
                         name=job_event.spec.template.spec.containers[0].name,
                         image=job_event.spec.template.spec.containers[0].image,
-
+                        args=job_event.spec.template.spec.containers[0].args,
+                        command=job_event.spec.template.spec.containers[0].command,
+                        env=job_event.spec.template.spec.containers[0].env,
+                        envFrom=job_event.spec.template.spec.containers[0].envFrom,
+                        imagePullPolicy=job_event.spec.template.spec.containers[0].imagePullPolicy,
 
                     ),
                     ],
