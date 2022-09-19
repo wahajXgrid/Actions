@@ -4,7 +4,7 @@ from robusta.api import *
 
 
 @action
-def job_restart(event: JobChangeEvent):
+def job_restart(event: JobEvent, params: EventEnricherParams):
     job_event = event.get_job()
     job_spec = RobustaJob(
         metadata=ObjectMeta(
@@ -25,7 +25,7 @@ def job_restart(event: JobChangeEvent):
                     containers=[Container(
                         name=job_event.spec.template.spec.containers[0].name,
                         image=job_event.spec.template.spec.containers[0].image,
-                        
+
 
                     ),
                     ],
