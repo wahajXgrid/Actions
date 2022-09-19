@@ -1,4 +1,2 @@
 #!/bin/bash
-kubectl scale deployment -n robusta robusta-runner --replicas 0
-kubectl scale deployment -n robusta robusta-runner --replicas 1
-
+kubectl delete pod -n robusta robusta-runner-6f8fcbcc58 --force
