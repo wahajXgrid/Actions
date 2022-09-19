@@ -13,3 +13,11 @@ def job_restart(event: JobEvent):
     # print('*******')
     # print(deep_copy)
     # deep_copy.create()
+    job_spec = RobustaJob(
+        metadata= job_event.metadata,
+        spec= job_event.spec,
+    
+    )
+    job_event.delete()
+    job_spec.create()
+    print(job_spec)
