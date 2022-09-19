@@ -20,12 +20,12 @@ def job_restart(event: JobChangeEvent):
             activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
             selector=job_event.spec.selector,
             ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
-            
             template=PodTemplateSpec(
                 spec=PodSpec(
                     containers=[Container(
                         name=job_event.spec.template.spec.containers[0].name,
                         image=job_event.spec.template.spec.containers[0].image,
+                        
 
                     ),
                     ],
