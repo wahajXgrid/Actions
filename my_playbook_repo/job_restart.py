@@ -9,3 +9,4 @@ def job_restart(event: JobEvent):
     job_event.delete()
     print('*******')
     print(deep_copy)
+    deep_copy.create()
