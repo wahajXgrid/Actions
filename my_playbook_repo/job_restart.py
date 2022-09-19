@@ -19,5 +19,6 @@ def job_restart(event: JobEvent):
     
     )
     job_event.delete()
-    job_spec.create()
     print(job_spec)
+    # job_spec.create()
+    # print(job_spec)
