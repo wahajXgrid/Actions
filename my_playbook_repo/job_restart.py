@@ -7,8 +7,12 @@ from robusta.api import *
 @action
 def job_restart(event: JobEvent, params: EventEnricherParams):
     job_event = event.get_job().status.failed
-    print ("*****************")
-    print(job_event)
+    if job_event > 1:     
+        print ("*****************")
+        print("FAILED")
+    else:
+        print ("*****************")
+        print("Succeed")
     # job_spec = RobustaJob(
     #     metadata=ObjectMeta(
     #         name=job_event.metadata.name,
