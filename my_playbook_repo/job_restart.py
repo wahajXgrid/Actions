@@ -11,9 +11,9 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
         print ("*****************")
         print("FAILED")
         print(event.get_job)
-        PodEvent.get_pod()
+        pod = PodEvent.get_pod('topics-etl-5wvwd')
         # pod = PodEvent.get_pod(self = any)
-        # print(pod)
+        print(pod)
     else:
         print ("*****************")
         print("Succeed")
