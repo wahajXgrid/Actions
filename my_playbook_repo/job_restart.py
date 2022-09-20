@@ -6,7 +6,7 @@ from robusta.api import *
 
 @action
 def job_restart(event: JobEvent, params: EventEnricherParams):
-    job_event = event.get_job()
+    job_event = event.get_scheduler()
     print ("*****************")
     print(job_event)
     # job_spec = RobustaJob(
