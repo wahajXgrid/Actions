@@ -10,8 +10,9 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
     if job_event is not None:     
         print ("*****************")
         print("FAILED")
-        pod = PodEvent.get_pod(self = any)
-        print(pod)
+        print(job_event)
+        # pod = PodEvent.get_pod(self = any)
+        # print(pod)
     else:
         print ("*****************")
         print("Succeed")
