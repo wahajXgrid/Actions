@@ -7,7 +7,7 @@ from robusta.api import *
 @action
 def job_restart(event: JobEvent, params: EventEnricherParams):
     job_event = event.get_job().status.failed
-    if job_event > 1:     
+    if job_event is not None:     
         print ("*****************")
         print("FAILED")
     else:
