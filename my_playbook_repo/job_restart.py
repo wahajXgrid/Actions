@@ -1,3 +1,4 @@
+from ast import Break
 from copy import copy
 from pdb import Restart
 from robusta.api import *
@@ -10,7 +11,12 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
     if job is not None:
         pod = get_job_pod(event.get_job().metadata.namespace,
                           event.get_job().metadata.name)
-        if pod.status.containerStatuses[0].state.terminated.reason == 'Error':
+        status_flag = False
+        for status in pod.status.containerStatuses :
+            if status.state.terminated.reason == 'Error':
+                status_flag = True
+                break
+        if status_flag:
             print("han bhai theek hy")
             container_list = get_container_list(
                 job_event.spec.template.spec.containers)
@@ -40,8 +46,7 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
             )
             job_event.delete()
             job_spec.create()
-        else:
-            print("nh bhai")
+     
 
     else:
         print("*****************")
