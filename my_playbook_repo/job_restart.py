@@ -12,7 +12,7 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
         print("FAILED")
         print(event.get_job)
         #pod = get_job_pod(event.get_job().spec.template.metadata.namespace)
-        pod = event.get_job().spec.template.metadata.namespace
+        pod = event.get_job().metadata.namespace
         print(pod)
     else:
         print ("*****************")
