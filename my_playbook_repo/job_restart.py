@@ -3,15 +3,18 @@ from pdb import Restart
 from robusta.api import *
 
 
-
 @action
 def job_restart(event: JobEvent, params: EventEnricherParams):
     job = event.get_job().status.failed
     job_event = event.get_job()
-    if job is not None:     
-        pod = get_job_pod(event.get_job().metadata.namespace, event.get_job().metadata.name)
+    if job is not None:
+        pod = get_job_pod(event.get_job().metadata.namespace,
+                          event.get_job().metadata.name)
         if pod.status.containerStatuses[0].state.terminated.reason == 'Error':
             print("han bhai theek hy")
+            container_list = get_container_list(
+                job_event.spec.template.spec.containers)
+
             job_spec = RobustaJob(
                 metadata=ObjectMeta(
                     name=job_event.metadata.name,
@@ -22,79 +25,47 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
                     completions=job_event.spec.completions,
                     parallelism=job_event.spec.parallelism,
                     backoffLimit=job_event.spec.backoffLimit,
-                
+
                     activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
-                    
+
                     ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
                     template=PodTemplateSpec(
                         spec=PodSpec(
-                            containers=[Container(
-                                name=job_event.spec.template.spec.containers[0].name,
-                                image=job_event.spec.template.spec.containers[0].image,
-                                args=job_event.spec.template.spec.containers[0].args,
-                                command=job_event.spec.template.spec.containers[0].command,
-                                env=job_event.spec.template.spec.containers[0].env,
-                                envFrom=job_event.spec.template.spec.containers[0].envFrom,
-                                imagePullPolicy=job_event.spec.template.spec.containers[0].imagePullPolicy,
-
-                            ),
-                            ],
-                        restartPolicy= job_event.spec.template.spec.restartPolicy
+                            containers=container_list,
+                            restartPolicy=job_event.spec.template.spec.restartPolicy
                         ),
                     ),
 
                 ),
             )
-            job_event.delete() 
+            job_event.delete()
             job_spec.create()
         else:
             print("nh bhai")
-        
-   
+
     else:
-        print ("*****************")
+        print("*****************")
         print("Succeed")
-    # job_spec = RobustaJob(
-    #     metadata=ObjectMeta(
-    #         name=job_event.metadata.name,
-    #         namespace=job_event.metadata.namespace,
-    #         labels=job_event.metadata.labels,
-    #     ),
-    #     spec=JobSpec(
-    #         completions=job_event.spec.completions,
-    #         parallelism=job_event.spec.parallelism,
-    #         backoffLimit=job_event.spec.backoffLimit,
-           
-    #         activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
-            
-    #         ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
-    #         template=PodTemplateSpec(
-    #             spec=PodSpec(
-    #                 containers=[Container(
-    #                     name=job_event.spec.template.spec.containers[0].name,
-    #                     image=job_event.spec.template.spec.containers[0].image,
-    #                     args=job_event.spec.template.spec.containers[0].args,
-    #                     command=job_event.spec.template.spec.containers[0].command,
-    #                     env=job_event.spec.template.spec.containers[0].env,
-    #                     envFrom=job_event.spec.template.spec.containers[0].envFrom,
-    #                     imagePullPolicy=job_event.spec.template.spec.containers[0].imagePullPolicy,
 
-    #                 ),
-    #                 ],
-    #             restartPolicy= job_event.spec.template.spec.restartPolicy
-    #             ),
-    #         ),
 
-    #     ),
-    # )
-    # job_event.delete() 
-    # job_spec.create()
-
-def get_job_pod(namespace,job):
+def get_job_pod(namespace, job):
     pod_list = PodList.listNamespacedPod(namespace).obj
     for pod in pod_list.items:
-        if pod.metadata.name.startswith(job): 
+        if pod.metadata.name.startswith(job):
             return pod
-    
-    
-    
+
+
+def get_container_list(containers_spec):
+    containers_list = None
+    for index, container in enumerate(containers_spec):
+        containers_list[index] = Container(
+            name=container.name,
+            image=container.image,
+            args=container.args,
+            command=container.command,
+            env=container.env,
+            envFrom=container.envFrom,
+            imagePullPolicy=container.imagePullPolicy,
+
+        )
+    return containers_list
