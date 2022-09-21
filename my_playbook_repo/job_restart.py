@@ -10,7 +10,7 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
     if job_event is not None:     
         pod = get_job_pod(event.get_job().metadata.namespace, event.get_job().metadata.name)
         print (pod.status.containerStatuses[0].state.terminated.reason)
-        if pod.status.containerStatuses[0].state.terminated.reason is 'Error':
+        if pod.status.containerStatuses[0].state.terminated.reason == 'Error':
             print("han bhai theek hy")
         else:
             print("nh bhai")
