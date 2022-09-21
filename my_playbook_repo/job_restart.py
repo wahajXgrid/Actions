@@ -10,7 +10,7 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
     if job_event is not None:     
         print ("*****************")
         print("FAILED")
-        print(event.get_job)
+        #print(event.get_job)
     
     else:
         print ("*****************")
