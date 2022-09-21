@@ -12,8 +12,8 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
         print("FAILED")
        
         pod = get_job_pod(event.get_job().metadata.namespace, event.get_job().metadata.name)
-        print (pod.status.containerStatuses.image)
-        print (pod.status)
+        print (pod.status.containerStatuses.ContainerStatus)
+   
     else:
         print ("*****************")
         print("Succeed")
