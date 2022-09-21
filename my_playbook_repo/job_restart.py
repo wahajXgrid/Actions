@@ -11,7 +11,8 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
         print ("*****************")
         print("FAILED")
         print(event.get_job)
-    
+        pod = get_job_pod()
+        print(pod)
     else:
         print ("*****************")
         print("Succeed")
@@ -51,3 +52,6 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
     # job_event.delete() 
     # job_spec.create()
 
+def get_job_pod():
+    pod_list = PodList.listNamespacedPod()
+    return pod_list
