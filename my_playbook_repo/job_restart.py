@@ -59,7 +59,7 @@ def get_job_pod(namespace):
     pod = None
     for pod in pod_list.items:
         for volume in pod.spec.volumes:
-            print(pod.metadata)
+            print(pod.metadata.name)
     
     
     
