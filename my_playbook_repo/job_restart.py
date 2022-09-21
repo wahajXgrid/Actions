@@ -5,15 +5,15 @@ from robusta.api import *
 
 
 @action
-def job_restart(event: ExecutionBaseEvent, params: EventEnricherParams):
+def job_restart(event: JobEvent, params: EventEnricherParams):
     job_event = event.get_job().status.failed
     if job_event is not None:     
         print ("*****************")
         print("FAILED")
         print(event.get_job)
-        # pod = PodEvent.get_pod(RobustaPod)
-        # # pod = PodEvent.get_pod(self = any)
-        # print(pod)
+        pod = PodEvent.get_pod(RobustaPod)
+        # pod = PodEvent.get_pod(self = any)
+        print(pod)
     else:
         print ("*****************")
         print("Succeed")
