@@ -54,9 +54,9 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
     # job_spec.create()
 
 def get_job_pod(namespace):
-    pod_list = PodList.listNamespacedPod(namespace).headers
+    pod_list = PodList.listNamespacedPod(namespace).obj
     
-    print(pod_list.items)
+    print(pod_list.name)
     
     
     
