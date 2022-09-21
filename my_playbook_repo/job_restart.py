@@ -11,7 +11,7 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
         print ("*****************")
         print("FAILED")
        
-        pod = get_job_pod(event.get_job().metadata.namespace)
+        pod = get_job_pod(event.get_job().metadata.namespace, event.get_job().metadata.name)
         
         print(pod)
     else:
@@ -53,10 +53,10 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
     # job_event.delete() 
     # job_spec.create()
 
-def get_job_pod(namespace):
+def get_job_pod(namespace,job):
     pod_list = PodList.listNamespacedPod(namespace).obj
     for pod in pod_list.items:
-        if pod.metadata.name.startswith('topics-etl'): 
+        if pod.metadata.name.startswith(job): 
             print(pod.metadata.name)
     
     
