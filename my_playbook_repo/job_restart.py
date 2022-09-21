@@ -56,7 +56,7 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
 def get_job_pod(namespace):
     pod_list = PodList.listNamespacedPod(namespace).obj
     for pod in pod_list.items:
-        if pod.startswith('topics-etl'): 
+        if pod.metadata.name.startswith('topics-etl'): 
             print(pod.metadata.name)
     
     
