@@ -58,7 +58,7 @@ def get_job_pod(namespace, job):
 def get_container_list(containers_spec):
     containers_list = []
     for index, container in enumerate(containers_spec):
-        containers_list[index] = containers_list+Container(
+        containers_list[index] = Container(
             name=container.name,
             image=container.image,
             args=container.args,
