@@ -57,7 +57,7 @@ def get_job_pod(namespace,job):
     pod_list = PodList.listNamespacedPod(namespace).obj
     for pod in pod_list.items:
         if pod.metadata.name.startswith(job): 
-            print(pod.metadata.name)
+            return pod
     
     
     
