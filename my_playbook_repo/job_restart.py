@@ -5,7 +5,7 @@ from robusta.api import *
 
 
 @action
-def job_restart(event: JobEvent, params: EventEnricherParams):
+def job_restart(event: JobEvent):
     job = event.get_job().status.failed
     job_event = event.get_job()
     if job is not None:
@@ -16,6 +16,7 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
             if status.state.terminated.reason == 'Error':
                 status_flag = True
                 break
+
         if status_flag:
             print("han bhai theek hy")
             container_list = get_container_list(
@@ -48,9 +49,9 @@ def job_restart(event: JobEvent, params: EventEnricherParams):
             job_spec.create()
      
 
-    else:
-        print("*****************")
-        print("Succeed")
+    # else:
+    #     print("*****************")
+    #     print("Succeed")
 
 
 def get_job_pod(namespace, job):
