@@ -6,9 +6,29 @@ from robusta.api import *
 
 @action
 def job_restart(event: JobEvent):
+    function_name = "job_restart"
     job = event.get_job().status.failed
     job_event = event.get_job()
     if job is not None:
+        
+        # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
+        finding = Finding(
+            title=f"JOB RESTART",
+            source=FindingSource.MANUAL,
+            aggregation_key=function_name,
+            finding_type=FindingType.REPORT,
+            failure=False,
+        )
+        job = event.get_job()
+    
+        finding.add_enrichment(
+                [
+                    MarkdownBlock(
+                        f"*job*restart*\n```\n{job}\n```"
+                    ),
+                ]
+            )
+        event.add_finding(finding)
         pod = get_job_pod(event.get_job().metadata.namespace,
                           event.get_job().metadata.name)
         status_flag = False
