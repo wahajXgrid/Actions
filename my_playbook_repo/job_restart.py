@@ -13,7 +13,7 @@ def job_restart(event: JobEvent):
                           event.get_job().metadata.name)
         status_flag = False
         for status in pod.status.containerStatuses :
-            if status.state.terminated.reason == 'Error':
+            if status.state.terminated.reason:
                 status_flag = True
                 break
 
