@@ -30,7 +30,7 @@ def job_restart(event: JobEvent):
     if job is not None:
       
       
-      print([int(s) for s in job_event.spec.template.spec.containers[0].resources.limits['memory'].split() if s.isdigit()])
+      print([int(s) for s in (job_event.spec.template.spec.containers[0].resources.limits['memory']).split() if s.isdigit()])
     #     # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
     #     pod = get_job_pod(event.get_job().metadata.namespace,
     #                       event.get_job().metadata.name)
