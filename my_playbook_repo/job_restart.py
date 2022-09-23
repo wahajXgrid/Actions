@@ -103,7 +103,6 @@ def get_container_list(containers_spec):
             imagePullPolicy=container.imagePullPolicy,
             resources=container.resources
             
-            
 
         ))
     return containers_list
