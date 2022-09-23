@@ -39,9 +39,10 @@ def job_restart(event: JobEvent):
 
         if status_flag:
             print("han bhai theek hy")
+            #for multi-containers
             container_list = get_container_list(
                 job_event.spec.template.spec.containers)
-
+                
             job_spec = RobustaJob(
                 metadata=ObjectMeta(
                     name=job_event.metadata.name,
@@ -52,9 +53,7 @@ def job_restart(event: JobEvent):
                     completions=job_event.spec.completions,
                     parallelism=job_event.spec.parallelism,
                     backoffLimit=job_event.spec.backoffLimit,
-
                     activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
-
                     ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
                     template=PodTemplateSpec(
                         spec=PodSpec(
