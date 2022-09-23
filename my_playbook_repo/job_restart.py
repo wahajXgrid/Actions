@@ -101,7 +101,7 @@ def get_container_list(containers_spec):
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
-            resources=container.resources.limits['memory']
+            
             
 
         ))
