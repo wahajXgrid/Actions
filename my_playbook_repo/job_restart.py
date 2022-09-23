@@ -27,7 +27,7 @@ def job_restart(event: JobEvent):
     job = event.get_job().status.failed
     job_event = event.get_job()
     if job is not None:
-        print(job_event.spec.template.spec.containers.resources)
+        print(job_event.spec.template.spec.containers[0].resources)
         # # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
         # pod = get_job_pod(event.get_job().metadata.namespace,
         #                   event.get_job().metadata.name)
