@@ -30,8 +30,22 @@ def job_restart(event: JobEvent):
     if job is not None:
       
       txt = job_event.spec.template.spec.containers[0].resources.limits['memory']
-      print (txt)
-      print(re.findall(r'\b\d+\b', txt))
+    
+      num=''
+      for x in txt:
+        if x.isdigit():
+            num=num+x
+        else:
+            break
+      print(int(num))
+
+
+
+
+
+
+
+
     #     # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
     #     pod = get_job_pod(event.get_job().metadata.namespace,
     #                       event.get_job().metadata.name)
