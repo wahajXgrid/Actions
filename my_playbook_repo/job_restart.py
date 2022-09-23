@@ -29,7 +29,7 @@ def job_restart(event: JobEvent):
     job_event = event.get_job()
     if job is not None:
       
-      print(job_event.spec.template.spec.containers[0].resources.limits['memory'] + 2)
+      print(job_event.spec.template.spec.containers[0].resources.limits['memory'] + str(2))
     #     # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
     #     pod = get_job_pod(event.get_job().metadata.namespace,
     #                       event.get_job().metadata.name)
