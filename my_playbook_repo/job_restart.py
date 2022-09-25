@@ -97,7 +97,7 @@ def get_container_list(containers_spec):
             name=container.name,
             image=container.image,
             args=container.args,
-            #command=container.command,
+            command=container.command,
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
