@@ -38,7 +38,7 @@ def job_restart(event: JobEvent):
                 num=''
                 for x in txt:
                     if x.isdigit():
-                        num=int(num+x)
+                        num=int(num)+x
                     else:
                         break
                 print(num)
