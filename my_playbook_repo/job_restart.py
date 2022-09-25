@@ -31,7 +31,7 @@ def job_restart(event: JobEvent):
         # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
         pod = get_job_pod(event.get_job().metadata.namespace,
                           event.get_job().metadata.name)
-        print(pod.status)
+        print(pod.status.phase)
         # if pod.status
         #     status_flag = False
         #     for status in pod.status.containerStatuses:
