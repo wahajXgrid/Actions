@@ -72,8 +72,8 @@ def job_restart(event: JobEvent):
                 job_event.delete()
                 
                 job_spec.create()
-            else:
-                print("Pod is running")
+        else:
+            print("Pod is running")
 
     else:
         print("*****************")
