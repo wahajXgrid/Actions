@@ -38,6 +38,8 @@ def job_restart(event: JobEvent):
                 
                 status_flag = True
                 break
+            else:
+                print("Pod is running")
 
         if status_flag:
             print("han bhai theek hy")
