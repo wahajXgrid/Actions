@@ -28,23 +28,20 @@ def job_restart(event: JobEvent):
     job = event.get_job().status.failed
     job_event = event.get_job()
     if job is not None:
-    
-    #   txt = job_event.spec.template.spec.containers[0].resources.limits['memory']
-    
-    #   num=''
-    #   for x in txt:
-    #     if x.isdigit():
-    #         num=num+x
-    #     else:
-    #         break
-    #   print(int(num))
-
         # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
         pod = get_job_pod(event.get_job().metadata.namespace,
                           event.get_job().metadata.name)
         status_flag = False
         for status in pod.status.containerStatuses:
             if status.state.terminated.reason == 'OOMKilled':
+                txt = job_event.spec.template.spec.containers[0].resources.limits['memory']
+                num=''
+                for x in txt:
+                    if x.isdigit():
+                        num=num+x
+                    else:
+                        break
+                print(int(num))
                 status_flag = True
                 break
 
