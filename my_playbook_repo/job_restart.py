@@ -105,7 +105,7 @@ def get_container_list(containers_spec):
             #             num=num+x
             #         else:
             #             break
-            resources=container.resources.limits,
+            resources=container.resources,
             
         ))
     return containers_list
