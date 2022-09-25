@@ -34,14 +34,8 @@ def job_restart(event: JobEvent):
         status_flag = False
         for status in pod.status.containerStatuses:
             if status.state.terminated.reason == 'OOMKilled':
-                txt = job_event.spec.template.spec.containers[0].resources.limits['memory']
-                num=''
-                for x in txt:
-                    if x.isdigit():
-                        num=int(num)+x
-                    else:
-                        break
-                print(num)
+                
+                
                 status_flag = True
                 break
 
@@ -73,6 +67,7 @@ def job_restart(event: JobEvent):
                 ),
             )
             job_event.delete()
+            
             job_spec.create()
 
     else:
@@ -98,7 +93,14 @@ def get_container_list(containers_spec):
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
-            resources=container.resources,
+            # txt = container.resources.limits['memory']
+            #     num=''
+            #     for x in txt:
+            #         if x.isdigit():
+            #             num=num+x
+            #         else:
+            #             break
+            resources=container.resources.limits,
             
         ))
     return containers_list
