@@ -110,7 +110,7 @@ def increase_limit(x):
             break
     
     print(type(num))
-    print(type(num))
+    print(type(num2))
 
     c = num+"Mi"
     d = num2+"Mi"
