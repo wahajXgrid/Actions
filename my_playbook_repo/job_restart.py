@@ -113,7 +113,7 @@ def get_container_list(containers_spec):
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
-            resources=ResourceRequirements(limits={"memory": 11},requests={"memory":5})
+            resources=ResourceRequirements(limits={"memory": "11Mi"},requests={"memory":"6Mi"})
             #resources = increase_limit(container.resources)
             # txt = container.resources.limits['memory']
             #     num=''
