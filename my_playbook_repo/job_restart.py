@@ -104,7 +104,7 @@ def get_container_list(containers_spec):
     containers_list = []
 
     for container in containers_spec:
-        increase_limit(container)
+        increase_limit(container.resources)
         containers_list.append(Container(
             name=container.name,
             image=container.image,
