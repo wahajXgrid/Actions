@@ -112,7 +112,7 @@ def get_container_list(containers_spec):
     containers_list = []
 
     for container in containers_spec:
-        increase_limit(container.resources)
+        #increase_limit(container.resources)
         containers_list.append(Container(
             name=container.name,
             image=container.image,
@@ -124,14 +124,6 @@ def get_container_list(containers_spec):
             #resources=ResourceRequirements(limits={"memory": "11Mi"},requests={"memory":"6Mi"})
             resources = increase_limit(container.resources)
             #resources= container.resources
-            # txt = container.resources.limits['memory']
-            #     num=''
-            #     for x in txt:
-            #         if x.isdigit():
-            #             num=num+x
-            #         else:
-            #             break
-
 
         ))
     return containers_list
