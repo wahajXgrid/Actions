@@ -110,6 +110,10 @@ def increase_limit(x):
             break
     num = int(num)
     num2 = int(num2)
+    num = num + 1
+    num2 = num2 +1
+    num = str(num)
+    num2 = str(num2)
     print(type(num))
     print(type(num2))
 
