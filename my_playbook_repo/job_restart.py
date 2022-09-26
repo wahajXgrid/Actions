@@ -87,7 +87,14 @@ def get_job_pod(namespace, job):
             return pod
 
 def increase_limit(x):
-    print(x.limits['memory'])
+    txt = x.limits['memory']
+    num=''
+    for x in txt:
+       if x.isdigit():
+          num=num+x
+       else:
+          break
+    print(num)
 
 
 def get_container_list(containers_spec):
@@ -103,7 +110,6 @@ def get_container_list(containers_spec):
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
-            
             resources= container.resources
             # txt = container.resources.limits['memory']
             #     num=''
