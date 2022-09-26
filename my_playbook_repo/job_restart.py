@@ -102,6 +102,8 @@ def increase_limit(x):
             num2 = num2+x
         else:
             break
+    num = int(num)+1
+    num2 = int(num2)+1
     c = num+"Mi"
     d = num2+"Mi"
     a = ResourceRequirements(limits={"memory" : c},requests={"memory": d})
