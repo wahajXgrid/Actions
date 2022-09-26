@@ -31,23 +31,21 @@ def job_restart(event: JobEvent):
         # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
         pod = get_job_pod(event.get_job().metadata.namespace,
                           event.get_job().metadata.name)
-        
+
         if pod.status.phase == 'Failed':
             status_flag = False
             for status in pod.status.containerStatuses:
                 if status.state.terminated.reason == 'OOMKilled':
-                    
-                    
+
                     status_flag = True
                     break
-            
 
             if status_flag:
                 print("han bhai theek hy")
-                #for multi-containers
+                # for multi-containers
                 container_list = get_container_list(
                     job_event.spec.template.spec.containers)
-                    
+
                 job_spec = RobustaJob(
                     metadata=ObjectMeta(
                         name=job_event.metadata.name,
@@ -70,7 +68,7 @@ def job_restart(event: JobEvent):
                     ),
                 )
                 job_event.delete()
-                
+
                 job_spec.create()
         else:
             print("Pod is running")
@@ -86,20 +84,22 @@ def get_job_pod(namespace, job):
         if pod.metadata.name.startswith(job):
             return pod
 
+
 def increase_limit(x):
     txt = x.limits['memory']
-    num=''
+    num = ''
     for x in txt:
-       if x.isdigit():
-          num=num+x
-       else:
-          break
-    print(num)
-
+        if x.isdigit():
+            num = num+x
+        else:
+            break
+    
+    a = ResourceRequirements(limits={num + 1})
+    print(a)
 
 def get_container_list(containers_spec):
     containers_list = []
-    
+
     for container in containers_spec:
         increase_limit(container.resources)
         containers_list.append(Container(
@@ -110,7 +110,7 @@ def get_container_list(containers_spec):
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
-            resources= container.resources
+            resources=container.resources
             # txt = container.resources.limits['memory']
             #     num=''
             #     for x in txt:
@@ -118,7 +118,7 @@ def get_container_list(containers_spec):
             #             num=num+x
             #         else:
             #             break
-            
-            
+
+
         ))
     return containers_list
