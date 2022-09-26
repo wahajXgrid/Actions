@@ -1,7 +1,9 @@
 from ast import Break
 from cgitb import reset
 from copy import copy
+from importlib import resources
 from pdb import Restart
+import resource
 from robusta.api import *
 
 
@@ -94,14 +96,14 @@ def increase_limit(x):
         else:
             break
     
-    a = ResourceRequirements(limits={int(num) + 1})
-    print(a)
+    a = ResourceRequirements(limits={int(num) + 1},requests=x.request['memory'])
+    return a
 
 def get_container_list(containers_spec):
     containers_list = []
 
     for container in containers_spec:
-        increase_limit(container.resources)
+        
         containers_list.append(Container(
             name=container.name,
             image=container.image,
@@ -110,7 +112,8 @@ def get_container_list(containers_spec):
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
-            resources=container.resources
+            #resources=container.resources
+            resources = increase_limit(container.resources)
             # txt = container.resources.limits['memory']
             #     num=''
             #     for x in txt:
