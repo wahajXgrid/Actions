@@ -89,21 +89,22 @@ def get_job_pod(namespace, job):
 
 def increase_limit(x):
     txt = x.limits['memory']
-    num = ''
-    for x in txt:
-        if x.isdigit():
-            num = num+x
-        else:
-            break
+    print(x.requests['memory'])
+    # num = ''
+    # for x in txt:
+    #     if x.isdigit():
+    #         num = num+x
+    #     else:
+    #         break
     
-    a = ResourceRequirements(limits={int(num) + 1},requests=x.requests['memory'])
-    return a
+    # a = ResourceRequirements(limits={int(num) + 1},requests=x.requests['memory'])
+    # return a
 
 def get_container_list(containers_spec):
     containers_list = []
 
     for container in containers_spec:
-        
+        increase_limit(container)
         containers_list.append(Container(
             name=container.name,
             image=container.image,
@@ -112,8 +113,8 @@ def get_container_list(containers_spec):
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
-            #resources=container.resources
-            resources = increase_limit(container.resources)
+            resources=container.resources
+            #resources = increase_limit(container.resources)
             # txt = container.resources.limits['memory']
             #     num=''
             #     for x in txt:
