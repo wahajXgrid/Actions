@@ -96,7 +96,7 @@ def increase_limit(x):
         else:
             break
     
-    a = ResourceRequirements(limits={int(num) + 1},requests=x.request['memory'])
+    a = ResourceRequirements(limits={int(num) + 1},requests=x.requests['memory'])
     return a
 
 def get_container_list(containers_spec):
