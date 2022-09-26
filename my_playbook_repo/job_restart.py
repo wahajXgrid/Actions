@@ -98,6 +98,7 @@ def get_container_list(containers_spec):
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
+            resources= container.resources
             # txt = container.resources.limits['memory']
             #     num=''
             #     for x in txt:
@@ -105,7 +106,7 @@ def get_container_list(containers_spec):
             #             num=num+x
             #         else:
             #             break
-            #resources=container.resources,
+            
             
         ))
     return containers_list
