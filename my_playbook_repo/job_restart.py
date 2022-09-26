@@ -98,14 +98,14 @@ def increase_limit(x):
     for x in mem:
         if x.isdigit():
             num = num+x
-            int(num)
+            int(num) + 1
         else:
             break
 
     for x in req:
         if x.isdigit():
             num2 = num2+x
-            int(num2)
+            int(num2) + 1
         else:
             break
     
