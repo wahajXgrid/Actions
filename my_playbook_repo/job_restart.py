@@ -96,15 +96,15 @@ def increase_limit(x):
             num = num+x
         else:
             break
-    
-    a = ResourceRequirements(limits={int(num) + 1},requests={10})
-    return a
+    print(num+"Mi")
+    #a = ResourceRequirements(limits={"memory" : int(num) + 1},requests={10})
+    #return a
 
 def get_container_list(containers_spec):
     containers_list = []
 
     for container in containers_spec:
-        #increase_limit(container.resources)
+        increase_limit(container.resources)
         containers_list.append(Container(
             name=container.name,
             image=container.image,
@@ -113,8 +113,9 @@ def get_container_list(containers_spec):
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
-            resources=ResourceRequirements(limits={"memory": "11Mi"},requests={"memory":"6Mi"})
+            #resources=ResourceRequirements(limits={"memory": "11Mi"},requests={"memory":"6Mi"})
             #resources = increase_limit(container.resources)
+            resources= container.resources
             # txt = container.resources.limits['memory']
             #     num=''
             #     for x in txt:
