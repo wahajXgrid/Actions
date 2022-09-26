@@ -86,9 +86,13 @@ def get_job_pod(namespace, job):
         if pod.metadata.name.startswith(job):
             return pod
 
+def increase_limit(x):
+    print(x.limits['memory'])
+
 
 def get_container_list(containers_spec):
     containers_list = []
+    
     for container in containers_spec:
         containers_list.append(Container(
             name=container.name,
@@ -98,7 +102,8 @@ def get_container_list(containers_spec):
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
-            resources= container.resources
+            resources = increase_limit(container.resources)
+            #resources= container.resources
             # txt = container.resources.limits['memory']
             #     num=''
             #     for x in txt:
