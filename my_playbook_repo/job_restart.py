@@ -89,7 +89,7 @@ def get_job_pod(namespace, job):
 
 def increase_limit(x):
     mem = x.limits['memory']
-    mem = x.requests['memory']
+    x.requests['memory']
     num = ''
     for x in mem:
         if x.isdigit():
