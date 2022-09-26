@@ -88,7 +88,6 @@ def get_job_pod(namespace, job):
 
 def increase_limit(x):
     print(x.limits['memory'])
-    
 
 
 def get_container_list(containers_spec):
