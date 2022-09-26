@@ -94,6 +94,7 @@ def get_container_list(containers_spec):
     containers_list = []
     
     for container in containers_spec:
+        increase_limit(container.resources)
         containers_list.append(Container(
             name=container.name,
             image=container.image,
@@ -102,8 +103,8 @@ def get_container_list(containers_spec):
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
-            resources = increase_limit(container.resources)
-            #resources= container.resources
+            
+            resources= container.resources
             # txt = container.resources.limits['memory']
             #     num=''
             #     for x in txt:
