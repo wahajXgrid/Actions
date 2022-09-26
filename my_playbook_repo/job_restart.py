@@ -88,16 +88,16 @@ def get_job_pod(namespace, job):
 
 
 def increase_limit(x):
-    txt = x.limits['memory']
+    mem = x.limits['memory']
     print(x.requests['memory'])
     num = ''
-    for x in txt:
+    for x in mem:
         if x.isdigit():
             num = num+x
         else:
             break
     
-    a = ResourceRequirements(limits={int(num) + 1},requests={x.requests['memory']})
+    a = ResourceRequirements(limits={int(num) + 1},requests={10})
     return a
 
 def get_container_list(containers_spec):
