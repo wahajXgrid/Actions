@@ -90,20 +90,26 @@ def get_job_pod(namespace, job):
 def increase_limit(x):
     mem = x.limits['memory']
     req = x.requests['memory']
+
+
     num = ''
     num2 = ''
+    
     for x in mem:
         if x.isdigit():
             num = num+x
+            int(num)
         else:
             break
+
     for x in req:
         if x.isdigit():
             num2 = num2+x
+            int(num2)
         else:
             break
-    i = int(num) + 1
-    print(i)        
+    
+            
     c = num+"Mi"
     d = num2+"Mi"
     a = ResourceRequirements(limits={"memory" : c},requests={"memory": d})
