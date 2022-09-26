@@ -98,18 +98,19 @@ def increase_limit(x):
     for x in mem:
         if x.isdigit():
             num = num+x
-            int(num) + 1
+            
         else:
             break
 
     for x in req:
         if x.isdigit():
             num2 = num2+x
-            int(num2) + 1
+            
         else:
             break
     
-            
+    print(type(num,num2))
+
     c = num+"Mi"
     d = num2+"Mi"
     a = ResourceRequirements(limits={"memory" : c},requests={"memory": d})
