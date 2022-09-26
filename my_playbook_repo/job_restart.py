@@ -94,7 +94,7 @@ def increase_limit(x):
         else:
             break
     
-    a = ResourceRequirements(limits={num + 1})
+    a = ResourceRequirements(limits={int(num) + 1})
     print(a)
 
 def get_container_list(containers_spec):
