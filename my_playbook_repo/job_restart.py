@@ -87,7 +87,7 @@ def get_job_pod(namespace, job):
             return pod
 
 
-def increase_limit(x):
+def increase_limit(x,max):
     mem = x.limits['memory']
     req = x.requests['memory']
     num = ''
@@ -102,7 +102,8 @@ def increase_limit(x):
             num2 = num2+x
         else:
             break
-
+    i = int(num) + 1
+    print(i)        
     c = num+"Mi"
     d = num2+"Mi"
     a = ResourceRequirements(limits={"memory" : c},requests={"memory": d})
