@@ -91,7 +91,7 @@ def increase_limit(x):
     mem = x.limits['memory']
     req = x.requests['memory']
     num = ''
-    for x in mem,req:
+    for x in mem:
         if x.isdigit():
             num = num+x
         else:
