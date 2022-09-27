@@ -118,6 +118,8 @@ def get_container_list(containers_spec):
             command=container.command,
             ports=container.ports,
             lifecycle=container.lifecycle,
+            readinessProbe=container.readinessProbe,
+            workingDir=container.workingDir,
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,       
