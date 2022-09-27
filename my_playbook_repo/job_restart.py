@@ -101,11 +101,10 @@ def increase_limit(x):
 
     split_lim = int(split_lim) + 1
     split_req = int(split_req) + 1
-    # split_lim = split_lim + 1
-    # split_req = split_req +1
 
-    a = ResourceRequirements(limits={"memory" : (str(split_lim)+"Mi")},requests={"memory": (str(split_req)+"Mi")})
-    return a
+
+    return ResourceRequirements(limits={"memory" : (str(split_lim)+"Mi")},requests={"memory": (str(split_req)+"Mi")})
+    
 
 def get_container_list(containers_spec):
     containers_list = []
