@@ -119,7 +119,7 @@ def get_container_list(containers_spec,increase_to):
             startupProbe=container.startupProbe,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,       
-            resources = increase_resource(container.resources,increase_to) if (container.resources.limits or container.resources.requests)  else None
+            resources = increase_resource(container.resources,increase_to) if (container.resources.limits and container.resources.requests)  else None
      
 
         ))
