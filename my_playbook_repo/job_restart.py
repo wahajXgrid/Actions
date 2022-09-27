@@ -4,8 +4,11 @@ from urllib import request
 from robusta.api import *
 
 
+class IncreaseResources(ActionParams):
+   increase_to: int 
+
 @action
-def job_restart(event: JobEvent):
+def job_restart(event: JobEvent,params: IncreaseResources):
     function_name = "job_restart"
     finding = Finding(
         title=f"JOB RESTART",
@@ -43,7 +46,7 @@ def job_restart(event: JobEvent):
                 print("han bhai theek hy")
                 # for multi-containers
                 container_list = get_container_list(
-                    job_event.spec.template.spec.containers , increase_to=1)
+                    job_event.spec.template.spec.containers , increase_to=params.increase_to)
             #job_event.spec.template.spec.containers[0].livenessProbe
                 job_spec = RobustaJob(
                     metadata=ObjectMeta(
