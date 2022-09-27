@@ -84,7 +84,12 @@ def get_job_pod(namespace, job):
     pod_list = PodList.listNamespacedPod(namespace).obj
     for pod in pod_list.items:
         if pod.metadata.name.startswith(job):
-            return pod
+            if pod.status.phase == 'Failed':
+                return pod
+            else:
+                print("Job is active")
+        else:
+            print("There is not pod for this job")
 
 
 def increase_resource(resource,increase_to):
