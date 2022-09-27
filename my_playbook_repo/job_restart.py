@@ -44,7 +44,7 @@ def job_restart(event: JobEvent,params: IncreaseResources):
         print("han bhai theek hy")         
         container_list = get_container_list(
             job_event.spec.template.spec.containers , increase_to=params.increase_to)
-    
+            
         job_spec = RobustaJob(
             metadata=ObjectMeta(
                 name=job_event.metadata.name,
@@ -119,7 +119,7 @@ def get_container_list(containers_spec,increase_to):
             startupProbe=container.startupProbe,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,       
-            resources = increase_resource(container.resources,increase_to) if container.resources else None
+            resources = increase_resource(container.resources,increase_to) if (container.resources.limits or container.resources.requests)  else None
      
 
         ))
