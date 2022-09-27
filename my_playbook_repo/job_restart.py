@@ -27,13 +27,14 @@ def job_restart(event: JobEvent,params: IncreaseResources):
         ]
     )
     event.add_finding(finding)
-    job = event.get_job().status.failed
+    #job_status = event.get_job().status.failed
     job_event = event.get_job()
-    if job is not None:
+    #if job_status is not None:
         # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
-        pod = get_job_pod(event.get_job().metadata.namespace,
-                          event.get_job().metadata.name)
-  
+    pod = get_job_pod(event.get_job().metadata.namespace,
+                        event.get_job().metadata.name)
+    
+    if pod.status.phase == 'Failed':
         status_flag = False
         # for multi-containers
         for status in pod.status.containerStatuses:
@@ -72,11 +73,14 @@ def job_restart(event: JobEvent,params: IncreaseResources):
             job_event.delete()
 
             job_spec.create()
+
+        else:
+            print("Your Job is active")
         
 
-    else:
-        print("*****************")
-        print("Succeed")
+    # else:
+    #     print("*****************")
+    #     print("Succeed")
 
 
 def get_job_pod(namespace, job):
@@ -85,8 +89,9 @@ def get_job_pod(namespace, job):
         if pod.metadata.name.startswith(job):
             if pod.status.phase == 'Running':
                 print("Job is active")
+                break
         else:
-            print("There is not pod for this job")
+            print("There is no pod for this job")
     return pod
 
 
