@@ -121,6 +121,7 @@ def get_container_list(containers_spec):
             readinessProbe=container.readinessProbe,
             workingDir=container.workingDir,
             env=container.env,
+            startupProbe=container.startupProbe,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,       
             resources = increase_limit(container.resources)
