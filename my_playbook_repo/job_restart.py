@@ -33,47 +33,46 @@ def job_restart(event: JobEvent,params: IncreaseResources):
         # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
         pod = get_job_pod(event.get_job().metadata.namespace,
                           event.get_job().metadata.name)
+  
+        status_flag = False
+        # for multi-containers
+        for status in pod.status.containerStatuses:
+            if status.state.terminated.reason == 'OOMKilled':
 
-        if pod.status.phase == 'Failed':
-            status_flag = False
-            for status in pod.status.containerStatuses:
-                if status.state.terminated.reason == 'OOMKilled':
+                status_flag = True
+                break
 
-                    status_flag = True
-                    break
-
-            if status_flag:
-                print("han bhai theek hy")
-                # for multi-containers
-                container_list = get_container_list(
-                    job_event.spec.template.spec.containers , increase_to=params.increase_to)
-            #job_event.spec.template.spec.containers[0].livenessProbe
-                job_spec = RobustaJob(
-                    metadata=ObjectMeta(
-                        name=job_event.metadata.name,
-                        namespace=job_event.metadata.namespace,
-                        labels=job_event.metadata.labels,
-                    ),
-                    spec=JobSpec(
-                        completions=job_event.spec.completions,
-                        parallelism=job_event.spec.parallelism,
-                        backoffLimit=job_event.spec.backoffLimit,
-                        activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
-                        ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
-                        template=PodTemplateSpec(
-                            spec=PodSpec(
-                                containers=container_list,
-                                restartPolicy=job_event.spec.template.spec.restartPolicy
-                            ),
+        if status_flag:
+            print("han bhai theek hy")
+            
+            container_list = get_container_list(
+                job_event.spec.template.spec.containers , increase_to=params.increase_to)
+        #job_event.spec.template.spec.containers[0].livenessProbe
+            job_spec = RobustaJob(
+                metadata=ObjectMeta(
+                    name=job_event.metadata.name,
+                    namespace=job_event.metadata.namespace,
+                    labels=job_event.metadata.labels,
+                ),
+                spec=JobSpec(
+                    completions=job_event.spec.completions,
+                    parallelism=job_event.spec.parallelism,
+                    backoffLimit=job_event.spec.backoffLimit,
+                    activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
+                    ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
+                    template=PodTemplateSpec(
+                        spec=PodSpec(
+                            containers=container_list,
+                            restartPolicy=job_event.spec.template.spec.restartPolicy
                         ),
-
                     ),
-                )
-                job_event.delete()
 
-                job_spec.create()
-        else:
-            print("Pod is running")
+                ),
+            )
+            job_event.delete()
+
+            job_spec.create()
+        
 
     else:
         print("*****************")
