@@ -27,9 +27,8 @@ def job_restart(event: JobEvent,params: IncreaseResources):
         ]
     )
     event.add_finding(finding)
-    #job_status = event.get_job().status.failed
+
     job_event = event.get_job()
-    #if job_status is not None:
         # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
     pod = get_job_pod(event.get_job().metadata.namespace,
                         event.get_job().metadata.name)
@@ -48,7 +47,7 @@ def job_restart(event: JobEvent,params: IncreaseResources):
             
             container_list = get_container_list(
                 job_event.spec.template.spec.containers , increase_to=params.increase_to)
-        #job_event.spec.template.spec.containers[0].livenessProbe
+      
             job_spec = RobustaJob(
                 metadata=ObjectMeta(
                     name=job_event.metadata.name,
@@ -71,16 +70,10 @@ def job_restart(event: JobEvent,params: IncreaseResources):
                 ),
             )
             job_event.delete()
-
             job_spec.create()
 
         else:
             print("Your Job is active")
-        
-
-    # else:
-    #     print("*****************")
-    #     print("Succeed")
 
 
 def get_job_pod(namespace, job):
