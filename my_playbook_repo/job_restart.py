@@ -43,7 +43,7 @@ def job_restart(event: JobEvent):
                 print("han bhai theek hy")
                 # for multi-containers
                 container_list = get_container_list(
-                    job_event.spec.template.spec.containers)
+                    job_event.spec.template.spec.containers , increase_to=2)
             #job_event.spec.template.spec.containers[0].livenessProbe
                 job_spec = RobustaJob(
                     metadata=ObjectMeta(
@@ -84,7 +84,7 @@ def get_job_pod(namespace, job):
             return pod
 
 
-def increase_limit(resource):
+def increase_resource(resource,increase_to):
     limit = resource.limits['memory']
     reqest = resource.requests['memory']
     split_lim = ''
@@ -97,14 +97,14 @@ def increase_limit(resource):
         if resource.isdigit(): split_req = split_req+resource  
         else: break
 
-    split_lim = int(split_lim) + 1
-    split_req = int(split_req) + 1
+    split_lim = int(split_lim) + increase_to
+    split_req = int(split_req) + increase_to
 
 
     return ResourceRequirements(limits={"memory" : (str(split_lim)+"Mi")},requests={"memory": (str(split_req)+"Mi")})
     
 
-def get_container_list(containers_spec):
+def get_container_list(containers_spec,increase_to):
     containers_list = []
 
     for container in containers_spec:
@@ -124,7 +124,7 @@ def get_container_list(containers_spec):
             startupProbe=container.startupProbe,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,       
-            resources = increase_limit(container.resources)
+            resources = increase_resource(container.resources,increase_to)
      
 
         ))
