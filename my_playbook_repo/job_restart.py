@@ -44,7 +44,7 @@ def job_restart(event: JobEvent):
                 # for multi-containers
                 container_list = get_container_list(
                     job_event.spec.template.spec.containers)
-
+            #job_event.spec.template.spec.containers[0].livenessProbe
                 job_spec = RobustaJob(
                     metadata=ObjectMeta(
                         name=job_event.metadata.name,
@@ -111,6 +111,9 @@ def get_container_list(containers_spec):
         containers_list.append(Container(
             name=container.name,
             image=container.image,
+            livenessProbe=container.livenessProbe,
+            securityContext=container.securityContext,
+            volumeMounts=container.volumeMounts,
             args=container.args,
             command=container.command,
             env=container.env,
