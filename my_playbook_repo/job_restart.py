@@ -1,9 +1,6 @@
-from ast import Break
-from cgitb import reset
-from copy import copy
-from importlib import resources
-from pdb import Restart
-import resource
+
+
+from urllib import request
 from robusta.api import *
 
 
@@ -88,38 +85,34 @@ def get_job_pod(namespace, job):
 
 
 def increase_limit(x):
-    mem = x.limits['memory']
-    req = x.requests['memory']
+    limit = x.limits['memory']
+    reqest = x.requests['memory']
 
-    num = ''
-    num2 = ''
+    split_lim = ''
+    split_req = ''
     
-    for x in mem:
-        if x.isdigit(): num = num+x 
+    for x in limit:
+        if x.isdigit(): split_lim = split_lim+x 
         else: break
 
-    for x in req:
-        if x.isdigit(): num2 = num2+x  
+    for x in reqest:
+        if x.isdigit(): split_req = split_req+x  
         else: break
 
-    num = int(num)
-    num2 = int(num2)
-    num = num + 1
-    num2 = num2 +1
-    num = str(num)
-    num2 = str(num2)
-   
+    split_lim = int(split_lim)
+    split_req = int(split_req)
+    split_lim = split_lim + 1
+    split_req = split_req +1
+    split_lim = str(split_lim)
+    split_req = str(split_req)
 
-    # c = num+"Mi"
-    # d = num2+"Mi"
-    a = ResourceRequirements(limits={"memory" : (num+"Mi")},requests={"memory": (num2+"Mi")})
+    a = ResourceRequirements(limits={"memory" : (split_lim+"Mi")},requests={"memory": (split_req+"Mi")})
     return a
 
 def get_container_list(containers_spec):
     containers_list = []
 
     for container in containers_spec:
-        #increase_limit(container.resources)
         containers_list.append(Container(
             name=container.name,
             image=container.image,
@@ -127,10 +120,9 @@ def get_container_list(containers_spec):
             command=container.command,
             env=container.env,
             envFrom=container.envFrom,
-            imagePullPolicy=container.imagePullPolicy,
-            #resources=ResourceRequirements(limits={"memory": "11Mi"},requests={"memory":"6Mi"})
+            imagePullPolicy=container.imagePullPolicy,       
             resources = increase_limit(container.resources)
-            #resources= container.resources
+     
 
         ))
     return containers_list
