@@ -91,7 +91,6 @@ def increase_limit(x):
     mem = x.limits['memory']
     req = x.requests['memory']
 
-
     num = ''
     num2 = ''
     
@@ -102,19 +101,18 @@ def increase_limit(x):
     for x in req:
         if x.isdigit(): num2 = num2+x  
         else: break
-        
+
     num = int(num)
     num2 = int(num2)
     num = num + 1
     num2 = num2 +1
     num = str(num)
     num2 = str(num2)
-    print(type(num))
-    print(type(num2))
+   
 
-    c = num+"Mi"
-    d = num2+"Mi"
-    a = ResourceRequirements(limits={"memory" : c},requests={"memory": d})
+    # c = num+"Mi"
+    # d = num2+"Mi"
+    a = ResourceRequirements(limits={"memory" : (num+"Mi")},requests={"memory": (num2+"Mi")})
     return a
 
 def get_container_list(containers_spec):
