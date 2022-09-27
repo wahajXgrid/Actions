@@ -5,7 +5,7 @@ from robusta.api import *
 
 
 @action
-def job_restart(event: JobEvent):
+def job_restart(event: JobEvent,inc):
     function_name = "job_restart"
     finding = Finding(
         title=f"JOB RESTART",
@@ -43,7 +43,7 @@ def job_restart(event: JobEvent):
                 print("han bhai theek hy")
                 # for multi-containers
                 container_list = get_container_list(
-                    job_event.spec.template.spec.containers , increase_to=2)
+                    job_event.spec.template.spec.containers , increase_to=inc)
             #job_event.spec.template.spec.containers[0].livenessProbe
                 job_spec = RobustaJob(
                     metadata=ObjectMeta(
