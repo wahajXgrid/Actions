@@ -99,12 +99,10 @@ def increase_limit(x):
         if x.isdigit(): split_req = split_req+x  
         else: break
 
-    split_lim = int(split_lim)
-    split_req = int(split_req)
-    split_lim = split_lim + 1
-    split_req = split_req +1
-    # split_lim = str(split_lim)
-    # split_req = str(split_req)
+    split_lim = int(split_lim) + 1
+    split_req = int(split_req) + 1
+    # split_lim = split_lim + 1
+    # split_req = split_req +1
 
     a = ResourceRequirements(limits={"memory" : (str(split_lim)+"Mi")},requests={"memory": (str(split_req)+"Mi")})
     return a
