@@ -84,17 +84,17 @@ def get_job_pod(namespace, job):
             return pod
 
 
-def increase_limit(x):
-    limit = x.limits['memory']
-    reqest = x.requests['memory']
+def increase_limit(resource):
+    limit = resource.limits['memory']
+    reqest = resource.requests['memory']
     split_lim = ''
     split_req = ''
-    for x in limit:
-        if x.isdigit(): split_lim = split_lim+x 
+    for resource in limit:
+        if resource.isdigit(): split_lim = split_lim+resource
         else: break
 
-    for x in reqest:
-        if x.isdigit(): split_req = split_req+x  
+    for resource in reqest:
+        if resource.isdigit(): split_req = split_req+resource  
         else: break
 
     split_lim = int(split_lim) + 1
