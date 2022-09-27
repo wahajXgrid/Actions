@@ -5,7 +5,7 @@ from robusta.api import *
 
 
 class IncreaseResources(ActionParams):
-   increase_to: int 
+   increase_to: Optional[int] = 0 
 
 @action
 def job_restart(event: JobEvent,params: IncreaseResources):
