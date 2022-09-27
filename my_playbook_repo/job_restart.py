@@ -116,6 +116,8 @@ def get_container_list(containers_spec):
             volumeMounts=container.volumeMounts,
             args=container.args,
             command=container.command,
+            ports=container.ports,
+            lifecycle=container.lifecycle,
             env=container.env,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,       
