@@ -79,13 +79,8 @@ def job_restart(event: JobEvent,params: IncreaseResources):
 def get_job_pod(namespace, job):
     pod_list = PodList.listNamespacedPod(namespace).obj
     for pod in pod_list.items:
-        if pod.metadata.name.startswith(job):
-            if pod.status.phase == 'Running':
-                print("Job is active")
-                break
-        else:
-            print("There is no pod for this job")
-    return pod
+        if pod.metadata.name.startswith(job):   
+            return pod
 
 
 def increase_resource(resource,increase_to):
