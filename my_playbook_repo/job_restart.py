@@ -1,6 +1,6 @@
 
 
-from turtle import pu
+
 from urllib import request
 from robusta.api import *
 
