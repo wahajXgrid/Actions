@@ -92,8 +92,8 @@ def increase_resource(resource,increase_to):
         if resource.isdigit(): split_req = split_req+resource  
         else: break
 
-    split_lim = int(split_lim) + increase_to
-    split_req = int(split_req) + increase_to
+    split_lim = float(split_lim) + increase_to
+    split_req = float(split_req) + increase_to
 
 
     return ResourceRequirements(limits={"memory" : (str(split_lim)+"Mi")},requests={"memory": (str(split_req)+"Mi")})
