@@ -5,7 +5,8 @@ from robusta.api import *
 
 
 class IncreaseResources(ActionParams):
-   increase_to: Optional[int] = 1 
+   increase_to: Optional[int] = 1
+     
 
 @action
 def job_restart(event: JobEvent,params: IncreaseResources):
@@ -84,6 +85,7 @@ def increase_resource(resource,increase_to):
     reqest = resource.requests['memory']
     split_lim = ''
     split_req = ''
+
     for resource in limit:
         if resource.isdigit(): split_lim = split_lim+resource
         else: break
@@ -95,6 +97,7 @@ def increase_resource(resource,increase_to):
     split_lim = float(split_lim) + increase_to
     split_req = float(split_req) + increase_to
 
+    
 
     return ResourceRequirements(limits={"memory" : (str(split_lim)+"Mi")},requests={"memory": (str(split_req)+"Mi")})
     
