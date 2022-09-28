@@ -98,7 +98,7 @@ def increase_resource(resource,increase_to):
     split_lim = float(split_lim) + increase_to
     split_req = float(split_req) + increase_to
 
-    if limits.endswith("Gi"):
+    if limits.endswith("Mi"):
         a = (str(split_lim)+"Mi")
         b = (str(split_req)+"Mi")
 
