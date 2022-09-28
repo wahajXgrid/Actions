@@ -97,7 +97,8 @@ def increase_resource(resource,increase_to):
 
     #split_lim = float(split_lim) + increase_to
     split_req = float(split_req) + increase_to
-
+    if(split_req > split_lim):
+        split_lim = split_req
     if limits.endswith("Mi") or reqests.endswith("Mi"):
         limit_memory = (str(split_lim)+"Mi")
         request_memory = (str(split_req)+"Mi")
