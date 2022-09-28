@@ -30,7 +30,6 @@ def job_restart(event: JobEvent,params: IncreaseResources):
     event.add_finding(finding)
 
     job_event = event.get_job()
-        # https://docs.robusta.dev/master/developer-guide/actions/findings-api.html
     pod = get_job_pod(event.get_job().metadata.namespace,
                         event.get_job().metadata.name)
     
@@ -86,6 +85,7 @@ def increase_resource(resource,increase_to):
     
     split_lim = ''
     split_req = ''
+    max_req = 3
 
     for resource in limits:
         if resource.isdigit(): split_lim = split_lim+resource
@@ -95,7 +95,7 @@ def increase_resource(resource,increase_to):
         if resource.isdigit(): split_req = split_req+resource  
         else: break
 
-    split_lim = float(split_lim) + increase_to
+    #split_lim = float(split_lim) + increase_to
     split_req = float(split_req) + increase_to
 
     if limits.endswith("Mi") or reqests.endswith("Mi"):
@@ -129,8 +129,6 @@ def get_container_list(containers_spec,increase_to):
             startupProbe=container.startupProbe,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,       
-            resources = increase_resource(container.resources,increase_to) if (container.resources.limits and container.resources.requests)  else None
-     
-
+            resources = increase_resource(container.resources,increase_to) if (container.resources.limits and container.resources.requests)  else None  
         ))
     return containers_list
