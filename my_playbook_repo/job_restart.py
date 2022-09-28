@@ -101,6 +101,10 @@ def increase_resource(resource,increase_to):
     if limits.endswith("Mi"):
         a = (str(split_lim)+"Mi")
         b = (str(split_req)+"Mi")
+        
+    elif limits.endswith("Gi"):
+        a = (str(split_lim)+"Gi")
+        b = (str(split_req)+"Gi")
 
     return ResourceRequirements(limits={"memory" : a},requests={"memory": b})
     
