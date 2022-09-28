@@ -1,5 +1,6 @@
 
 
+from turtle import pu
 from urllib import request
 from robusta.api import *
 
@@ -95,7 +96,7 @@ def increase_resource(resource,increase_to):
         if resource.isdigit(): split_req = split_req+resource  
         else: break
 
-    #split_lim = float(split_lim) + increase_to
+    
     split_req = float(split_req) + increase_to
     if(split_req > float(split_lim)):
         split_lim = split_req
