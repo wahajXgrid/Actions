@@ -81,8 +81,10 @@ def get_job_pod(namespace, job):
 
 
 def increase_resource(resource,increase_to):
-    limit = resource.limits['memory']
-    reqest = resource.requests['memory']
+    limits = resource.limits['memory']
+    reqests = resource.requests['memory']
+    print(limits)
+    print(reqests)
     split_lim = ''
     split_req = ''
 
@@ -97,6 +99,7 @@ def increase_resource(resource,increase_to):
     split_lim = float(split_lim) + increase_to
     split_req = float(split_req) + increase_to
 
+    
     a = (str(split_lim)+"Mi")
     b = (str(split_req)+"Mi")
 
