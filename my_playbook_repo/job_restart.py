@@ -98,15 +98,15 @@ def increase_resource(resource,increase_to):
     split_lim = float(split_lim) + increase_to
     split_req = float(split_req) + increase_to
 
-    if limits.endswith("Mi"):
-        a = (str(split_lim)+"Mi")
-        b = (str(split_req)+"Mi")
-        
-    elif limits.endswith("Gi"):
-        a = (str(split_lim)+"Gi")
-        b = (str(split_req)+"Gi")
+    if limits.endswith("Mi") or reqests.endswith("Mi"):
+        limit_memory = (str(split_lim)+"Mi")
+        request_memory = (str(split_req)+"Mi")
 
-    return ResourceRequirements(limits={"memory" : a},requests={"memory": b})
+    elif limits.endswith("Gi") or reqests.endswith("Gi"):
+        limit_memory = (str(split_lim)+"Gi")
+        request_memory = (str(split_req)+"Gi")
+
+    return ResourceRequirements(limits={"memory" : limit_memory},requests={"memory": request_memory})
     
 
 def get_container_list(containers_spec,increase_to):
