@@ -7,10 +7,13 @@ from robusta.api import *
 
 class IncreaseResources(ActionParams):
    increase_to: Optional[int] = 1
+   max_resource: int
      
 
 @action
 def job_restart(event: JobEvent,params: IncreaseResources):
+    job_event = event.get_job()
+    
     function_name = "job_restart"
     finding = Finding(
         title=f"JOB RESTART",
@@ -86,7 +89,7 @@ def increase_resource(resource,increase_to):
     
     split_lim = ''
     split_req = ''
-    max_req = 3
+    
 
     for resource in limits:
         if resource.isdigit(): split_lim = split_lim+resource
