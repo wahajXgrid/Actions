@@ -35,9 +35,16 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
         job_event = event.get_job()
 
         if status_flag:        
-            restart_job(job_event,params.increase_to,finding)
+            restart_job(job_event,params.increase_to)
                  
-                
+            finding.title = f"Restart Job"
+            finding.add_enrichment(
+                [
+                    MarkdownBlock(
+                        f"*Job Restarted With Memory Increament*\n```\n{job_event.spec.template.spec.containers[index].resources.requests['memory']}\n```"
+                    ),
+                ]
+            )    
     else:
         finding.title = f"Max Reached"
         finding.add_enrichment(
@@ -50,7 +57,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
     event.add_finding(finding)
 
 # Function to restart job
-def restart_job(job_event,increase_to,findings):
+def restart_job(job_event,increase_to):
     container_list = get_container_list(
                 job_event.spec.template.spec.containers , increase_to=increase_to)
                 
@@ -77,14 +84,6 @@ def restart_job(job_event,increase_to,findings):
     )
     job_event.delete()
     job_spec.create()
-    finding.title = f"Restart Job"
-    finding.add_enrichment(
-        [
-            MarkdownBlock(
-                f"*Job Restarted With Memory Increament*\n```\n{job_event.spec.template.spec.containers[index].resources.requests['memory']}\n```"
-            ),
-        ]
-    )
 
 # function to get Containers attributes
 def get_container_list(containers_spec,increase_to):
