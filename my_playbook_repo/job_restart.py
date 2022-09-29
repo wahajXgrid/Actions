@@ -9,19 +9,22 @@ class IncreaseResources(ActionParams):
 @action
 def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
     job_event = event.get_job()
-    max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[0].resources.requests['memory'])
+
+    pod = get_job_pod(event.get_job().metadata.namespace,
+                            event.get_job().metadata.name)
+    index = None
+    status_flag = False
+    for ind,status in enumerate(pod.status.containerStatuses):
+        if status.state.terminated.reason == 'OOMKilled':
+            index = ind
+            print(index)
+            status_flag = True
+            break
+
+    max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[index].resources.requests['memory'])
 
     if float(max_res) < params.max_resource:
         job_event = event.get_job()
-
-        pod = get_job_pod(event.get_job().metadata.namespace,
-                            event.get_job().metadata.name)
-
-        status_flag = False
-        for status in pod.status.containerStatuses:
-            if status.state.terminated.reason == 'OOMKilled':
-                status_flag = True
-                break
 
         if status_flag:        
             restart_job(job_event,params.increase_to)
