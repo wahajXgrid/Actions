@@ -109,6 +109,7 @@ def increase_resource(resource,increase_to):
     print(split_req)
     print(increase_to)
     split_req = float(split_req) + float(increase_to)
+    print(split_req)
     if(split_req > float(split_lim)):
         split_lim = split_req    
 
