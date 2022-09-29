@@ -9,7 +9,7 @@ class IncreaseResources(ActionParams):
 @action
 def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
 
-    function_name = "job_restart"
+    function_name = "job_restart_on_oomkilled"
     finding = Finding(
         title=f"JOB RESTART",
         source=FindingSource.MANUAL,
