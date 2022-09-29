@@ -61,7 +61,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
                 ),
             ]
         )
-    event.add_finding(finding)
+        event.add_finding(finding)
 
 # Function to restart job
 def restart_job(job_event,increase_to):
