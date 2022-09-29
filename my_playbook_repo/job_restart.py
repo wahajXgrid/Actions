@@ -6,8 +6,8 @@ from robusta.api import *
 
 
 class IncreaseResources(ActionParams):
-   increase_to: Optional[float] = 0.5
-   max_resource: int
+   increase_to: Optional[float] = 1
+   max_resource: float
      
 
 @action
