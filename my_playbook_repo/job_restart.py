@@ -35,7 +35,8 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
         job_event = event.get_job()
 
         if status_flag:        
-            restart_job(job_event,params.increase_to)     
+            restart_job(job_event,params.increase_to)
+                 
             finding.title = f"Restart Job"
             finding.add_enrichment(
                 [
