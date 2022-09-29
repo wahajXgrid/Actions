@@ -7,7 +7,7 @@ class IncreaseResources(ActionParams):
      
 
 @action
-def job_restart(event: JobEvent,params: IncreaseResources):
+def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
     job_event = event.get_job()
     max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[0].resources.requests['memory'])
 
@@ -67,6 +67,7 @@ def job_restart(event: JobEvent,params: IncreaseResources):
         )
         event.add_finding(finding)
 
+# Function to restart job
 def restart(job_event,increase_to):
     container_list = get_container_list(
                 job_event.spec.template.spec.containers , increase_to=increase_to)
