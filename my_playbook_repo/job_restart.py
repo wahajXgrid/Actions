@@ -112,11 +112,8 @@ def increase_resource(resource,increase_to):
     print(split_req)
     if(split_req > float(split_lim)):
         split_lim = split_req    
-    a = (str(split_lim)+lim_unit)
-    b = (str(split_req)+req_unit)
-    print(a)
-    print(b)
-    return ResourceRequirements(limits={"memory" : '8Mi'},requests={"memory": '5.5Mi'})
+    
+    return ResourceRequirements(limits={"memory" : (str(split_lim)+lim_unit)},requests={"memory": (str(split_req)+req_unit)})
     
 
 def get_container_list(containers_spec,increase_to):
