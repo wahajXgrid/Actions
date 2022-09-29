@@ -15,25 +15,6 @@ def job_restart(event: JobEvent,params: IncreaseResources):
     job_event = event.get_job()
     max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[0].resources.requests['memory'])
     if float(max_res) < params.max_resource:
-        
-        function_name = "job_restart"
-        finding = Finding(
-            title=f"JOB RESTART",
-            source=FindingSource.MANUAL,
-            aggregation_key=function_name,
-            finding_type=FindingType.REPORT,
-            failure=False,
-        )
-        job_temp = event.get_job()
-
-        finding.add_enrichment(
-            [
-                MarkdownBlock(
-                    f"*job*restart*\n```\n{job_temp}\n```"
-                ),
-            ]
-        )
-        event.add_finding(finding)
 
         job_event = event.get_job()
         pod = get_job_pod(event.get_job().metadata.namespace,
@@ -74,6 +55,25 @@ def job_restart(event: JobEvent,params: IncreaseResources):
             )
             job_event.delete()
             job_spec.create()
+
+            function_name = "job_restart"
+            finding = Finding(
+                title=f"JOB RESTART",
+                source=FindingSource.MANUAL,
+                aggregation_key=function_name,
+                finding_type=FindingType.REPORT,
+                failure=False,
+            )
+            job_temp = event.get_job()
+
+            finding.add_enrichment(
+                [
+                    MarkdownBlock(
+                        f"*job*restart*\n```\n{job_temp}\n```"
+                    ),
+                ]
+            )
+            event.add_finding(finding)
     else:
         print('max reached')
         function_name = "job_restart"
