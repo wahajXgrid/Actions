@@ -44,7 +44,7 @@ def job_restart(event: JobEvent,params: IncreaseResources):
                     backoffLimit=job_event.spec.backoffLimit,
                     activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
                     ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
-                    selector=job_event.spec.selector
+                    selector=job_event.spec.selector,
                     template=PodTemplateSpec(
                         spec=PodSpec(
                             containers=container_list,
