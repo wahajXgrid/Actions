@@ -90,7 +90,7 @@ def split_num_and_str(num_str:str):
     num = ''
     index=None
     for ind,char in enumerate(num_str):
-       if char.isdigit() or char == '.':
+       if char.isdigit() or char is '.':
          num = num+char
        else:
          index =ind
@@ -106,7 +106,7 @@ def increase_resource(resource,increase_to):
    
     split_lim,lim_unit = split_num_and_str(limits)
     split_req,req_unit = split_num_and_str(reqests)
-
+    print(split_req)
     
     split_req = float(split_req) + float(increase_to)
     if(split_req > float(split_lim)):
