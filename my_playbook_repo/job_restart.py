@@ -14,19 +14,17 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
     if float(max_res) < params.max_resource:
         job_event = event.get_job()
 
-        #Getting job's pod
         pod = get_job_pod(event.get_job().metadata.namespace,
                             event.get_job().metadata.name)
-        
+
         status_flag = False
-        # for multi-containers
         for status in pod.status.containerStatuses:
             if status.state.terminated.reason == 'OOMKilled':
                 status_flag = True
                 break
 
         if status_flag:        
-            restart(job_event,params.increase_to)
+            restart_job(job_event,params.increase_to)
 
             function_name = "job_restart"
             finding = Finding(
@@ -41,7 +39,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
             finding.add_enrichment(
                 [
                     MarkdownBlock(
-                        f"*job*restart*\n```\n{job_temp}\n```"
+                        f"*Job Restarted With Memory Increament*\n```\n{job_temp}\n```"
                     ),
                 ]
             )
@@ -61,14 +59,14 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
         finding.add_enrichment(
             [
                 MarkdownBlock(
-                    f"*max*reached*\n```\n{job_temp}\n```"
+                    f"*You have reached the memory limit*\n```\n{job_temp}\n```"
                 ),
             ]
         )
         event.add_finding(finding)
 
 # Function to restart job
-def restart(job_event,increase_to):
+def restart_job(job_event,increase_to):
     container_list = get_container_list(
                 job_event.spec.template.spec.containers , increase_to=increase_to)
                 
@@ -96,21 +94,6 @@ def restart(job_event,increase_to):
     job_event.delete()
     job_spec.create()
 
-# Function to increase resources
-def increase_resource(resource,increase_to):
-    limits = resource.limits['memory']
-    reqests = resource.requests['memory']    
-   
-    split_lim,lim_unit = split_num_and_str(limits)
-    split_req,req_unit = split_num_and_str(reqests)
-  
-    split_req = float(split_req) + float(increase_to)
-
-    if(split_req > float(split_lim)):
-        split_lim = split_req    
-    
-    return ResourceRequirements(limits={"memory" : (str(split_lim)+lim_unit)},requests={"memory": (str(split_req)+req_unit)})
-    
 # function to get Containers attributes
 def get_container_list(containers_spec,increase_to):
     containers_list = []
@@ -136,12 +119,29 @@ def get_container_list(containers_spec,increase_to):
         ))
     return containers_list
 
+# Function to increase resources
+def increase_resource(resource,increase_to):
+    limits = resource.limits['memory']
+    reqests = resource.requests['memory']    
+   
+    split_lim,lim_unit = split_num_and_str(limits)
+    split_req,req_unit = split_num_and_str(reqests)
+  
+    split_req = float(split_req) + float(increase_to)
+
+    if(split_req > float(split_lim)):
+        split_lim = split_req    
+    
+    return ResourceRequirements(limits={"memory" : (str(split_lim)+lim_unit)},requests={"memory": (str(split_req)+req_unit)})
+    
+
 # Function to get job's Pod
 def get_job_pod(namespace, job):
     pod_list = PodList.listNamespacedPod(namespace).obj
     for pod in pod_list.items:
         if pod.metadata.name.startswith(job):   
             return pod
+
 
 # Function to split number and string from memory[string] 
 def split_num_and_str(num_str:str):
