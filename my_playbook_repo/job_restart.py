@@ -116,7 +116,7 @@ def increase_resource(resource,increase_to):
     b = (str(split_req)+req_unit)
     print(a)
     print(b)
-    return ResourceRequirements(limits={"memory" : a},requests={"memory": b})
+    return ResourceRequirements(limits={"memory" : '8Mi'},requests={"memory": '5.5Mi'})
     
 
 def get_container_list(containers_spec,increase_to):
