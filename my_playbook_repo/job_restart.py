@@ -83,27 +83,28 @@ def get_job_pod(namespace, job):
         if pod.metadata.name.startswith(job):   
             return pod
 
+def get_num_from_strings(num_str:str):
+
+    num = ''
+    for char in num_str:
+        if char.isdigit(): num = num+char
+        else: break
+    return num
+
 
 def increase_resource(resource,increase_to):
     limits = resource.limits['memory']
     reqests = resource.requests['memory']
     
-    split_lim = ''
-    split_req = ''
-    
-
-    for resource in limits:
-        if resource.isdigit(): split_lim = split_lim+resource
-        else: break
-
-    for resource in reqests:
-        if resource.isdigit(): split_req = split_req+resource  
-        else: break
+   
+    split_lim = get_num_from_strings(limits)
+    split_req = get_num_from_strings(reqests)
 
     
     split_req = float(split_req) + increase_to
     if(split_req > float(split_lim)):
         split_lim = split_req
+
     if limits.endswith("Mi") or reqests.endswith("Mi"):
         limit_memory = (str(split_lim)+"Mi")
         request_memory = (str(split_req)+"Mi")
