@@ -90,7 +90,7 @@ def split_num_and_str(num_str:str):
     num = ''
     index=None
     for ind,char in enumerate(num_str):
-       if char.isdigit() or char is '.':
+       if char.isdigit() or char == '.':
          num = num+char
        else:
          index =ind
