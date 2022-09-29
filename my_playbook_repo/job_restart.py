@@ -39,12 +39,12 @@ def job_restart(event: JobEvent,params: IncreaseResources):
         pod = get_job_pod(event.get_job().metadata.namespace,
                             event.get_job().metadata.name)
         
-        status_flag = True
-        # # for multi-containers
-        # for status in pod.status.containerStatuses:
-        #     if status.state.terminated.reason == 'OOMKilled':
-        #         status_flag = True
-        #         break
+        status_flag = False
+        # for multi-containers
+        for status in pod.status.containerStatuses:
+            if status.state.terminated.reason == 'OOMKilled':
+                status_flag = True
+                break
 
         if status_flag:
             print("han bhai theek hy")         
