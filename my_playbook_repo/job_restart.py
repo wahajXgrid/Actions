@@ -14,9 +14,8 @@ class IncreaseResources(ActionParams):
 def job_restart(event: JobEvent,params: IncreaseResources):
     job_event = event.get_job()
     max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[0].resources.requests['memory'])
-    if int(max_res) <= params.max_resource:
-        print(int(max_res))
-        print(params.max_resource)
+    if int(max_res) < params.max_resource:
+        
         function_name = "job_restart"
         finding = Finding(
             title=f"JOB RESTART",
