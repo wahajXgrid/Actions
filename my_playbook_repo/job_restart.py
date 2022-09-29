@@ -43,8 +43,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
                         f"*Job Restarted With Memory Increament*\n```\n{job_event.spec.template.spec.containers[index].resources.requests['memory']}\n```"
                     ),
                 ]
-            )
-            
+            )    
     else:
         finding.title = f"Max Reached"
         finding.add_enrichment(
