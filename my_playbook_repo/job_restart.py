@@ -39,12 +39,12 @@ def job_restart(event: JobEvent,params: IncreaseResources):
         pod = get_job_pod(event.get_job().metadata.namespace,
                             event.get_job().metadata.name)
         
-        status_flag = False
-        # for multi-containers
-        for status in pod.status.containerStatuses:
-            if status.state.terminated.reason == 'OOMKilled':
-                status_flag = True
-                break
+        status_flag = True
+        # # for multi-containers
+        # for status in pod.status.containerStatuses:
+        #     if status.state.terminated.reason == 'OOMKilled':
+        #         status_flag = True
+        #         break
 
         if status_flag:
             print("han bhai theek hy")         
@@ -76,28 +76,25 @@ def job_restart(event: JobEvent,params: IncreaseResources):
             job_spec.create()
     else:
         print('max reached')
+        function_name = "job_restart"
+        finding = Finding(
+            title=f"MAX REACHED",
+            source=FindingSource.MANUAL,
+            aggregation_key=function_name,
+            finding_type=FindingType.REPORT,
+            failure=False,
+        )
+        job_temp = event.get_job()
+
+        finding.add_enrichment(
+            [
+                MarkdownBlock(
+                    f"*max*reached*\n```\n{job_temp}\n```"
+                ),
+            ]
+        )
+        event.add_finding(finding)
       
-
-
-def get_job_pod(namespace, job):
-    pod_list = PodList.listNamespacedPod(namespace).obj
-    for pod in pod_list.items:
-        if pod.metadata.name.startswith(job):   
-            return pod
-
-def split_num_and_str(num_str:str):
-     
-    num = ''
-    index=None
-    for ind,char in enumerate(num_str):
-       if char.isdigit() or char is '.':
-         num = num+char
-       else:
-         index =ind
-         break
-    return num,num_str[index:]
-
-
 
 def increase_resource(resource,increase_to):
     limits = resource.limits['memory']
@@ -139,3 +136,21 @@ def get_container_list(containers_spec,increase_to):
             resources = increase_resource(container.resources,increase_to) if (container.resources.limits and container.resources.requests)  else None  
         ))
     return containers_list
+
+def get_job_pod(namespace, job):
+    pod_list = PodList.listNamespacedPod(namespace).obj
+    for pod in pod_list.items:
+        if pod.metadata.name.startswith(job):   
+            return pod
+
+def split_num_and_str(num_str:str):
+     
+    num = ''
+    index=None
+    for ind,char in enumerate(num_str):
+       if char.isdigit() or char is '.':
+         num = num+char
+       else:
+         index =ind
+         break
+    return num,num_str[index:]
