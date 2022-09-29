@@ -26,32 +26,7 @@ def job_restart(event: JobEvent,params: IncreaseResources):
                 break
 
         if status_flag:        
-            container_list = get_container_list(
-                job_event.spec.template.spec.containers , increase_to=params.increase_to)
-                
-            job_spec = RobustaJob(
-                metadata=ObjectMeta(
-                    name=job_event.metadata.name,
-                    namespace=job_event.metadata.namespace,
-                    labels=job_event.metadata.labels,
-                ),
-                spec=JobSpec(
-                    completions=job_event.spec.completions,
-                    parallelism=job_event.spec.parallelism,
-                    backoffLimit=job_event.spec.backoffLimit,
-                    activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
-                    ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,                 
-                    template=PodTemplateSpec(
-                        spec=PodSpec(
-                            containers=container_list,
-                            restartPolicy=job_event.spec.template.spec.restartPolicy
-                        ),
-                    ),
-
-                ),
-            )
-            job_event.delete()
-            job_spec.create()
+            restart(job_event,params.increase_to)
 
             function_name = "job_restart"
             finding = Finding(
@@ -92,7 +67,33 @@ def job_restart(event: JobEvent,params: IncreaseResources):
         )
         event.add_finding(finding)
 
+def restart(job_event,increase_to):
+    container_list = get_container_list(
+                job_event.spec.template.spec.containers , increase_to=increase_to)
+                
+    job_spec = RobustaJob(
+        metadata=ObjectMeta(
+            name=job_event.metadata.name,
+            namespace=job_event.metadata.namespace,
+            labels=job_event.metadata.labels,
+        ),
+        spec=JobSpec(
+            completions=job_event.spec.completions,
+            parallelism=job_event.spec.parallelism,
+            backoffLimit=job_event.spec.backoffLimit,
+            activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
+            ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,                 
+            template=PodTemplateSpec(
+                spec=PodSpec(
+                    containers=container_list,
+                    restartPolicy=job_event.spec.template.spec.restartPolicy
+                ),
+            ),
 
+        ),
+    )
+    job_event.delete()
+    job_spec.create()
 
 # Function to increase resources
 def increase_resource(resource,increase_to):
