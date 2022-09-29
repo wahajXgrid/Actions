@@ -8,8 +8,16 @@ class IncreaseResources(ActionParams):
 
 @action
 def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
-    job_event = event.get_job()
 
+    function_name = "job_restart"
+    finding = Finding(
+        title=f"JOB RESTART",
+        source=FindingSource.MANUAL,
+        aggregation_key=function_name,
+        finding_type=FindingType.REPORT,
+        failure=False,
+    )
+    job_event = event.get_job()
     pod = get_job_pod(event.get_job().metadata.namespace,
                             event.get_job().metadata.name)
     index = None
@@ -27,46 +35,26 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
         job_event = event.get_job()
 
         if status_flag:        
-            restart_job(job_event,params.increase_to)
-
-            function_name = "job_restart"
-            finding = Finding(
-                title=f"JOB RESTART",
-                source=FindingSource.MANUAL,
-                aggregation_key=function_name,
-                finding_type=FindingType.REPORT,
-                failure=False,
-            )
-            job_temp = event.get_job()
+            restart_job(job_event,params.increase_to)     
 
             finding.add_enrichment(
                 [
                     MarkdownBlock(
-                        f"*Job Restarted With Memory Increament*\n```\n{job_temp}\n```"
+                        f"*Job Restarted With Memory Increament*\n```\n\n```"
                     ),
                 ]
             )
-            event.add_finding(finding)
+            
     else:
-        print('max reached')
-        function_name = "job_restart"
-        finding = Finding(
-            title=f"MAX REACHED",
-            source=FindingSource.MANUAL,
-            aggregation_key=function_name,
-            finding_type=FindingType.REPORT,
-            failure=False,
-        )
-        job_temp = event.get_job()
-
+        finding.title = f"Max Reached"
         finding.add_enrichment(
             [
                 MarkdownBlock(
-                    f"*You have reached the memory limit*\n```\n{job_temp}\n```"
+                    f"*You have reached the memory limit*\n```\n\n```"
                 ),
             ]
         )
-        event.add_finding(finding)
+    event.add_finding(finding)
 
 # Function to restart job
 def restart_job(job_event,increase_to):
