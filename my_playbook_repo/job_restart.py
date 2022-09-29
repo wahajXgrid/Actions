@@ -6,7 +6,7 @@ from robusta.api import *
 
 
 class IncreaseResources(ActionParams):
-   increase_to: Optional[int] = 1
+   increase_to: Optional[float] = 1
    max_resource: int
      
 
@@ -14,7 +14,7 @@ class IncreaseResources(ActionParams):
 def job_restart(event: JobEvent,params: IncreaseResources):
     job_event = event.get_job()
     max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[0].resources.requests['memory'])
-    if int(max_res) < params.max_resource:
+    if float(max_res) < params.max_resource:
         
         function_name = "job_restart"
         finding = Finding(
