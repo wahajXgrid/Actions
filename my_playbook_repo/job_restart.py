@@ -36,8 +36,14 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
 
         if status_flag:        
             restart_job(job_event,params.increase_to)
-                 
-            finding.title = f"Restart Job"
+            function_name = "job_restart_on_oomkilled"
+            finding = Finding(
+                title=f"JOB RESTART",
+                source=FindingSource.MANUAL,
+                aggregation_key=function_name,
+                finding_type=FindingType.REPORT,
+                failure=False,
+    )     
             finding.add_enrichment(
                 [
                     MarkdownBlock(
