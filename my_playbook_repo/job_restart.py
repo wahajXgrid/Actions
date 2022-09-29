@@ -9,14 +9,7 @@ class IncreaseResources(ActionParams):
 @action
 def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
 
-    function_name = "job_restart_on_oomkilled"
-    finding = Finding(
-        title=f"JOB RESTART",
-        source=FindingSource.MANUAL,
-        aggregation_key=function_name,
-        finding_type=FindingType.REPORT,
-        failure=False,
-    )
+    
     job_event = event.get_job()
     pod = get_job_pod(event.get_job().metadata.namespace,
                             event.get_job().metadata.name)
@@ -53,7 +46,14 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
             )   
             event.add_finding(finding) 
     else:
-        finding.title = f"Max Reached"
+        function_name = "job_restart_on_oomkilled"
+        finding = Finding(
+            title=f"Max Reached",
+            source=FindingSource.MANUAL,
+            aggregation_key=function_name,
+            finding_type=FindingType.REPORT,
+            failure=False,
+        )
         finding.add_enrichment(
             [
                 MarkdownBlock(
