@@ -83,13 +83,17 @@ def get_job_pod(namespace, job):
         if pod.metadata.name.startswith(job):   
             return pod
 
-def get_num_from_strings(num_str:str):
-
+def split_num_and_str(num_str:str):
+     
     num = ''
-    for char in num_str:
-        if char.isdigit(): num = num+char
-        else: break
-    return num
+    index=None
+    for ind,char in enumerate(num_str):
+       if char.isdigit(): num = num+char
+       else:
+         index =ind
+         break
+    return num,num_str[index:]
+
 
 
 def increase_resource(resource,increase_to):
@@ -97,23 +101,15 @@ def increase_resource(resource,increase_to):
     reqests = resource.requests['memory']
     
    
-    split_lim = get_num_from_strings(limits)
-    split_req = get_num_from_strings(reqests)
+    split_lim,lim_unit = split_num_and_str(limits)
+    split_req,req_unit = split_num_and_str(reqests)
 
     
     split_req = float(split_req) + increase_to
     if(split_req > float(split_lim)):
-        split_lim = split_req
+        split_lim = split_req    
 
-    if limits.endswith("Mi") or reqests.endswith("Mi"):
-        limit_memory = (str(split_lim)+"Mi")
-        request_memory = (str(split_req)+"Mi")
-
-    elif limits.endswith("Gi") or reqests.endswith("Gi"):
-        limit_memory = (str(split_lim)+"Gi")
-        request_memory = (str(split_req)+"Gi")
-
-    return ResourceRequirements(limits={"memory" : limit_memory},requests={"memory": request_memory})
+    return ResourceRequirements(limits={"memory" : (str(split_lim)+lim_unit)},requests={"memory": (str(split_req)+req_unit)})
     
 
 def get_container_list(containers_spec,increase_to):
