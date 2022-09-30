@@ -22,12 +22,17 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
         finding_type=FindingType.REPORT,
         failure=False,
     )
-
     job_event = event.get_job()
+    """
+    Retrieves job's pod information
+    """
     pod = get_job_pod(job_event.metadata.namespace,job_event.metadata.name)
 
     index = None
     status_flag = False
+    """
+    Retrieves pod's container information for an OOMKilled pod
+    """
     for ind,status in enumerate(pod.status.containerStatuses):
         if status.state.terminated.reason == 'OOMKilled':
             index = ind
