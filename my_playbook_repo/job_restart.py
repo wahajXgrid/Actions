@@ -51,7 +51,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
 
         finding.add_enrichment(
             [
-                FileBlock(
+                MarkdownBlock(
                     f"*You have reached the memory limit*\n```\n{job_temp}\n```"
                 ),
             ]
