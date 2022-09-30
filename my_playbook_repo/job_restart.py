@@ -30,11 +30,9 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
             break
 
     max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[index].resources.requests['memory'])
-
-    
     
     if float(max_res) < params.max_resource:
-        job_event = event.get_job()
+        #job_event = event.get_job()
         if status_flag:        
             job_spec = restart_job(job_event,params.increase_to)
             job_temp = job_spec.spec.template.spec.containers[index].resources.requests['memory']
