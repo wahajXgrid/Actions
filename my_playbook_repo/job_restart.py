@@ -80,8 +80,10 @@ def restart_job(job_event,increase_to):
             template=PodTemplateSpec(
                 spec=PodSpec(
                     containers=container_list,
-                    restartPolicy=job_event.spec.template.spec.restartPolicy
+                    restartPolicy=job_event.spec.template.spec.restartPolicy,
+                    nodeName=job_event.spec.template.spec.nodeName,
                     
+
                 ),
             ),
 
