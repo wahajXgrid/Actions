@@ -17,7 +17,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
         finding_type=FindingType.REPORT,
         failure=False,
     )
-    job_temp = event.get_job()
+    job_temp = event.get_job().spec.template
 
     pod = get_job_pod(event.get_job().metadata.namespace,
                             event.get_job().metadata.name)
@@ -33,7 +33,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
     max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[index].resources.requests['memory'])
 
     if float(max_res) < params.max_resource:
-        job_event = event.get_job().spec.template.spec
+        job_event = event.get_job()
 
         if status_flag:        
             restart_job(job_event,params.increase_to)
