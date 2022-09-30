@@ -9,6 +9,15 @@ class IncreaseResources(ActionParams):
 @action
 def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
     
+    function_name = "job_restart"
+    finding = Finding(
+        title=f"JOB RESTART",
+        source=FindingSource.MANUAL,
+        aggregation_key=function_name,
+        finding_type=FindingType.REPORT,
+        failure=False,
+    )
+    
     job_event = event.get_job()
     pod = get_job_pod(event.get_job().metadata.namespace,event.get_job().metadata.name)
 
@@ -22,18 +31,10 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
 
     max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[index].resources.requests['memory'])
 
-    function_name = "job_restart"
-    finding = Finding(
-        title=f"JOB RESTART",
-        source=FindingSource.MANUAL,
-        aggregation_key=function_name,
-        finding_type=FindingType.REPORT,
-        failure=False,
-    )
+    
     
     if float(max_res) < params.max_resource:
         job_event = event.get_job()
-
         if status_flag:        
             job_spec = restart_job(job_event,params.increase_to)
             job_temp = job_spec.spec.template.spec.containers[index].resources.requests['memory']
@@ -44,8 +45,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
                     ),
                 ]
             )
-            event.add_finding(finding)
-            
+            event.add_finding(finding)     
     else:
         job_temp = event.get_job().spec.template.spec.containers[index].resources.requests['memory']
         finding.title = f" MAX REACHED "
@@ -61,9 +61,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
 
 # Function to restart job
 def restart_job(job_event,increase_to):
-    container_list = get_container_list(
-                job_event.spec.template.spec.containers , increase_to=increase_to)
-                
+    container_list = get_container_list(job_event.spec.template.spec.containers , increase_to=increase_to)             
     job_spec = RobustaJob(
         metadata=ObjectMeta(
             name=job_event.metadata.name,
