@@ -16,11 +16,10 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
     for ind,status in enumerate(pod.status.containerStatuses):
         if status.state.terminated.reason == 'OOMKilled':
             index = ind
-            print(index)
             status_flag = True
             break
 
-    max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[index].resources.requests['memory'])
+    max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[0].resources.requests['memory'])
 
     function_name = "job_restart"
     finding = Finding(
@@ -37,7 +36,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
         if status_flag:        
             restart_job(job_event,params.increase_to)
 
-            job_temp = event.get_job().spec.template.spec.containers[index].resources.requests['memory']
+            job_temp = event.get_job().spec.template.spec.containers[0].resources.requests['memory']
             finding.add_enrichment(
                 [
                     MarkdownBlock(
