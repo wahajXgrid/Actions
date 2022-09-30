@@ -34,8 +34,8 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
         job_event = event.get_job()
 
         if status_flag:        
-            
-            job_temp = event.get_job().spec.template.spec.containers[index].resources.requests['memory']
+            job_spec = restart_job(job_event,params.increase_to)
+            job_temp = job_spec
             finding.add_enrichment(
                 [
                     MarkdownBlock(
@@ -44,7 +44,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
                 ]
             )
             event.add_finding(finding)
-            restart_job(job_event,params.increase_to)
+            
     else:
         job_temp = event.get_job().spec.template.spec.containers[index].resources.requests['memory']
         finding.title = f" MAX REACHED "
@@ -86,6 +86,7 @@ def restart_job(job_event,increase_to):
     )
     job_event.delete()
     job_spec.create()
+    return job_spec
 
 # function to get Containers attributes
 def get_container_list(containers_spec,increase_to):
