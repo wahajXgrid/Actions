@@ -17,7 +17,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
         finding_type=FindingType.REPORT,
         failure=False,
     )
-    job_temp = event.get_job().spec.template
+    job_temp = event.get_job().spec.template.spec.containers[index]
 
     pod = get_job_pod(event.get_job().metadata.namespace,
                             event.get_job().metadata.name)
