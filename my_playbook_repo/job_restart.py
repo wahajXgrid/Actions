@@ -33,7 +33,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
     max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[index].resources.requests['memory'])
 
     if float(max_res) < params.max_resource:
-        job_event = event.get_job()
+        job_event = event.get_job().spec.template.spec
 
         if status_flag:        
             restart_job(job_event,params.increase_to)
@@ -48,17 +48,8 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
             )
             event.add_finding(finding)
     else:
-       
-        # function_name = "job_restart"
-        # finding = Finding(
-        #     title=f"MAX REACHED",
-        #     source=FindingSource.MANUAL,
-        #     aggregation_key=function_name,
-        #     finding_type=FindingType.REPORT,
-        #     failure=False,
-        # )
-        # job_temp = event.get_job()
-        finding.title = f"Max Reached "
+
+        finding.title = f" MAX REACHED "
 
         finding.add_enrichment(
             [
