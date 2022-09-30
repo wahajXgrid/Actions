@@ -92,7 +92,6 @@ def restart_job(job_event,increase_to):
 # function to get Containers attributes
 def get_container_list(containers_spec,increase_to):
     containers_list = []
-
     for container in containers_spec:
         containers_list.append(Container(
             name=container.name,
