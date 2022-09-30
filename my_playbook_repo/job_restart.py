@@ -49,15 +49,16 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
             event.add_finding(finding)
     else:
        
-        function_name = "job_restart"
-        finding = Finding(
-            title=f"MAX REACHED",
-            source=FindingSource.MANUAL,
-            aggregation_key=function_name,
-            finding_type=FindingType.REPORT,
-            failure=False,
-        )
-        job_temp = event.get_job()
+        # function_name = "job_restart"
+        # finding = Finding(
+        #     title=f"MAX REACHED",
+        #     source=FindingSource.MANUAL,
+        #     aggregation_key=function_name,
+        #     finding_type=FindingType.REPORT,
+        #     failure=False,
+        # )
+        # job_temp = event.get_job()
+        finding.title = f"Max Reached "
 
         finding.add_enrichment(
             [
