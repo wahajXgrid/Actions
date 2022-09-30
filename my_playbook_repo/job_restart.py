@@ -38,8 +38,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
         if status_flag:        
             restart_job(job_event,params.increase_to)
 
-            
-
+        
             finding.add_enrichment(
                 [
                     MarkdownBlock(
@@ -50,6 +49,15 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
             event.add_finding(finding)
     else:
        
+        function_name = "job_restart"
+        finding = Finding(
+            title=f"MAX REACHED",
+            source=FindingSource.MANUAL,
+            aggregation_key=function_name,
+            finding_type=FindingType.REPORT,
+            failure=False,
+        )
+        job_temp = event.get_job()
 
         finding.add_enrichment(
             [
