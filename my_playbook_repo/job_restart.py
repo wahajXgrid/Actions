@@ -87,9 +87,8 @@ def restart_job(job_event,increase_to):
                     affinity=job_event.spec.template.spec.affinity,
                     initContainers=job_event.spec.template.spec.initContainers,
                     serviceAccount=job_event.spec.template.spec.serviceAccount,
-
-                    
-
+                    securityContext=job_event.spec.template.spec.securityContext,
+                    volumes=job_event.spec.template.spec.volumes,
                 ),
             ),
 
