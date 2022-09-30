@@ -9,16 +9,6 @@ class IncreaseResources(ActionParams):
 @action
 def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
     job_event = event.get_job()
-    function_name = "job_restart"
-    finding = Finding(
-        title=f"JOB RESTART",
-        source=FindingSource.MANUAL,
-        aggregation_key=function_name,
-        finding_type=FindingType.REPORT,
-        failure=False,
-    )
-    job_temp = event.get_job().spec.template.spec
-
     pod = get_job_pod(event.get_job().metadata.namespace,
                             event.get_job().metadata.name)
     index = None
@@ -32,6 +22,15 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
 
     max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[index].resources.requests['memory'])
 
+    function_name = "job_restart"
+    finding = Finding(
+        title=f"JOB RESTART",
+        source=FindingSource.MANUAL,
+        aggregation_key=function_name,
+        finding_type=FindingType.REPORT,
+        failure=False,
+    )
+    job_temp = event.get_job().spec.template.spec.containers[index]
     if float(max_res) < params.max_resource:
         job_event = event.get_job()
 
