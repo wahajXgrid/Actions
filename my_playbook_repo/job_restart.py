@@ -35,7 +35,7 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
 
         if status_flag:        
             
-            job_temp = job_event
+            job_temp = event.get_job().spec.template.spec.containers[index].resources.requests['memory']
             finding.add_enrichment(
                 [
                     MarkdownBlock(
