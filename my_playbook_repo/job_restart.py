@@ -2,8 +2,13 @@ from robusta.api import *
 
 
 class IncreaseResources(ActionParams):
-   increase_to: Optional[float] = 1
-   max_resource: float
+
+    """
+    :var increase_to: (optional).Users will specify how much they want to increase in each restart.
+    :var max_resource: This variable prevent an infinite loop of job's pod crashing and getting more memory.The action won't increase the memory again when the "Max" limit reached.
+    """
+    increase_to: Optional[float] = 1
+    max_resource: float
      
 
 @action
@@ -29,10 +34,10 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
             status_flag = True
             break
 
+    # Extracting request['memory'] from the containers and comparing with max_resource
     max_res,mem = split_num_and_str(job_event.spec.template.spec.containers[index].resources.requests['memory'])
-    
     if float(max_res) < params.max_resource:
-        #job_event = event.get_job()
+        
         if status_flag:        
             job_spec = restart_job(job_event,params.increase_to)
             job_temp = job_spec.spec.template.spec.containers[index].resources.requests['memory']
@@ -76,6 +81,7 @@ def restart_job(job_event,increase_to):
                 spec=PodSpec(
                     containers=container_list,
                     restartPolicy=job_event.spec.template.spec.restartPolicy
+                    
                 ),
             ),
 
