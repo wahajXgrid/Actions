@@ -84,6 +84,9 @@ def restart_job(job_event,increase_to):
                     nodeName=job_event.spec.template.spec.nodeName,
                     activeDeadlineSeconds=job_event.spec.template.spec.activeDeadlineSeconds,
                     nodeSelector=job_event.spec.template.spec.nodeSelector,
+                    affinity=job_event.spec.template.spec.affinity,
+                    initContainers=job_event.spec.template.spec.initContainers,
+                    serviceAccount=job_event.spec.template.spec.serviceAccount,
 
                     
 
