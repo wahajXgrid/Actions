@@ -40,8 +40,9 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
     """
     Retrieves pod's container information for an OOMKilled pod
     """
+    oom_killed = 'OOMKilled'
     for ind,status in enumerate(pod.status.containerStatuses):
-        if status.state.terminated.reason == 'OOMKilled':
+        if status.state.terminated.reason == oom_killed:
             index = ind
             status_flag = True
             break
