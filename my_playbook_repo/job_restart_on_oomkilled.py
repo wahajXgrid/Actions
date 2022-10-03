@@ -24,17 +24,17 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
     )
     
     job_event = event.get_job()
-    if not job_event():
-        logging.error(
-            f"Job restart was called on event without Job: {event}")
+    # if not job_event():
+    #     logging.error(
+    #         f"Job restart was called on event without Job: {event}")
 
     """
     Retrieves job's pod information
     """
     pod = get_job_pod(job_event.metadata.namespace,job_event.metadata.name)
-    if not pod:
-        logging.error(
-            f"get_job_pod was called on event without pod: {event}")
+    # if not pod:
+    #     logging.error(
+    #         f"get_job_pod was called on event without pod: {event}")
     index = None
     status_flag = False
     """
@@ -53,9 +53,9 @@ def job_restart_on_oomkilled(event: JobEvent,params: IncreaseResources):
         
         if status_flag:        
             job_spec = restart_job(job_event,params.increase_to)
-            if not job_spec():
-                logging.error(
-                    f"Job spec was called on event without job: {event}")
+            # if not job_spec():
+            #     logging.error(
+            #         f"Job spec was called on event without job: {event}")
             job_temp = job_spec.spec.template.spec.containers[index].resources.requests['memory']
             finding.add_enrichment(
                 [
