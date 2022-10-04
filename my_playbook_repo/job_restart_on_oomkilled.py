@@ -14,10 +14,13 @@ class IncreaseResources(ActionParams):
 
 @action
 def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
-
-    function_name = "job_restart"
+    
+    """
+    This action will run when job failed with oomkilled
+    """
+    function_name = "job_restart_on_oomkilled"
     finding = Finding(
-        title=f"JOB RESTART",
+        title=f"Job Restart",
         source=FindingSource.MANUAL,
         aggregation_key=function_name,
         finding_type=FindingType.REPORT,
