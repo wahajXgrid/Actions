@@ -43,7 +43,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     # try:
     #     #pod = get_job_pod(job_event.metadata.namespace, job_event.metadata.name)
         
-    pod = get_job_latest_pod(job_event.metadata.name)
+    pod = get_job_latest_pod(job_event)
     print("&&&&&&&")
     print (pod)
     print("&&&&&&&")
