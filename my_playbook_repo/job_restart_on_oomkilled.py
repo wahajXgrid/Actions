@@ -70,7 +70,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             finding.add_enrichment(
                 [
                     MarkdownBlock(
-                        f"*Job Restarted With Memory Increament*\n```\n{job_temp}\n```"
+                        f"*Job Restarted With Memory Increment*\n```\n{job_temp}\n```"
                     ),
                 ]
             )
