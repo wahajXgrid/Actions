@@ -41,8 +41,8 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     Retrieves job's pod information
     """
     try:
-        #pod = get_job_pod(job_event.metadata.namespace, job_event.metadata.name)
-        pod = get_job_latest_pod(job_event.metadata.name)
+        pod = get_job_pod(job_event.metadata.namespace, job_event.metadata.name)
+        #pod = get_job_latest_pod(job_event.metadata.name)
     except:
         logging.error(
             f"get_job_pod was called on event without job: {event}")
