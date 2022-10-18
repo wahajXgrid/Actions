@@ -35,14 +35,10 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         return
     job_event = event.get_job()
     
-
-
     """
     Retrieves job's pod information
     """
-    try:
-        #pod = get_job_pod(job_event.metadata.namespace, job_event.metadata.name)
-        
+    try:    
         pod = get_job_latest_pod(job_event)
     
     except:
@@ -65,39 +61,47 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     max_res, mem = split_num_and_str(
         job_event.spec.template.spec.containers[index].resources.requests["memory"]
     )
-    if float(max_res) < params.max_resource:
+    if status_flag:
+        if float(max_res) < params.max_resource:
+                job_spec = restart_job(job_event, params.increase_to)
 
-        if status_flag:
-            job_spec = restart_job(job_event, params.increase_to)
+                job_temp = job_spec.spec.template.spec.containers[index].resources.requests[
+                    "memory"
+                ]
+                finding.add_enrichment(
+                    [
+                        MarkdownBlock(
+                            f"*Job Restarted With Memory Increment*\n```\n{job_temp}\n```"
+                        ),
+                    ]
+                )
+                event.add_finding(finding)
+        else:
+            job_temp = (
+                event.get_job()
+                .spec.template.spec.containers[index]
+                .resources.requests["memory"]
+            )
+            finding.title = f" MAX REACHED "
 
-            job_temp = job_spec.spec.template.spec.containers[index].resources.requests[
-                "memory"
-            ]
             finding.add_enrichment(
                 [
                     MarkdownBlock(
-                        f"*Job Restarted With Memory Increment*\n```\n{job_temp}\n```"
+                        f"*You have reached the memory limit*\n```\n{job_temp}\n```"
                     ),
                 ]
             )
             event.add_finding(finding)
     else:
-        job_temp = (
-            event.get_job()
-            .spec.template.spec.containers[index]
-            .resources.requests["memory"]
-        )
-        finding.title = f" MAX REACHED "
-
+        finding.title = f" POD FAILED "
         finding.add_enrichment(
             [
                 MarkdownBlock(
-                    f"*You have reached the memory limit*\n```\n{job_temp}\n```"
+                    f"*The job's pod was not killed because of OOM*"
                 ),
             ]
         )
         event.add_finding(finding)
-
 
 # Function to restart job
 def restart_job(job_event, increase_to):
