@@ -7,11 +7,11 @@ CONTROLLER_UID = "controller-uid"
 class IncreaseResources(ActionParams):
 
     """
-    :var increase_to: (optional).Users will specify how much they want to increase in each restart.
+    :var increase_by: (optional).Users will specify how much they want to increase in each restart.
     :var max_resource: This variable prevent an infinite loop of job's pod crashing and getting more memory.The action won't increase the memory again when the "Max" limit reached.
     """
 
-    increase_to: Optional[float] = 1
+    increase_by: Optional[float] = 1
     max_resource: float
 
 
@@ -63,7 +63,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     )
     if status_flag:
         if float(max_res) < params.max_resource:
-                job_spec = restart_job(job_event, params.increase_to)
+                job_spec = restart_job(job_event, params.increase_by)
 
                 job_temp = job_spec.spec.template.spec.containers[index].resources.requests[
                     "memory"
@@ -104,9 +104,9 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         event.add_finding(finding)
 
 # Function to restart job
-def restart_job(job_event, increase_to):
+def restart_job(job_event, increase_by):
     container_list = get_container_list(
-        job_event.spec.template.spec.containers, increase_to=increase_to
+        job_event.spec.template.spec.containers, increase_by=increase_by
     )
     job_spec = RobustaJob(
         metadata=ObjectMeta(
@@ -142,7 +142,7 @@ def restart_job(job_event, increase_to):
 
 
 # function to get Containers attributes
-def get_container_list(containers_spec, increase_to):
+def get_container_list(containers_spec, increase_by):
     containers_list = []
     for container in containers_spec:
         containers_list.append(
@@ -162,7 +162,7 @@ def get_container_list(containers_spec, increase_to):
                 startupProbe=container.startupProbe,
                 envFrom=container.envFrom,
                 imagePullPolicy=container.imagePullPolicy,
-                resources=increase_resource(container.resources, increase_to)
+                resources=increase_resource(container.resources, increase_by)
                 if (container.resources.limits and container.resources.requests)
                 else None,
             )
@@ -171,14 +171,14 @@ def get_container_list(containers_spec, increase_to):
 
 
 # Function to increase resources
-def increase_resource(resource, increase_to):
+def increase_resource(resource, increase_by):
     limits = resource.limits["memory"]
     reqests = resource.requests["memory"]
 
     split_lim, lim_unit = split_num_and_str(limits)
     split_req, req_unit = split_num_and_str(reqests)
 
-    split_req = float(split_req) + float(increase_to)
+    split_req = float(split_req) + float(increase_by)
 
     if split_req > float(split_lim):
         split_lim = split_req
