@@ -56,6 +56,11 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             index = ind
             status_flag = True
             break
+    
+    a = find_most_recent_oom_killed_container(pod,container_statuses=pod.status.containerStatuses,only_current_state=True)
+    print('************$$$$$$$')
+    print(a)
+    print('********$$$$$$$')
 
     # Extracting request['memory'] from the containers and comparing with max_resource
     max_res, mem = split_num_and_str(
@@ -225,3 +230,11 @@ def get_job_latest_pod(job: Job) -> Optional[RobustaPod]:
     ).obj.items
     pod_list.sort(key=lambda pod: pod.status.startTime, reverse=True)
     return pod_list[0] if pod_list else None
+
+def find_most_recent_oom_killed_container(pod: Pod, container_statuses: List[ContainerStatus], only_current_state: bool = False) -> Optional[PodContainer]:
+    latest_oom_kill_container = None
+    for container_status in container_statuses:
+        oom_killed_container = get_oom_killed_container(pod, container_status, only_current_state)
+        if not latest_oom_kill_container or get_oom_kill_time(oom_killed_container) > get_oom_kill_time(latest_oom_kill_container):
+            latest_oom_kill_container = oom_killed_container
+    return latest_oom_kill_container
