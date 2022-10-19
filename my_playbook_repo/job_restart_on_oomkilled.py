@@ -60,6 +60,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     a = find_most_recent_oom_killed_container(pod,container_statuses=pod.status.containerStatuses,only_current_state=True)
     print('************$$$$$$$')
     print(a)
+    print(index)
     print('********$$$$$$$')
 
     # Extracting request['memory'] from the containers and comparing with max_resource
