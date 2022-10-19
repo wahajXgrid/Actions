@@ -57,10 +57,10 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             status_flag = True
             break
    
-    a = PodContainer.get_requests(job_event.spec.template.spec.containers[index])
+    a = PodContainer.get_requests(job_event.spec.template.spec.containers[index]).memory
     print('************$$$$$$$')
     print(a)
-    print(index)
+
     print('********$$$$$$$')
     # Extracting request['memory'] from the containers and comparing with max_resource
     max_res, mem = split_num_and_str(
