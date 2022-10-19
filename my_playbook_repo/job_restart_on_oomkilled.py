@@ -65,7 +65,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     # )
     if status_flag:
         if float(a) < params.max_resource:
-                job_spec = restart_job(job_event, params.increase_by)
+                job_spec = restart_job(job_event, params.increase_by, params.max_resource)
 
                 job_temp = job_spec.spec.template.spec.containers[index].resources.requests[
                     "memory"
@@ -106,9 +106,9 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         event.add_finding(finding)
 
 # Function to restart job
-def restart_job(job_event, increase_by):
+def restart_job(job_event, increase_by, max_resource):
     container_list = get_container_list(
-        job_event.spec.template.spec.containers, increase_by=increase_by
+        job_event.spec.template.spec.containers, increase_by=increase_by  , max_resource = max_resource
     )
     job_spec = RobustaJob(
         metadata=ObjectMeta(
@@ -144,7 +144,7 @@ def restart_job(job_event, increase_by):
 
 
 # function to get Containers attributes
-def get_container_list(containers_spec, increase_by):
+def get_container_list(containers_spec, increase_by,max_resource):
     containers_list = []
     for container in containers_spec:
         containers_list.append(
@@ -164,7 +164,7 @@ def get_container_list(containers_spec, increase_by):
                 startupProbe=container.startupProbe,
                 envFrom=container.envFrom,
                 imagePullPolicy=container.imagePullPolicy,
-                resources=increase_resource(container.resources, increase_by)
+                resources=increase_resource(container.resources, increase_by,max_resource)
                 if (container.resources.limits and container.resources.requests)
                 else None,
             )
@@ -173,7 +173,7 @@ def get_container_list(containers_spec, increase_by):
 
 
 # Function to increase resources
-def increase_resource(resource, increase_by):
+def increase_resource(resource, increase_by,max_resource):
     limits = resource.limits["memory"]
     reqests = resource.requests["memory"]
 
@@ -184,7 +184,8 @@ def increase_resource(resource, increase_by):
 
     if split_req > float(split_lim):
         split_lim = split_req
-
+    if split_req > max_resource:
+        split_req = max_resource
     return ResourceRequirements(
         limits={"memory": (str(split_lim) + lim_unit)},
         requests={"memory": (str(split_req) + req_unit)},
