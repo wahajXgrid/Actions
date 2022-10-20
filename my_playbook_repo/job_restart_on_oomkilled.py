@@ -174,8 +174,8 @@ def get_container_list(containers_spec, increase_by,max_resource):
 
 # Function to increase resources
 def increase_resource(container, increase_by,max_resource):
-    limits = container.resource.limits["memory"]
-    reqests = container.resource.requests["memory"]
+    limits = container.resources.limits["memory"]
+    reqests = container.resources.requests["memory"]
     print("/////////////////////")
     print(container)
     print("/////////////////////")
