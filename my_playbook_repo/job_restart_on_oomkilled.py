@@ -70,7 +70,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     if status_flag:
         for i in index,max_res:
             
-            if max_res[i] < params.max_resource:
+            if max_res < params.max_resource:
                     job_spec = restart_job(job_event, params.increase_by, params.max_resource, i)
 
                     job_temp = job_spec.spec.template.spec.containers[i].resources.requests[
