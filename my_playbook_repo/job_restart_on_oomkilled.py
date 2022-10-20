@@ -148,12 +148,7 @@ def get_container_list(containers_spec, increase_by,max_resource,index):
     count = 0
     containers_list = []
     for container in containers_spec:
-        print("index")
-        print(index)
-        print("count")
-        print(count)
         containers_list.append(
-        
             Container(
                 name=container.name,
                 image=container.image,
@@ -170,7 +165,7 @@ def get_container_list(containers_spec, increase_by,max_resource,index):
                 startupProbe=container.startupProbe,
                 envFrom=container.envFrom,
                 imagePullPolicy=container.imagePullPolicy,
-                resources=increase_resource(container, increase_by,max_resource)
+                resources=increase_resource(container.resources, increase_by,max_resource,count,index)
                 if (container.resources.limits and container.resources.requests)
                 else None,
             )
@@ -181,26 +176,26 @@ def get_container_list(containers_spec, increase_by,max_resource,index):
 
 
 # Function to increase resources
-def increase_resource(container, increase_by,max_resource):
-    limits = container.resources.limits["memory"]
-    reqests = container.resources.requests["memory"]
-    print("/////////////////////")
-    print(container)
-    print("/////////////////////")
+def increase_resource(resources, increase_by,max_resource,count,index):
+    if count == index:
+        limits = resources.limits["memory"]
+        reqests = resources.requests["memory"]
 
-    split_lim, lim_unit = split_num_and_str(limits)
-    split_req, req_unit = split_num_and_str(reqests)
+        split_lim, lim_unit = split_num_and_str(limits)
+        split_req, req_unit = split_num_and_str(reqests)
 
-    split_req = float(split_req) + float(increase_by)
+        split_req = float(split_req) + float(increase_by)
 
-    if split_req > float(split_lim):
-        split_lim = split_req
-    if split_req > max_resource:
-        split_req = max_resource
-    return ResourceRequirements(
-        limits={"memory": (str(split_lim) + lim_unit)},
-        requests={"memory": (str(split_req) + req_unit)},
-    )
+        if split_req > float(split_lim):
+            split_lim = split_req
+        if split_req > max_resource:
+            split_req = max_resource
+        return ResourceRequirements(
+            limits={"memory": (str(split_lim) + lim_unit)},
+            requests={"memory": (str(split_req) + req_unit)},
+        )
+    else:
+        return resources
 
 
 # Function to get job's Pod
