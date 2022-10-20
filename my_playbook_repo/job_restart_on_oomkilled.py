@@ -56,7 +56,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             index = ind
             status_flag = True
             break
-   
+    print(index)
     a = PodContainer.get_requests(job_event.spec.template.spec.containers[index]).memory
     
     # Extracting request['memory'] from the containers and comparing with max_resource
@@ -65,7 +65,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     # )
     if status_flag:
         if float(a) < params.max_resource:
-                job_spec = restart_job(job_event, params.increase_by, params.max_resource)
+                job_spec = restart_job(job_event, params.increase_by, params.max_resource, index)
 
                 job_temp = job_spec.spec.template.spec.containers[index].resources.requests[
                     "memory"
@@ -106,9 +106,9 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         event.add_finding(finding)
 
 # Function to restart job
-def restart_job(job_event, increase_by, max_resource):
+def restart_job(job_event, increase_by, max_resource , index):
     container_list = get_container_list(
-        job_event.spec.template.spec.containers, increase_by=increase_by  , max_resource = max_resource
+        job_event.spec.template.spec.containers, increase_by=increase_by  , max_resource = max_resource ,index = index
     )
     job_spec = RobustaJob(
         metadata=ObjectMeta(
@@ -144,7 +144,7 @@ def restart_job(job_event, increase_by, max_resource):
 
 
 # function to get Containers attributes
-def get_container_list(containers_spec, increase_by,max_resource):
+def get_container_list(containers_spec, increase_by,max_resource,index):
     containers_list = []
     for container in containers_spec:
         containers_list.append(
