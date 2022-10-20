@@ -68,8 +68,8 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     #     job_event.spec.template.spec.containers[index].resources.requests["memory"]
     # )
     if status_flag:
-        for i,j in index,max_res:
-            print (max_res[i])
+        for i in index,max_res:
+            
             if max_res[i] < params.max_resource:
                     job_spec = restart_job(job_event, params.increase_by, params.max_resource, i)
 
