@@ -45,7 +45,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         logging.error(
             f"get_job_pod was called on event without job: {event}")
     
-    index = None
+    index = []
     status_flag = False
     """
     Retrieves pod's container information for an OOMKilled pod
