@@ -164,7 +164,7 @@ def get_container_list(containers_spec, increase_by,max_resource):
                 startupProbe=container.startupProbe,
                 envFrom=container.envFrom,
                 imagePullPolicy=container.imagePullPolicy,
-                resources=increase_resource(container.resources, increase_by,max_resource)
+                resources=increase_resource(container, increase_by,max_resource)
                 if (container.resources.limits and container.resources.requests)
                 else None,
             )
@@ -173,9 +173,12 @@ def get_container_list(containers_spec, increase_by,max_resource):
 
 
 # Function to increase resources
-def increase_resource(resource, increase_by,max_resource):
-    limits = resource.limits["memory"]
-    reqests = resource.requests["memory"]
+def increase_resource(container, increase_by,max_resource):
+    limits = container.resource.limits["memory"]
+    reqests = container.resource.requests["memory"]
+    print("/////////////////////")
+    print(container)
+    print("/////////////////////")
 
     split_lim, lim_unit = split_num_and_str(limits)
     split_req, req_unit = split_num_and_str(reqests)
