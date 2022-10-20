@@ -145,9 +145,13 @@ def restart_job(job_event, increase_by, max_resource , index):
 
 # function to get Containers attributes
 def get_container_list(containers_spec, increase_by,max_resource,index):
+    count = 0
     containers_list = []
     for container in containers_spec:
-        print(container)
+        print("index")
+        print(index)
+        print("count")
+        print(count)
         containers_list.append(
         
             Container(
@@ -170,7 +174,9 @@ def get_container_list(containers_spec, increase_by,max_resource,index):
                 if (container.resources.limits and container.resources.requests)
                 else None,
             )
+
         )
+        count = count + 1
     return containers_list
 
 
