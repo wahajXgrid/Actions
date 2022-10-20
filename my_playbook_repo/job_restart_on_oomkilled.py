@@ -3,7 +3,7 @@
 # from hikaru.model import Job, PodList
 
 
-# CONTROLLER_UID = "controller-uid"
+CONTROLLER_UID = "controller-uid"
 # class IncreaseResources(ActionParams):
 
 #     """
@@ -436,3 +436,17 @@ def split_num_and_str(num_str: str):
             index = ind
             break
     return num, num_str[index:]
+
+def get_job_latest_pod(job: Job) -> Optional[RobustaPod]:
+    if not job:
+        return None
+
+    job_labels = job.metadata.labels
+    job_selector = f"{CONTROLLER_UID}={job_labels[CONTROLLER_UID]}"
+
+    pod_list: List[RobustaPod] = PodList.listNamespacedPod(
+        namespace=job.metadata.namespace,
+        label_selector=job_selector
+    ).obj.items
+    pod_list.sort(key=lambda pod: pod.status.startTime, reverse=True)
+    return pod_list[0] if pod_list else None
