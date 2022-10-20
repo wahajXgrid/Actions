@@ -147,7 +147,9 @@ def restart_job(job_event, increase_by, max_resource , index):
 def get_container_list(containers_spec, increase_by,max_resource,index):
     containers_list = []
     for container in containers_spec:
+        print(container)
         containers_list.append(
+        
             Container(
                 name=container.name,
                 image=container.image,
