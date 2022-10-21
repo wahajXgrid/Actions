@@ -40,7 +40,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     """
     try:    
         pod = get_job_latest_pod(job_event)
-        print(pod)
+      
     except:
         logging.error(
             f"get_job_pod was called on event without job: {event}")
