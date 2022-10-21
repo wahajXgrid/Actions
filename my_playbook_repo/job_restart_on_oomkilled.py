@@ -58,10 +58,9 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             if status.state.terminated.reason == oom_killed:
                 container_name.append(status.name)
 
-    print(container_name)
-    # for ind,container in enumerate(pod.spec.containers):
-    #     if container.name == container_name:
-    #         index = ind
+    for ind,container in enumerate(pod.spec.containers):
+        if container.name in container_name:
+            index.append(ind)
 
             
                 # index.append(ind)
@@ -70,8 +69,8 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         
 
         
-    print(max_res) 
-    print(index)
+    # print(max_res) 
+    # print(index)
     
     
     # Extracting request['memory'] from the containers and comparing with max_resource
