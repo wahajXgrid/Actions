@@ -238,6 +238,8 @@ def get_job_latest_pod(job: Job) -> Optional[RobustaPod]:
         label_selector=job_selector
     ).obj.items
     pod_list.sort(key=lambda pod: pod.status.startTime, reverse=True)
+    
+    print(f"////////////{pod_list}////////////////////")
     return pod_list[0] if pod_list else None
 
 def find_most_recent_oom_killed_container(pod: Pod, container_statuses: List[ContainerStatus], only_current_state: bool = False) -> Optional[PodContainer]:
