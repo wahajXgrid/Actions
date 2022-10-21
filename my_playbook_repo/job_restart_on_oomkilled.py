@@ -45,7 +45,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     except:
         logging.error(
             f"get_job_pod was called on event without job: {event}")
-    container_name = ''
+    container_name = []
     index = []
     max_res = []
     status_flag = False
@@ -56,10 +56,12 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     for status in pod.status.containerStatuses:
         if status.state.running == None:
             if status.state.terminated.reason == oom_killed:
-                container_name = status.name
-    for ind,container in enumerate(pod.spec.containers):
-        if container.name == container_name:
-            print(container.name)
+                container_name.append(status.name)
+
+    print(container_name)
+    # for ind,container in enumerate(pod.spec.containers):
+    #     if container.name == container_name:
+    #         index = ind
 
             
                 # index.append(ind)
