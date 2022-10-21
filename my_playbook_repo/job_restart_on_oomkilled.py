@@ -67,48 +67,48 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     # max_res, mem = split_num_and_str(
     #     job_event.spec.template.spec.containers[index].resources.requests["memory"]
     # )
-    if status_flag:
-        for i in index: 
-            if float(max_res) < params.max_resource:
-                    job_spec = restart_job(job_event, params.increase_by, params.max_resource, i)
+    # if status_flag:
+    #     for i in index: 
+    #         if float(max_res) < params.max_resource:
+    #                 job_spec = restart_job(job_event, params.increase_by, params.max_resource, i)
 
-                    job_temp = job_spec.spec.template.spec.containers[i].resources.requests[
-                        "memory"
-                    ]
-                    finding.add_enrichment(
-                        [
-                            MarkdownBlock(
-                                f"*Job Restarted With Memory Increment*\n```\n{job_temp}\n```"
-                            ),
-                        ]
-                    )
-                    event.add_finding(finding)
-            else:
-                job_temp = (
-                    event.get_job()
-                    .spec.template.spec.containers[i]
-                    .resources.requests["memory"]
-                )
-                finding.title = f" MAX REACHED "
+    #                 job_temp = job_spec.spec.template.spec.containers[i].resources.requests[
+    #                     "memory"
+    #                 ]
+    #                 finding.add_enrichment(
+    #                     [
+    #                         MarkdownBlock(
+    #                             f"*Job Restarted With Memory Increment*\n```\n{job_temp}\n```"
+    #                         ),
+    #                     ]
+    #                 )
+    #                 event.add_finding(finding)
+    #         else:
+    #             job_temp = (
+    #                 event.get_job()
+    #                 .spec.template.spec.containers[i]
+    #                 .resources.requests["memory"]
+    #             )
+    #             finding.title = f" MAX REACHED "
 
-                finding.add_enrichment(
-                    [
-                        MarkdownBlock(
-                            f"*You have reached the memory limit*\n```\n{job_temp}\n```"
-                        ),
-                    ]
-                )
-                event.add_finding(finding)
-    else:
-        finding.title = f" POD FAILED "
-        finding.add_enrichment(
-            [
-                MarkdownBlock(
-                    f"*The job's pod was not killed because of OOM*"
-                ),
-            ]
-        )
-        event.add_finding(finding)
+    #             finding.add_enrichment(
+    #                 [
+    #                     MarkdownBlock(
+    #                         f"*You have reached the memory limit*\n```\n{job_temp}\n```"
+    #                     ),
+    #                 ]
+    #             )
+    #             event.add_finding(finding)
+    # else:
+    #     finding.title = f" POD FAILED "
+    #     finding.add_enrichment(
+    #         [
+    #             MarkdownBlock(
+    #                 f"*The job's pod was not killed because of OOM*"
+    #             ),
+    #         ]
+    #     )
+    #     event.add_finding(finding)
 
 # Function to restart job
 def restart_job(job_event, increase_by, max_resource , index):
