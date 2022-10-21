@@ -1,3 +1,4 @@
+from unicodedata import name
 from robusta.api import *
 from typing import List, Optional
 from hikaru.model import Job, PodList
@@ -55,7 +56,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     for ind, status in enumerate(pod.status.containerStatuses):
         if status.state.running == None:
             if status.state.terminated.reason == oom_killed:
-                container_name = pod.status.containerStatuses.name
+                container_name = pod.status.containerStatuses[name]
                 print(container_name)
             
                 # index.append(ind)
