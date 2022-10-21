@@ -53,7 +53,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     """
     oom_killed = "OOMKilled"
     for ind, status in enumerate(pod.status.containerStatuses):
-        print(status.state)
+        print(status.state.terminated.reason)
         # if status.state.terminated.reason == oom_killed:
         #     index.append(ind)
         #     status_flag = True
