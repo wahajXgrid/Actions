@@ -45,6 +45,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     except:
         logging.error(
             f"get_job_pod was called on event without job: {event}")
+
     oomkilled_container_names = []
     oomkilled_container_indexes = []
     container_req_memory = []
@@ -126,6 +127,7 @@ def restart_job(job_event,container_list):
             ),
         ),
     )
+    print(job_spec)
     job_event.delete()
     job_spec.create()
     return job_spec
