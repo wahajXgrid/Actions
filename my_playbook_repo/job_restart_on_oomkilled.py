@@ -63,9 +63,9 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             if status.state.terminated.reason == OOMKilled:
                 oomkilled_container_names.append(status.name)
         else:
-            running_containers.append(status.name)
+            running_containers.append(container)
     
-
+    print(running_containers)
     for index,container in enumerate(pod.spec.containers):
       
         if container.name in oomkilled_container_names:
@@ -74,7 +74,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             if req_memory < params.max_resource:
                 #container_req_memory.append(req_memory)
                 container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by))
-                container_list_after_resource_increment.extend(running_containers)
+                #container_list_after_resource_increment.extend(running_containers)
     print(container_list_after_resource_increment)
     job_spec = restart_job(job_event,container_list_after_resource_increment) 
     job_spec.create()
