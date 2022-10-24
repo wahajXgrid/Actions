@@ -78,7 +78,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     # print(job_spec)
     job_event.delete()
     print(job)
-    job.create()
+    job.createNamespacedJob()
 
 def increase_request(container,max_resource,increase_by):
     container_final = Container(
