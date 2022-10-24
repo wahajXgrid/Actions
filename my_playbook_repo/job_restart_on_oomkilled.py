@@ -69,12 +69,13 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 container_req_memory.append(req_memory)
                 container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by))
                 
-    print(job_event)    
+    print(job_event)
+    job = job_event  
     print("///////////////////////////////////////////")
-    job_spec = restart_job(job_event,container_list_after_resource_increment) 
-    print(job_spec)
-    
-    job_spec.create()
+    # job_spec = restart_job(job_event,container_list_after_resource_increment) 
+    # print(job_spec)
+    print(job)
+    job.create()
 
 def increase_request(container,max_resource,increase_by):
     container_final = Container(
