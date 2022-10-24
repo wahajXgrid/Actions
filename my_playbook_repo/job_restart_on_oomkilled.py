@@ -111,6 +111,7 @@ def restart_job(job_event,container_list):
             completions=job_event.spec.completions,
             parallelism=job_event.spec.parallelism,
             backoffLimit=job_event.spec.backoffLimit,
+            selector=job_event.spec.selector,
             activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
             ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
             template=PodTemplateSpec(
