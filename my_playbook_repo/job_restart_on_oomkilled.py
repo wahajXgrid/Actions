@@ -119,7 +119,7 @@ def restart_job(job_event,container_list):
             activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
             ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
             template=PodTemplateSpec(
-                metadata=job_event.spec.template.metadata,
+                
                 spec=PodSpec(
                     containers=container_list,
                     restartPolicy=job_event.spec.template.spec.restartPolicy,
