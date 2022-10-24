@@ -69,7 +69,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     
 
     
-def increase_request(container,count):
+def increase_request(container):
     print(container)
     print("called")        
 
