@@ -74,7 +74,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             if req_memory < params.max_resource:
                 #container_req_memory.append(req_memory)
                 container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by))
-                
+                container_list_after_resource_increment.extend(running_containers)
     job_spec = restart_job(job_event,container_list_after_resource_increment) 
     print(job_spec)
     job_spec.create()
@@ -113,7 +113,6 @@ def restart_job(job_event,container_list):
             completions=job_event.spec.completions,
             parallelism=job_event.spec.parallelism,
             backoffLimit=job_event.spec.backoffLimit,
-        
             activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
             ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
             template=PodTemplateSpec(
