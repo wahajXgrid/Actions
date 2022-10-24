@@ -127,7 +127,7 @@ def restart_job(job_event,container_list):
     )
     job_event.delete()
     job_spec.create()
-    return job_spec
+    
     
     # Extracting request['memory'] from the containers and comparing with max_resource
     # max_res, mem = split_num_and_str(
