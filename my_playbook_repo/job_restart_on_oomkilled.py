@@ -66,7 +66,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             if req_memory < params.max_resource:
                 container_req_memory.append(req_memory)
                 container = increase_request(container)
-                print (container)
+                print(container)
     
 
     
