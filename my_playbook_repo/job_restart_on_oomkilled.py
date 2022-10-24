@@ -52,6 +52,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     oomkilled_container_indexes = []
     container_req_memory = []
     container_list_after_resource_increment = []
+    running_containers = []
 
     """
     Retrieves pod's container information for an OOMKilled pod
@@ -61,6 +62,9 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         if status.state.running == None:
             if status.state.terminated.reason == OOMKilled:
                 oomkilled_container_names.append(status.name)
+        else:
+            running_containers.append(status.name)
+    print(running_containers)
 
     for index,container in enumerate(pod.spec.containers):
       
@@ -71,11 +75,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 container_req_memory.append(req_memory)
                 container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by))
                 
-    print(job_event)
-    job = copy.copy(job_event)  
-    print("///////////////////////////////////////////")
     job_spec = restart_job(job_event,container_list_after_resource_increment) 
-    # print(job_spec)
     print(job_spec)
     job_spec.create()
 
@@ -84,8 +84,7 @@ def increase_request(container,max_resource,increase_by):
             name=container.name,
             image=container.image,
             livenessProbe=container.livenessProbe,
-            securityContext=container.securityContext,
-            
+            securityContext=container.securityContext,      
             args=container.args,
             command=container.command,
             ports=container.ports,
@@ -95,8 +94,7 @@ def increase_request(container,max_resource,increase_by):
             env=container.env,
             startupProbe=container.startupProbe,
             envFrom=container.envFrom,
-            imagePullPolicy=container.imagePullPolicy,
-           
+            imagePullPolicy=container.imagePullPolicy,  
             resources=increase_resource(container.resources, increase_by,max_resource)
             if (container.resources.limits and container.resources.requests)
             else None,
