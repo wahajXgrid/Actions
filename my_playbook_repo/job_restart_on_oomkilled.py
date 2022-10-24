@@ -177,41 +177,41 @@ def restart_job(job_event,container_list):
     #     event.add_finding(finding)
 
 # Function to restart job
-def restart_job(job_event, increase_by, max_resource , index):
-    container_list = get_container_list(
-        job_event.spec.template.spec.containers, increase_by=increase_by  , max_resource = max_resource ,index = index
-    )
-    job_spec = RobustaJob(
-        metadata=ObjectMeta(
-            name=job_event.metadata.name,
-            namespace=job_event.metadata.namespace,
-            labels=job_event.metadata.labels,
-        ),
-        spec=JobSpec(
-            completions=job_event.spec.completions,
-            parallelism=job_event.spec.parallelism,
-            backoffLimit=job_event.spec.backoffLimit,
-            activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
-            ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
-            template=PodTemplateSpec(
-                spec=PodSpec(
-                    containers=container_list,
-                    restartPolicy=job_event.spec.template.spec.restartPolicy,
-                    nodeName=job_event.spec.template.spec.nodeName,
-                    activeDeadlineSeconds=job_event.spec.template.spec.activeDeadlineSeconds,
-                    nodeSelector=job_event.spec.template.spec.nodeSelector,
-                    affinity=job_event.spec.template.spec.affinity,
-                    initContainers=job_event.spec.template.spec.initContainers,
-                    serviceAccount=job_event.spec.template.spec.serviceAccount,
-                    securityContext=job_event.spec.template.spec.securityContext,
-                    volumes=job_event.spec.template.spec.volumes,
-                ),
-            ),
-        ),
-    )
-    job_event.delete()
-    job_spec.create()
-    return job_spec
+# def restart_job(job_event, increase_by, max_resource , index):
+#     container_list = get_container_list(
+#         job_event.spec.template.spec.containers, increase_by=increase_by  , max_resource = max_resource ,index = index
+#     )
+#     job_spec = RobustaJob(
+#         metadata=ObjectMeta(
+#             name=job_event.metadata.name,
+#             namespace=job_event.metadata.namespace,
+#             labels=job_event.metadata.labels,
+#         ),
+#         spec=JobSpec(
+#             completions=job_event.spec.completions,
+#             parallelism=job_event.spec.parallelism,
+#             backoffLimit=job_event.spec.backoffLimit,
+#             activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
+#             ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
+#             template=PodTemplateSpec(
+#                 spec=PodSpec(
+#                     containers=container_list,
+#                     restartPolicy=job_event.spec.template.spec.restartPolicy,
+#                     nodeName=job_event.spec.template.spec.nodeName,
+#                     activeDeadlineSeconds=job_event.spec.template.spec.activeDeadlineSeconds,
+#                     nodeSelector=job_event.spec.template.spec.nodeSelector,
+#                     affinity=job_event.spec.template.spec.affinity,
+#                     initContainers=job_event.spec.template.spec.initContainers,
+#                     serviceAccount=job_event.spec.template.spec.serviceAccount,
+#                     securityContext=job_event.spec.template.spec.securityContext,
+#                     volumes=job_event.spec.template.spec.volumes,
+#                 ),
+#             ),
+#         ),
+#     )
+#     job_event.delete()
+#     job_spec.create()
+#     return job_spec
 
 
 # function to get Containers attributes
