@@ -70,7 +70,28 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
 
     
 def increase_request(container):
-    print(container.name)
+    
+    Container(
+            name=container.name,
+            image=container.image,
+            livenessProbe=container.livenessProbe,
+            securityContext=container.securityContext,
+            volumeMounts=container.volumeMounts,
+            args=container.args,
+            command=container.command,
+            ports=container.ports,
+            lifecycle=container.lifecycle,
+            readinessProbe=container.readinessProbe,
+            workingDir=container.workingDir,
+            env=container.env,
+            startupProbe=container.startupProbe,
+            envFrom=container.envFrom,
+            imagePullPolicy=container.imagePullPolicy,
+            resources=container.resources
+            #resources=increase_resource(container.resources, increase_by,max_resource,count,index)
+            if (container.resources.limits and container.resources.requests)
+            else None,
+            )
     
     
     
