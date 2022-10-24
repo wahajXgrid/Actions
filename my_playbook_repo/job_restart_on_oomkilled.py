@@ -48,6 +48,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     oomkilled_container_names = []
     oomkilled_container_indexes = []
     container_req_memory = []
+    container_final = []
 
     """
     Retrieves pod's container information for an OOMKilled pod
@@ -65,8 +66,9 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             req_memory = (PodContainer.get_requests(job_event.spec.template.spec.containers[index]).memory)
             if req_memory < params.max_resource:
                 container_req_memory.append(req_memory)
-                container_final = increase_request(container,params.max_resource,params.increase_by)
+                container_final.append(increase_request(container,params.max_resource,params.increase_by))
                 print(container_final)
+                print("called")
     
 
     
