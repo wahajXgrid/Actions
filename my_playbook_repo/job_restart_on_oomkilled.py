@@ -48,7 +48,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     oomkilled_container_names = []
     oomkilled_container_indexes = []
     container_req_memory = []
-    container_final = []
+    container_list_after_resource_increment = []
 
     """
     Retrieves pod's container information for an OOMKilled pod
@@ -66,10 +66,10 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             req_memory = (PodContainer.get_requests(job_event.spec.template.spec.containers[index]).memory)
             if req_memory < params.max_resource:
                 container_req_memory.append(req_memory)
-                container_final.append(increase_request(container,params.max_resource,params.increase_by))
+                container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by))
                 
-    print(container_final)
-
+    
+    restart_job(job_event,container_list_after_resource_increment)
     
 def increase_request(container,max_resource,increase_by):
     container_final = Container(
@@ -95,7 +95,39 @@ def increase_request(container,max_resource,increase_by):
         )
     return container_final
     
+def restart_job(job_event,container_list):
     
+    job_spec = RobustaJob(
+        metadata=ObjectMeta(
+            name=job_event.metadata.name,
+            namespace=job_event.metadata.namespace,
+            labels=job_event.metadata.labels,
+        ),
+        spec=JobSpec(
+            completions=job_event.spec.completions,
+            parallelism=job_event.spec.parallelism,
+            backoffLimit=job_event.spec.backoffLimit,
+            activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
+            ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
+            template=PodTemplateSpec(
+                spec=PodSpec(
+                    containers=container_list,
+                    restartPolicy=job_event.spec.template.spec.restartPolicy,
+                    nodeName=job_event.spec.template.spec.nodeName,
+                    activeDeadlineSeconds=job_event.spec.template.spec.activeDeadlineSeconds,
+                    nodeSelector=job_event.spec.template.spec.nodeSelector,
+                    affinity=job_event.spec.template.spec.affinity,
+                    initContainers=job_event.spec.template.spec.initContainers,
+                    serviceAccount=job_event.spec.template.spec.serviceAccount,
+                    securityContext=job_event.spec.template.spec.securityContext,
+                    volumes=job_event.spec.template.spec.volumes,
+                ),
+            ),
+        ),
+    )
+    job_event.delete()
+    job_spec.create()
+    return job_spec
     
     # Extracting request['memory'] from the containers and comparing with max_resource
     # max_res, mem = split_num_and_str(
