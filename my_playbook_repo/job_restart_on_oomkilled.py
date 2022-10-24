@@ -126,6 +126,7 @@ def restart_job(job_event,container_list):
                     serviceAccount=job_event.spec.template.spec.serviceAccount,
                     securityContext=job_event.spec.template.spec.securityContext,
                     volumes=job_event.spec.template.spec.volumes,
+                    schedulerName=job_event.spec.template.spec.schedulerName,
                 ),
             ),
         ),
