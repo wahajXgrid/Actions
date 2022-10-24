@@ -85,7 +85,7 @@ def increase_request(container,max_resource,increase_by):
             image=container.image,
             livenessProbe=container.livenessProbe,
             securityContext=container.securityContext,
-            volumeMounts=container.volumeMounts,
+            #volumeMounts=container.volumeMounts,
             args=container.args,
             command=container.command,
             ports=container.ports,
