@@ -63,7 +63,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             if status.state.terminated.reason == OOMKilled:
                 oomkilled_container_names.append(status.name)
         else:
-            running_containers.append(container)
+            running_containers.append(pod.spec.containers)
     
     print(running_containers)
     for index,container in enumerate(pod.spec.containers):
