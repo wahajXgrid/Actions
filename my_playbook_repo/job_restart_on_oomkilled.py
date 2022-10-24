@@ -70,9 +70,8 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
 
     
 def increase_request(container):
-    print(container)
-    print("called")        
-
+    print(container.name)
+    
     
     
     # Extracting request['memory'] from the containers and comparing with max_resource
