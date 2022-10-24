@@ -66,6 +66,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 container_req_memory.append(req_memory)
     print(oomkilled_container_indexes)
     print(oomkilled_container_names)
+    print(container_req_memory)
 
     
                 
