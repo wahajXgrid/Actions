@@ -65,12 +65,12 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             req_memory = (PodContainer.get_requests(job_event.spec.template.spec.containers[index]).memory)
             if req_memory < params.max_resource:
                 container_req_memory.append(req_memory)
-                increase_request(container)
+                container = increase_request(container)
+                print (container)
     
 
     
 def increase_request(container):
-    
     Container(
             name=container.name,
             image=container.image,
@@ -91,7 +91,8 @@ def increase_request(container):
             #resources=increase_resource(container.resources, increase_by,max_resource,count,index)
             if (container.resources.limits and container.resources.requests)
             else None,
-            )
+        )
+    return Container
     
     
     
