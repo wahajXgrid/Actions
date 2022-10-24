@@ -109,7 +109,7 @@ def restart_job(job_event,container_list):
         metadata=ObjectMeta(
             name=job_event.metadata.name,
             namespace=job_event.metadata.namespace,
-            labels=job_event.metadata.labels,
+            
         ),
         spec=JobSpec(
             completions=job_event.spec.completions,
