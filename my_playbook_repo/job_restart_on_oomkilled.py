@@ -65,12 +65,12 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             req_memory = (PodContainer.get_requests(job_event.spec.template.spec.containers[index]).memory)
             if req_memory < params.max_resource:
                 container_req_memory.append(req_memory)
-                container_final = increase_request(container)
+                container_final = increase_request(container,params.max_resource,params.increase_by)
                 print(container_final)
     
 
     
-def increase_request(container):
+def increase_request(container,max_resource,increase_by):
     container_final = Container(
             name=container.name,
             image=container.image,
@@ -87,8 +87,8 @@ def increase_request(container):
             startupProbe=container.startupProbe,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,
-            resources=container.resources
-            #resources=increase_resource(container.resources, increase_by,max_resource,count,index)
+           
+            resources=increase_resource(container.resources, increase_by,max_resource)
             if (container.resources.limits and container.resources.requests)
             else None,
         )
@@ -214,26 +214,25 @@ def get_container_list(containers_spec, increase_by,max_resource,index):
 
 
 # Function to increase resources
-def increase_resource(resources, increase_by,max_resource,count,index):
-    if count == index:
-        limits = resources.limits["memory"]
-        reqests = resources.requests["memory"]
+def increase_resource(resources, increase_by,max_resource):
+  
+    limits = resources.limits["memory"]
+    reqests = resources.requests["memory"]
 
-        split_lim, lim_unit = split_num_and_str(limits)
-        split_req, req_unit = split_num_and_str(reqests)
+    split_lim, lim_unit = split_num_and_str(limits)
+    split_req, req_unit = split_num_and_str(reqests)
 
-        split_req = float(split_req) + float(increase_by)
+    split_req = float(split_req) + float(increase_by)
 
-        if split_req > float(split_lim):
-            split_lim = split_req
-        if split_req > max_resource:
-            split_req = max_resource
-        return ResourceRequirements(
-            limits={"memory": (str(split_lim) + lim_unit)},
-            requests={"memory": (str(split_req) + req_unit)},
-        )
-    else:
-        return resources
+    if split_req > float(split_lim):
+        split_lim = split_req
+    if split_req > max_resource:
+        split_req = max_resource
+    return ResourceRequirements(
+        limits={"memory": (str(split_lim) + lim_unit)},
+        requests={"memory": (str(split_req) + req_unit)},
+    )
+
 
 
 # Function to get job's Pod
