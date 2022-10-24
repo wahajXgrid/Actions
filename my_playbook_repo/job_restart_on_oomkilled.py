@@ -3,6 +3,7 @@ from requests import delete
 from robusta.api import *
 from typing import List, Optional
 from hikaru.model import Job, PodList
+import copy
 
 
 CONTROLLER_UID = "controller-uid"
@@ -71,7 +72,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by))
                 
     print(job_event)
-    job = job_event  
+    job = copy.copy(job_event)  
     print("///////////////////////////////////////////")
     # job_spec = restart_job(job_event,container_list_after_resource_increment) 
     # print(job_spec)
