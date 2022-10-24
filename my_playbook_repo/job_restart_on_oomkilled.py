@@ -35,7 +35,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             f"job restart was called on event without job: {event}")
         return
     job_event = event.get_job()
-    
+    count = None
     """
     Retrieves job's pod information
     """
@@ -69,7 +69,9 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
 
     
 def increase_request(container):
-    print(container)                
+    print(container)
+    count = count + 1
+    print(count)                
 
     
     
