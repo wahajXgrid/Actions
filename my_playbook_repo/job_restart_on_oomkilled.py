@@ -69,10 +69,11 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 job_event.spec.template.spec.containers[index]
             ).memory
             if req_memory < params.max_resource:
+                finding.title = f" MEMORY INCREASED"
                 finding.add_enrichment(
                     [
                         MarkdownBlock(
-                            f"*Job Restart With Memory Increment*\n```\n{container.name}{container.resources.requests}\n```"
+                            f"*Container request memory has been increased *\n```\n{container.name}\n```"
                         ),
                     ]
                 )
@@ -89,10 +90,11 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 )
 
             else:
+                finding.title = f"MAX REACHED"
                 finding.add_enrichment(
                     [
                         MarkdownBlock(
-                            f"*Below container has reached the limit*\n```\n{container.name}\n```"
+                            f"*container request memory has reached the limit*\n```\n{container.name}\n```"
                         ),
                     ]
                 )
