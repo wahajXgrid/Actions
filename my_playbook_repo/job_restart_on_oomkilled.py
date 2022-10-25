@@ -62,16 +62,16 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         if container.name in oomkilled_containers:
             req_memory = (PodContainer.get_requests(job_event.spec.template.spec.containers[index]).memory)
             if req_memory < params.max_resource:
-                containers.append(increase_resource(container,params.max_resource,params.increase_by,params.unit,flag = 1))
+                containers.append(increase_resource(container,params.max_resource,params.increase_by,flag = 1))
         elif container.name in running_containers:
-            containers.append(increase_resource(container,params.max_resource,params.increase_by,params.unit,flag = 0))
+            containers.append(increase_resource(container,params.max_resource,params.increase_by,flag = 0))
     
     job_spec = restart_job(job_event,containers)
     job_event.delete()
     job_spec.create()
 
 
-def increase_resource(container,max_resource,increase_by,flag,unit):
+def increase_resource(container,max_resource,increase_by,flag):
     container = Container(
             name=container.name,
             image=container.image,
@@ -87,7 +87,7 @@ def increase_resource(container,max_resource,increase_by,flag,unit):
             startupProbe=container.startupProbe,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,  
-            resources=memory_increment(container.resources, increase_by,max_resource,flag,unit)
+            resources=memory_increment(container.resources, increase_by,max_resource,flag)
             if (container.resources.limits and container.resources.requests)
             else None,
         )
@@ -126,15 +126,13 @@ def restart_job(job_event,container_list):
     return job_spec
 
 # Function to increase resources
-def memory_increment(resources, increase_by,max_resource,flag,unit):
+def memory_increment(resources, increase_by,max_resource,flag):
     if(flag == 1):
         limits = resources.limits["memory"]
         reqests = resources.requests["memory"]
 
         split_lim, lim_unit = split_num_and_str(limits)
         split_req, req_unit = split_num_and_str(reqests)
-        # print(req_unit)
-        # print(unit)
 
         split_req = float(split_req) + float(increase_by)
 
