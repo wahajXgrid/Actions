@@ -126,7 +126,7 @@ def restart_job(job_event,container_list):
     return job_spec
 
 # Function to increase resources
-def memory_increment(resources, increase_by,max_resource,flag ,unit):
+def memory_increment(resources, increase_by,max_resource,flag,unit):
     if(flag == 1):
         limits = resources.limits["memory"]
         reqests = resources.requests["memory"]
