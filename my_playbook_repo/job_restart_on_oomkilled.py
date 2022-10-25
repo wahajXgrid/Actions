@@ -1,10 +1,4 @@
-from unicodedata import name
-from requests import delete
 from robusta.api import *
-from typing import List, Optional
-from hikaru.model import Job, PodList
-import copy
-
 
 CONTROLLER_UID = "controller-uid"
 class IncreaseResources(ActionParams):
@@ -73,16 +67,11 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             if req_memory < params.max_resource:
                 container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by,flag = 1))
         elif container.name in running_containers:
-            # running_containers.clear()
-            # running_containers.append(container)
             container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by,flag = 0))
    
     print(container_list_after_resource_increment)
     
     job_spec = restart_job(job_event,container_list_after_resource_increment)
-
-    #job_spec.spec.template.spec.containers.extend(running_containers) 
-    #print(job_spec.spec.template.spec.containers)
     job_spec.create()
 
 def increase_request(container,max_resource,increase_by,flag):
@@ -141,6 +130,7 @@ def restart_job(job_event,container_list):
     )
     job_event.delete()
     return job_spec
+    
 # Function to increase resources
 def increase_resource(resources, increase_by,max_resource,flag):
     
@@ -163,134 +153,6 @@ def increase_resource(resources, increase_by,max_resource,flag):
         )
     else:
         return resources    
-    # Extracting request['memory'] from the containers and comparing with max_resource
-    # max_res, mem = split_num_and_str(
-    #     job_event.spec.template.spec.containers[index].resources.requests["memory"]
-    # )
-    # if status_flag:
-    #     for i in index: 
-    #         if float(max_res) < params.max_resource:
-    #                 job_spec = restart_job(job_event, params.increase_by, params.max_resource, i)
-
-    #                 job_temp = job_spec.spec.template.spec.containers[i].resources.requests[
-    #                     "memory"
-    #                 ]
-    #                 finding.add_enrichment(
-    #                     [
-    #                         MarkdownBlock(
-    #                             f"*Job Restarted With Memory Increment*\n```\n{job_temp}\n```"
-    #                         ),
-    #                     ]
-    #                 )
-    #                 event.add_finding(finding)
-    #         else:
-    #             job_temp = (
-    #                 event.get_job()
-    #                 .spec.template.spec.containers[i]
-    #                 .resources.requests["memory"]
-    #             )
-    #             finding.title = f" MAX REACHED "
-
-    #             finding.add_enrichment(
-    #                 [
-    #                     MarkdownBlock(
-    #                         f"*You have reached the memory limit*\n```\n{job_temp}\n```"
-    #                     ),
-    #                 ]
-    #             )
-    #             event.add_finding(finding)
-    # else:
-    #     finding.title = f" POD FAILED "
-    #     finding.add_enrichment(
-    #         [
-    #             MarkdownBlock(
-    #                 f"*The job's pod was not killed because of OOM*"
-    #             ),
-    #         ]
-    #     )
-    #     event.add_finding(finding)
-
-# Function to restart job
-# def restart_job(job_event, increase_by, max_resource , index):
-#     container_list = get_container_list(
-#         job_event.spec.template.spec.containers, increase_by=increase_by  , max_resource = max_resource ,index = index
-#     )
-#     job_spec = RobustaJob(
-#         metadata=ObjectMeta(
-#             name=job_event.metadata.name,
-#             namespace=job_event.metadata.namespace,
-#             labels=job_event.metadata.labels,
-#         ),
-#         spec=JobSpec(
-#             completions=job_event.spec.completions,
-#             parallelism=job_event.spec.parallelism,
-#             backoffLimit=job_event.spec.backoffLimit,
-#             activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
-#             ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
-#             template=PodTemplateSpec(
-#                 spec=PodSpec(
-#                     containers=container_list,
-#                     restartPolicy=job_event.spec.template.spec.restartPolicy,
-#                     nodeName=job_event.spec.template.spec.nodeName,
-#                     activeDeadlineSeconds=job_event.spec.template.spec.activeDeadlineSeconds,
-#                     nodeSelector=job_event.spec.template.spec.nodeSelector,
-#                     affinity=job_event.spec.template.spec.affinity,
-#                     initContainers=job_event.spec.template.spec.initContainers,
-#                     serviceAccount=job_event.spec.template.spec.serviceAccount,
-#                     securityContext=job_event.spec.template.spec.securityContext,
-#                     volumes=job_event.spec.template.spec.volumes,
-#                 ),
-#             ),
-#         ),
-#     )
-#     job_event.delete()
-#     job_spec.create()
-#     return job_spec
-
-
-# function to get Containers attributes
-def get_container_list(containers_spec, increase_by,max_resource):
-
-    containers_list = []
-    for container in containers_spec:
-        containers_list.append(
-            Container(
-                name=container.name,
-                image=container.image,
-                livenessProbe=container.livenessProbe,
-                securityContext=container.securityContext,
-                volumeMounts=container.volumeMounts,
-                args=container.args,
-                command=container.command,
-                ports=container.ports,
-                lifecycle=container.lifecycle,
-                readinessProbe=container.readinessProbe,
-                workingDir=container.workingDir,
-                env=container.env,
-                startupProbe=container.startupProbe,
-                envFrom=container.envFrom,
-                imagePullPolicy=container.imagePullPolicy,
-                resources=increase_resource(container.resources, increase_by,max_resource)
-                if (container.resources.limits and container.resources.requests)
-                else None,
-            )
-
-        )
-    
-    return containers_list
-
-
-
-
-
-
-# Function to get job's Pod
-def get_job_pod(namespace, job):
-    pod_list = PodList.listNamespacedPod(namespace).obj
-    for pod in pod_list.items:
-        if pod.metadata.name.startswith(job):
-            return pod
-
 
 # Function to split number and string from memory[string]
 def split_num_and_str(num_str: str):
@@ -322,11 +184,3 @@ def get_job_latest_pod(job: Job) -> Optional[RobustaPod]:
     
 
     return pod_list[0] if pod_list else None
-
-def find_most_recent_oom_killed_container(pod: Pod, container_statuses: List[ContainerStatus], only_current_state: bool = False) -> Optional[PodContainer]:
-    latest_oom_kill_container = None
-    for container_status in container_statuses:
-        oom_killed_container = get_oom_killed_container(pod, container_status, only_current_state)
-        if not latest_oom_kill_container or get_oom_kill_time(oom_killed_container) > get_oom_kill_time(latest_oom_kill_container):
-            latest_oom_kill_container = oom_killed_container
-    return latest_oom_kill_container
