@@ -75,7 +75,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         elif container.name in running_containers:
             # running_containers.clear()
             # running_containers.append(container)
-            container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by))
+            container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by,flag = 0))
    
     print(container_list_after_resource_increment)
     
