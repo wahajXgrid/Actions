@@ -87,7 +87,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                         ),
                     ]
                 )
-            event.add_finding(finding)
+                event.add_finding(finding)
         elif container.name in running_containers:
             flag = 0
             containers.append(
