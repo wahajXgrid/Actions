@@ -76,7 +76,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             running_containers.clear()
             running_containers.append(container)
    
-    
+    print(running_containers)
     
     job_spec = restart_job(job_event,container_list_after_resource_increment)
 
