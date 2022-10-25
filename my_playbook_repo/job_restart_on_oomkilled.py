@@ -42,6 +42,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     except:
         logging.error(
             f"get_job_pod was called on event without job: {event}")
+        return
     
     containers = []
     oomkilled_containers = []
@@ -135,18 +136,20 @@ def memory_increment(resources, increase_by,max_resource,flag,unit):
 
         split_lim, lim_unit = split_num_and_str(limits)
         split_req, req_unit = split_num_and_str(reqests)
-        print(req_unit)
-        print(unit)
-        split_req = float(split_req) + float(increase_by)
+        if(req_unit == unit):
+            split_req = float(split_req) + float(increase_by)
 
-        if split_req > float(split_lim):
-            split_lim = split_req
-        if split_req > max_resource:
-            split_req = max_resource
-        return ResourceRequirements(
-            limits={"memory": (str(split_lim) + lim_unit)},
-            requests={"memory": (str(split_req) + req_unit)},
-        )
+            if split_req > float(split_lim):
+                split_lim = split_req
+            if split_req > max_resource:
+                split_req = max_resource
+            return ResourceRequirements(
+                limits={"memory": (str(split_lim) + lim_unit)},
+                requests={"memory": (str(split_req) + req_unit)},
+            )
+        else:
+            logging.error(f"Provided unit is not same as that of Pod resource memory unit. Supported unit:{req_unit}")
+            return
     else:
         return resources    
 
