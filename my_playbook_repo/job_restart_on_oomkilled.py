@@ -133,8 +133,8 @@ def memory_increment(resources, increase_by,max_resource,flag,unit):
 
         split_lim, lim_unit = split_num_and_str(limits)
         split_req, req_unit = split_num_and_str(reqests)
-        print(req_unit)
-        print(unit)
+        # print(req_unit)
+        # print(unit)
 
         split_req = float(split_req) + float(increase_by)
 
