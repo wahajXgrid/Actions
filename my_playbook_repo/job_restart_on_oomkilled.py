@@ -130,7 +130,7 @@ def restart_job(job_event,container_list):
     )
     job_event.delete()
     return job_spec
-    
+
 # Function to increase resources
 def increase_resource(resources, increase_by,max_resource,flag):
     
@@ -181,6 +181,5 @@ def get_job_latest_pod(job: Job) -> Optional[RobustaPod]:
         label_selector=job_selector
     ).obj.items
     pod_list.sort(key=lambda pod: pod.status.startTime, reverse=True)
-    
 
     return pod_list[0] if pod_list else None
