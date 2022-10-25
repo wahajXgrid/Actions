@@ -66,6 +66,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             containers.append(increase_resource(container,params.max_resource,params.increase_by,flag = 0))
     
     job_spec = restart_job(job_event,containers)
+    job_event.delete()
     job_spec.create()
 
 def increase_resource(container,max_resource,increase_by,flag):
@@ -120,7 +121,6 @@ def restart_job(job_event,container_list):
             ),
         ),
     )
-    job_event.delete()
     return job_spec
 
 # Function to increase resources
