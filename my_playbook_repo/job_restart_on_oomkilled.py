@@ -71,12 +71,13 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             oomkilled_container_indexes.append(index)
             req_memory = (PodContainer.get_requests(job_event.spec.template.spec.containers[index]).memory)
             if req_memory < params.max_resource:
-                container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by))
+                container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by,flag = 1))
         elif container.name in running_containers:
-            running_containers.clear()
-            running_containers.append(container)
+            # running_containers.clear()
+            # running_containers.append(container)
+            container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by))
    
-    print(running_containers)
+    print(container_list_after_resource_increment)
     
     job_spec = restart_job(job_event,container_list_after_resource_increment)
 
@@ -84,7 +85,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     #print(job_spec.spec.template.spec.containers)
     job_spec.create()
 
-def increase_request(container,max_resource,increase_by):
+def increase_request(container,max_resource,increase_by,flag):
     container_final = Container(
             name=container.name,
             image=container.image,
@@ -100,8 +101,7 @@ def increase_request(container,max_resource,increase_by):
             startupProbe=container.startupProbe,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,  
-
-            resources=increase_resource(container.resources, increase_by,max_resource)
+            resources=increase_resource(container.resources, increase_by,max_resource,flag)
             if (container.resources.limits and container.resources.requests)
             else None,
         )
@@ -141,7 +141,28 @@ def restart_job(job_event,container_list):
     )
     job_event.delete()
     return job_spec
+# Function to increase resources
+def increase_resource(resources, increase_by,max_resource,flag):
     
+    if(flag == 1):
+        limits = resources.limits["memory"]
+        reqests = resources.requests["memory"]
+
+        split_lim, lim_unit = split_num_and_str(limits)
+        split_req, req_unit = split_num_and_str(reqests)
+
+        split_req = float(split_req) + float(increase_by)
+
+        if split_req > float(split_lim):
+            split_lim = split_req
+        if split_req > max_resource:
+            split_req = max_resource
+        return ResourceRequirements(
+            limits={"memory": (str(split_lim) + lim_unit)},
+            requests={"memory": (str(split_req) + req_unit)},
+        )
+    else:
+        return resources    
     # Extracting request['memory'] from the containers and comparing with max_resource
     # max_res, mem = split_num_and_str(
     #     job_event.spec.template.spec.containers[index].resources.requests["memory"]
@@ -259,25 +280,7 @@ def get_container_list(containers_spec, increase_by,max_resource):
     return containers_list
 
 
-# Function to increase resources
-def increase_resource(resources, increase_by,max_resource):
-  
-    limits = resources.limits["memory"]
-    reqests = resources.requests["memory"]
 
-    split_lim, lim_unit = split_num_and_str(limits)
-    split_req, req_unit = split_num_and_str(reqests)
-
-    split_req = float(split_req) + float(increase_by)
-
-    if split_req > float(split_lim):
-        split_lim = split_req
-    if split_req > max_resource:
-        split_req = max_resource
-    return ResourceRequirements(
-        limits={"memory": (str(split_lim) + lim_unit)},
-        requests={"memory": (str(split_req) + req_unit)},
-    )
 
 
 
