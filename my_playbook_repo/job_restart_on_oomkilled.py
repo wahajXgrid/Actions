@@ -147,9 +147,9 @@ def memory_increment(resources, increase_by,max_resource,flag,unit):
                 limits={"memory": (str(split_lim) + lim_unit)},
                 requests={"memory": (str(split_req) + req_unit)},
             )
-        else:
+        else: 
             logging.error(f"Provided unit is not same as that of Pod resource memory unit. Supported unit:{req_unit}")
-            return
+            return resources
     else:
         return resources    
 
