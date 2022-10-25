@@ -41,12 +41,10 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     except:
         logging.error(
             f"get_job_pod was called on event without job: {event}")
-
-    oomkilled_container_names = []
-    oomkilled_container_indexes = []
-    container_list_after_resource_increment = []
+    
+    containers = []
+    oomkilled_containers = []
     running_containers = []
- 
 
     """
     Retrieves pod's container information for an OOMKilled pod
@@ -55,27 +53,23 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     for status in pod.status.containerStatuses:
         if status.state.running == None:
             if status.state.terminated.reason == OOMKilled:
-                oomkilled_container_names.append(status.name)
+                oomkilled_containers.append(status.name)
         else:
             running_containers.append(status.name)
-
     
     for index,container in enumerate(pod.spec.containers): 
-        if container.name in oomkilled_container_names:
-            oomkilled_container_indexes.append(index)
+        if container.name in oomkilled_containers:
             req_memory = (PodContainer.get_requests(job_event.spec.template.spec.containers[index]).memory)
             if req_memory < params.max_resource:
-                container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by,flag = 1))
+                containers.append(increase_resource(container,params.max_resource,params.increase_by,flag = 1))
         elif container.name in running_containers:
-            container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by,flag = 0))
-   
-    print(container_list_after_resource_increment)
+            containers.append(increase_resource(container,params.max_resource,params.increase_by,flag = 0))
     
-    job_spec = restart_job(job_event,container_list_after_resource_increment)
+    job_spec = restart_job(job_event,containers)
     job_spec.create()
 
-def increase_request(container,max_resource,increase_by,flag):
-    container_final = Container(
+def increase_resource(container,max_resource,increase_by,flag):
+    container = Container(
             name=container.name,
             image=container.image,
             livenessProbe=container.livenessProbe,
@@ -90,19 +84,18 @@ def increase_request(container,max_resource,increase_by,flag):
             startupProbe=container.startupProbe,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,  
-            resources=increase_resource(container.resources, increase_by,max_resource,flag)
+            resources=memory_increment(container.resources, increase_by,max_resource,flag)
             if (container.resources.limits and container.resources.requests)
             else None,
         )
-    return container_final
+    return container
     
 def restart_job(job_event,container_list):
     
     job_spec = RobustaJob(
         metadata=ObjectMeta(
             name=job_event.metadata.name,
-            namespace=job_event.metadata.namespace,
-            
+            namespace=job_event.metadata.namespace,     
         ),
         spec=JobSpec(
             completions=job_event.spec.completions,
@@ -110,8 +103,7 @@ def restart_job(job_event,container_list):
             backoffLimit=job_event.spec.backoffLimit,
             activeDeadlineSeconds=job_event.spec.activeDeadlineSeconds,
             ttlSecondsAfterFinished=job_event.spec.ttlSecondsAfterFinished,
-            template=PodTemplateSpec(
-                
+            template=PodTemplateSpec(        
                 spec=PodSpec(
                     containers=container_list,
                     restartPolicy=job_event.spec.template.spec.restartPolicy,
@@ -132,8 +124,7 @@ def restart_job(job_event,container_list):
     return job_spec
 
 # Function to increase resources
-def increase_resource(resources, increase_by,max_resource,flag):
-    
+def memory_increment(resources, increase_by,max_resource,flag):
     if(flag == 1):
         limits = resources.limits["memory"]
         reqests = resources.requests["memory"]
@@ -165,8 +156,6 @@ def split_num_and_str(num_str: str):
             index = ind
             break
     return num, num_str[index:]
-
-
 
 
 def get_job_latest_pod(job: Job) -> Optional[RobustaPod]:
