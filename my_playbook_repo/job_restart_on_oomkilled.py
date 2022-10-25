@@ -62,8 +62,8 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         if status.state.running == None:
             if status.state.terminated.reason == OOMKilled:
                 oomkilled_container_names.append(status.name)
-                
-    print(running_containers)
+
+  
     for index,container in enumerate(pod.spec.containers):
       
         if container.name in oomkilled_container_names:
@@ -73,6 +73,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 #container_req_memory.append(req_memory)
                 container_list_after_resource_increment.append(increase_request(container,params.max_resource,params.increase_by))
                 #container_list_after_resource_increment.extend(running_containers)
+
     print(container_list_after_resource_increment)
     job_spec = restart_job(job_event,container_list_after_resource_increment) 
     job_spec.create()
@@ -93,6 +94,7 @@ def increase_request(container,max_resource,increase_by):
             startupProbe=container.startupProbe,
             envFrom=container.envFrom,
             imagePullPolicy=container.imagePullPolicy,  
+
             resources=increase_resource(container.resources, increase_by,max_resource)
             if (container.resources.limits and container.resources.requests)
             else None,
@@ -220,8 +222,8 @@ def restart_job(job_event,container_list):
 
 
 # function to get Containers attributes
-def get_container_list(containers_spec, increase_by,max_resource,index):
-    count = 0
+def get_container_list(containers_spec, increase_by,max_resource):
+
     containers_list = []
     for container in containers_spec:
         containers_list.append(
@@ -241,13 +243,13 @@ def get_container_list(containers_spec, increase_by,max_resource,index):
                 startupProbe=container.startupProbe,
                 envFrom=container.envFrom,
                 imagePullPolicy=container.imagePullPolicy,
-                resources=increase_resource(container.resources, increase_by,max_resource,count,index)
+                resources=increase_resource(container.resources, increase_by,max_resource)
                 if (container.resources.limits and container.resources.requests)
                 else None,
             )
 
         )
-        count = count + 1
+    
     return containers_list
 
 
