@@ -1,3 +1,4 @@
+import resource
 from robusta.api import *
 
 CONTROLLER_UID = "controller-uid"
@@ -118,10 +119,11 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     job_event.delete()
     job_spec.create()
     finding.title = f" JOB RESTARTED"
+    resource = pod.spec.containers
     finding.add_enrichment(
         [
             MarkdownBlock(
-                f"*Containers resources *\n```\n{container.name}\n```"
+                f"*Containers resources *\n```\n{resource}\n```"
             ),
         ]
     )
