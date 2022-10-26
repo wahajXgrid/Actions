@@ -119,11 +119,12 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     
 
     oomkilled_containers.extend(running_containers)
-    # list = []
-    # for index,containers in enumerate(pod.spec.containers):
-    #     list.append(PodContainer.get_requests(
-    #             job_event.spec.template.spec.containers[index]
-    #         ).memory)
+    list = []
+    for index,containers in enumerate(pod.spec.containers):
+        print(containers)
+        # list.append(PodContainer.get_requests(
+        #         job_event.spec.template.spec.containers[index]
+        #     ).memory)
     print(oomkilled_containers)
     #print(list)   
 
