@@ -118,13 +118,15 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     job_spec.create()
     
 
-    oomkilled_containers.extend(running_containers)
+    
     containers_memory_list = []
     for index,containers in enumerate(job_spec.spec.template.spec.containers):
-        containers_memory_list.append(containers.resources.requests)
+        containers_memory_list = containers.resources.requests
         
-    containers_memory_list.append(oomkilled_containers)
+    
     print(containers_memory_list)
+
+
     #print(list)   
 
     #finding.title = f" JOB RESTARTED" 
