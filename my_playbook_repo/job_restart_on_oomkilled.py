@@ -60,10 +60,6 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         else:
             running_containers.append(status.name)
 
-    print(count)
-    print("///")
-    print(len(oomkilled_containers))
-
     """
     Updating pod's containers resources if required
     """
@@ -121,15 +117,15 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     job_spec = job_fields(job_event, containers)
     job_event.delete()
     job_spec.create()
-    # finding.title = f" JOB RESTARTED"
-    # finding.add_enrichment(
-    #     [
-    #         MarkdownBlock(
-    #             f"*Containers resources *\n```\n{container.name}\n```"
-    #         ),
-    #     ]
-    # )
-    # event.add_finding(finding)
+    finding.title = f" JOB RESTARTED"
+    finding.add_enrichment(
+        [
+            MarkdownBlock(
+                f"*Containers resources *\n```\n{container.name}\n```"
+            ),
+        ]
+    )
+    event.add_finding(finding)
 
 
 # Function to increase resource of the container
