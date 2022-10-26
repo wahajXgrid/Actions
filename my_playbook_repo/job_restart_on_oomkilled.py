@@ -116,7 +116,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     job_spec = job_fields(job_event, containers)
     job_event.delete()
     job_spec.create()
-    finding.title = f" JOB RESTARTED"
+    
 
     oomkilled_containers.extend(running_containers)
     list = []
@@ -125,7 +125,8 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 job_event.spec.template.spec.containers[index]
             ).memory)
 
-    print(list)    
+    print(list)   
+    finding.title = f" JOB RESTARTED" 
     # finding.add_enrichment(
     #     [
     #         TableBlock(
