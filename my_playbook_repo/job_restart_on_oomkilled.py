@@ -1,4 +1,3 @@
-import resource
 from robusta.api import *
 
 CONTROLLER_UID = "controller-uid"
@@ -49,7 +48,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     containers = []
     oomkilled_containers = []
     running_containers = []
-    count = 0
+
     """
     Retrieves pod's containers information
     """
@@ -66,9 +65,11 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     """
     for index, container in enumerate(pod.spec.containers):
         if container.name in oomkilled_containers:
+    
             req_memory = PodContainer.get_requests(
                 job_event.spec.template.spec.containers[index]
             ).memory
+            # checking if containers has reached the limit or not
             if req_memory < params.max_resource:
                 flag = 1
                 containers.append(
@@ -80,9 +81,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                         params.unit,
                     )
                 )
-
             else:
-                count = count + 1
                 finding.title = f"MAX REACHED"
                 finding.add_enrichment(
                     [
@@ -102,7 +101,6 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                         params.unit,
                     )
                 )
-                
         elif container.name in running_containers:
             flag = 0
             containers.append(
@@ -119,19 +117,22 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     job_event.delete()
     job_spec.create()
     finding.title = f" JOB RESTARTED"
-    resource = pod.spec.containers
-    finding.add_enrichment(
-        [
-            MarkdownBlock(
-                f"*Containers resources *\n```\n{resource}\n```"
-            ),
-        ]
-    )
-    event.add_finding(finding)
+    oomkilled_containers.extend(running_containers)
+    print(oomkilled_containers)
+    
+    # finding.add_enrichment(
+    #     [
+    #         TableBlock(
+                
+    #         ),
+    #     ]
+    # )
+    # event.add_finding(finding)
 
 
 # Function to increase resource of the container
 def increase_resource(container, max_resource, increase_by, flag, unit):
+    # Getting Container attributes
     container = Container(
         name=container.name,
         image=container.image,
@@ -202,7 +203,7 @@ def split_num_and_str(num_str: str):
 
 # Function to get the job's field
 def job_fields(job_event, container_list):
-
+    # Getting job attributes
     job_spec = RobustaJob(
         metadata=ObjectMeta(
             name=job_event.metadata.name,
