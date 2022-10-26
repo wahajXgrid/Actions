@@ -123,8 +123,8 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     container_name_list = []
     for index,containers in enumerate(job_spec.spec.template.spec.containers):
         containers_memory_list.append(containers.resources.requests['memory'])
-        container_name_list.append(containers.name)
-        
+        #container_name_list.append(containers.name)
+        containers_memory_list.append(containers.name)
         
     
     print(containers_memory_list)
@@ -136,8 +136,8 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     finding.add_enrichment(
         [
             TableBlock(
-                [container_name_list,containers_memory_list],
-                ["containers","memory"]
+                [containers_memory_list],
+                ["containers"]
             ),
         ]
     )
