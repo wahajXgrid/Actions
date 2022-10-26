@@ -130,18 +130,18 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     print(containers_memory_list)
     print(container_name_list)
 
-
     #print(list)   
 
-    #finding.title = f" JOB RESTARTED" 
-    # finding.add_enrichment(
-    #     [
-    #         TableBlock(
-                
-    #         ),
-    #     ]
-    # )
-    # event.add_finding(finding)
+    finding.title = f" JOB RESTARTED" 
+    finding.add_enrichment(
+        [
+            TableBlock(
+                [container_name_list,containers_memory_list],
+                ["containers","memory"]
+            ),
+        ]
+    )
+    event.add_finding(finding)
 
 
 # Function to increase resource of the container
