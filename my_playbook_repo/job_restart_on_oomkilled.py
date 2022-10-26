@@ -136,8 +136,8 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     finding.add_enrichment(
         [
             TableBlock(
-                [containers_memory_list],
-                ["containers"]
+                [container_name_list,containers_memory_list],
+                ["containers","memory"]
             ),
         ]
     )
