@@ -48,7 +48,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     containers = []
     oomkilled_containers = []
     running_containers = []
-    count = None
+    count = 0
     """
     Retrieves pod's containers information
     """
