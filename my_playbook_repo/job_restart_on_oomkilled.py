@@ -85,6 +85,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 )
 
             else:
+                count = count + 1
                 finding.title = f"MAX REACHED"
                 finding.add_enrichment(
                     [
@@ -104,7 +105,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                         params.unit,
                     )
                 )
-                count = count + 1
+                
         elif container.name in running_containers:
             flag = 0
             containers.append(
