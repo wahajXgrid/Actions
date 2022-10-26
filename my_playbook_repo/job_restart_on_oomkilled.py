@@ -127,7 +127,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         container_name_list = [containers_memory_list.extend(containers_memory_list)]
         
     
-    print(containers_memory_list)
+  
     print(container_name_list)
 
     #print(list)   
