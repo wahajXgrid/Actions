@@ -117,9 +117,15 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     job_event.delete()
     job_spec.create()
     finding.title = f" JOB RESTARTED"
+
     oomkilled_containers.extend(running_containers)
-    print(oomkilled_containers)
-    
+    list = []
+    for index,containers in enumerate(pod.spec.containers):
+        list.append(PodContainer.get_requests(
+                job_event.spec.template.spec.containers[index]
+            ).memory)
+
+    print(list)    
     # finding.add_enrichment(
     #     [
     #         TableBlock(
