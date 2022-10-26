@@ -47,18 +47,23 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
 
     containers = []
     oomkilled_containers = []
+    oomkilled_containers_index = []
     running_containers = []
+
 
     """
     Retrieves pod's containers information
     """
     OOMKilled = "OOMKilled"
-    for status in pod.status.containerStatuses:
+    for index,status in enumerate(pod.status.containerStatuses):
         if status.state.running == None:
             if status.state.terminated.reason == OOMKilled:
                 oomkilled_containers.append(status.name)
+                oomkilled_containers_index.append(index)
+
         else:
             running_containers.append(status.name)
+    print(oomkilled_containers_index)
 
     """
     Updating pod's containers resources if required
