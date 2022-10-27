@@ -134,12 +134,22 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
 
 
 
+    # finding.title = f" JOB RESTARTED" 
+    # finding.add_enrichment(
+    #     [
+    #         TableBlock(
+    #             [containers_name_list,containers_memory_list],
+    #             [containers_name_list,"b"]
+    #         ),
+    #     ]
+    # )
+    # event.add_finding(finding)
+
     finding.title = f" JOB RESTARTED" 
     finding.add_enrichment(
         [
-            TableBlock(
-                [containers_name_list,containers_memory_list],
-                [containers_name_list,"b"]
+            MarkdownBlock(
+                f"*containers memory after restart*\n```\n{containers_name_list}\n```"
             ),
         ]
     )
