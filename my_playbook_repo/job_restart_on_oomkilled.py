@@ -2,6 +2,7 @@ from robusta.api import *
 
 CONTROLLER_UID = "controller-uid"
 
+
 class IncreaseResources(ActionParams):
 
     """
@@ -14,15 +15,15 @@ class IncreaseResources(ActionParams):
     unit: Optional[str]
     max_resource: float
 
+
 @action
 def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
-
     """
     This action will run when job failed with oomkilled
     """
     function_name = "job_restart_on_oomkilled"
     finding = Finding(
-        title=f"Job Restart",
+        title=f"JOB RESTART",
         source=FindingSource.MANUAL,
         aggregation_key=function_name,
         finding_type=FindingType.REPORT,
@@ -236,6 +237,7 @@ def job_fields(job_event, container_list):
         ),
     )
     return job_spec
+
 
 def get_job_latest_pod(job: Job) -> Optional[RobustaPod]:
     if not job:
