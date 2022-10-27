@@ -2,7 +2,6 @@ from robusta.api import *
 
 CONTROLLER_UID = "controller-uid"
 
-
 class IncreaseResources(ActionParams):
 
     """
@@ -14,7 +13,6 @@ class IncreaseResources(ActionParams):
     increase_by: Optional[float] = 1
     unit: Optional[str]
     max_resource: float
-
 
 @action
 def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
@@ -65,7 +63,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     """
     for index, container in enumerate(pod.spec.containers):
         if container.name in oomkilled_containers:
-    
+
             req_memory = PodContainer.get_requests(
                 job_event.spec.template.spec.containers[index]
             ).memory
@@ -116,37 +114,15 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     job_spec = job_fields(job_event, containers)
     job_event.delete()
     job_spec.create()
-    
 
-    
     containers_memory_list = []
-    containers_name_list = []
-    for index,containers in enumerate(job_spec.spec.template.spec.containers):
+
+    # Getting information for finding
+    for index, containers in enumerate(job_spec.spec.template.spec.containers):
         containers_memory_list.append(containers.name)
-        containers_memory_list.append(containers.resources.requests['memory'])
-        
-        
-        
-    
-    print(containers_memory_list)
-    print('////')
-    print(containers_name_list)
-    
+        containers_memory_list.append(containers.resources.requests["memory"])
 
-
-
-    # finding.title = f" JOB RESTARTED" 
-    # finding.add_enrichment(
-    #     [
-    #         TableBlock(
-    #             [containers_name_list,containers_memory_list],
-    #             [containers_name_list,"b"]
-    #         ),
-    #     ]
-    # )
-    # event.add_finding(finding)
-
-    finding.title = f" JOB RESTARTED" 
+    finding.title = f" JOB RESTARTED"
     finding.add_enrichment(
         [
             MarkdownBlock(
@@ -260,7 +236,6 @@ def job_fields(job_event, container_list):
         ),
     )
     return job_spec
-
 
 def get_job_latest_pod(job: Job) -> Optional[RobustaPod]:
     if not job:
