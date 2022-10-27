@@ -139,7 +139,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         [
             TableBlock(
                 [containers_name_list,containers_memory_list],
-                ["a","b"]
+                [containers_name_list,"b"]
             ),
         ]
     )
