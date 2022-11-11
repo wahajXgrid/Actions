@@ -70,13 +70,13 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             ).memory
             # checking if containers has reached the limit or not
             if req_memory < params.max_resource:
-                flag = 1
+                keep_the_same = True
                 containers.append(
                     increase_resource(
                         container,
                         params.max_resource,
                         params.increase_by,
-                        flag,
+                        keep_the_same,
                         params.unit,
                     )
                 )
@@ -90,24 +90,24 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                     ]
                 )
                 event.add_finding(finding)
-                flag = 0
+                keep_the_same = False
                 containers.append(
                     increase_resource(
                         container,
                         params.max_resource,
                         params.increase_by,
-                        flag,
+                        keep_the_same,
                         params.unit,
                     )
                 )
         elif container.name in running_containers:
-            flag = 0
+            keep_the_same = False
             containers.append(
                 increase_resource(
                     container,
                     params.max_resource,
                     params.increase_by,
-                    flag,
+                    keep_the_same,
                     params.unit,
                 )
             )
@@ -135,7 +135,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
 
 
 # Function to increase resource of the container
-def increase_resource(container, max_resource, increase_by, flag, unit):
+def increase_resource(container, max_resource, increase_by, keep_the_same, unit):
     # Getting Container attributes
     container = Container(
         name=container.name,
@@ -153,7 +153,7 @@ def increase_resource(container, max_resource, increase_by, flag, unit):
         envFrom=container.envFrom,
         imagePullPolicy=container.imagePullPolicy,
         resources=memory_increment(
-            container.resources, increase_by, max_resource, flag, unit
+            container.resources, increase_by, max_resource, keep_the_same, unit
         )
         if (container.resources.limits and container.resources.requests)
         else None,
@@ -162,8 +162,8 @@ def increase_resource(container, max_resource, increase_by, flag, unit):
 
 
 # Function to increment in memory
-def memory_increment(resources, increase_by, max_resource, flag, unit):
-    if flag == 1:
+def memory_increment(resources, increase_by, max_resource, keep_the_same, unit):
+    if keep_the_same:
         limits = resources.limits["memory"]
         reqests = resources.requests["memory"]
 
