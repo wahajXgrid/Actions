@@ -11,7 +11,7 @@ class IncreaseResources(ActionParams):
     :var max_resource: This variable prevent an infinite loop of job's pod crashing and getting more memory.The action won't increase the memory again when the "Max" limit reached.
     """
 
-    increase_by: Optional[float] = 1
+    increase_by: Optional[str] = 1
     unit: Optional[str]
     max_resource: float
 
@@ -171,6 +171,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same, unit):
         # splitting num and str
         split_lim, lim_unit = split_num_and_str(limits)
         split_req, req_unit = split_num_and_str(reqests)
+
+        split_memory_increment, memory_unit = split_num_and_str(increase_by)
 
         # Checking if provided unit is same as job's memory unit
         if req_unit == unit:
