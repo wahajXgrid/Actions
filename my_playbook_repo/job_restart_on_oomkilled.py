@@ -64,13 +64,12 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     """
     for index, container in enumerate(pod.spec.containers):
         if container.name in oomkilled_containers:
-
             req_memory = PodContainer.get_requests(
                 job_event.spec.template.spec.containers[index]
             ).memory
             # checking if containers has reached the limit or not
             if req_memory < params.max_resource:
-                keep_the_same = True
+                keep_the_same = False
                 containers.append(
                     increase_resource(
                         container,
@@ -90,7 +89,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                     ]
                 )
                 event.add_finding(finding)
-                keep_the_same = False
+                keep_the_same = True
                 containers.append(
                     increase_resource(
                         container,
@@ -101,7 +100,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                     )
                 )
         elif container.name in running_containers:
-            keep_the_same = False
+            keep_the_same = True
             containers.append(
                 increase_resource(
                     container,
@@ -164,6 +163,8 @@ def increase_resource(container, max_resource, increase_by, keep_the_same, unit)
 # Function to increment in memory
 def memory_increment(resources, increase_by, max_resource, keep_the_same, unit):
     if keep_the_same:
+        return resources
+    else: 
         limits = resources.limits["memory"]
         reqests = resources.requests["memory"]
 
@@ -188,8 +189,6 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same, unit):
                 f"Provided unit is not same as that of Pod resource memory unit. Supported unit:{req_unit}"
             )
             return resources
-    else:
-        return resources
 
 
 # Function to split number and string from memory[string]
