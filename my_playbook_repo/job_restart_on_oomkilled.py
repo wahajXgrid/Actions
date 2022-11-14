@@ -178,7 +178,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same, unit):
 
         # Checking if provided unit is same as job's memory unit
         if req_unit == unit:
-            split_req = float(split_req) + float(increase_by)
+            split_req = float(split_req) + float(split_memory_increment)
 
             if split_req > float(split_lim):
                 split_lim = split_req
