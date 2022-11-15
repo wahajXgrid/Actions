@@ -189,8 +189,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         #     )
         #     return resources
         else:
-            if req_unit is 'Mi':
-              print("yes")
+            if req_unit == 'Mi':
+              print("ayes")
             else:  
                 print("check")
             return resources
