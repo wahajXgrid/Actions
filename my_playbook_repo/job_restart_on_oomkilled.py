@@ -1,5 +1,5 @@
 from robusta.api import *
-from bitmath import *
+from bitmath import Byte
 
 CONTROLLER_UID = "controller-uid"
 
