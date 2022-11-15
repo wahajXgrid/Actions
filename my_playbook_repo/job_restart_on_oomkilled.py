@@ -1,5 +1,5 @@
 from robusta.api import *
-import bitmath
+
 
 CONTROLLER_UID = "controller-uid"
 
@@ -173,8 +173,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same, unit):
 
         split_memory_increment, memory_unit = split_num_and_str(increase_by)
      
-        a = bitmath.Gib(4)
-        print(a)
+        # a = bitmath.Gib(4)
+        # print(a)
         # # Checking if provided unit is same as job's memory unit
         # if req_unit == unit:
         #     split_req = float(split_req) + float(split_memory_increment)
