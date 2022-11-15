@@ -173,7 +173,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same, unit):
 
         split_memory_increment, memory_unit = split_num_and_str(increase_by)
         print(increase_by)
-        a = GiB(split_memory_increment)
+        a = GiB(4)
         print(a)
         print(split_memory_increment)
         print(memory_unit)
