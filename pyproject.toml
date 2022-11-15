@@ -8,6 +8,7 @@ authors = ["wahaj <wahaj.ali@xgrid.co>"]
 
 [tool.poetry.dev-dependencies]
 robusta-cli = "^0.8.9"
+bitmath = "^1.0.2-3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
