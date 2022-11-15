@@ -7,12 +7,10 @@ class IncreaseResources(ActionParams):
 
     """
     :var increase_by: (optional).Users will specify how much they want to increase in each restart.
-    :var unit: Users will specify the unit of memory.
     :var max_resource: This variable prevent an infinite loop of job's pod crashing and getting more memory.The action won't increase the memory again when the "Max" limit reached.
     """
 
     increase_by: Optional[str] = 1
-    unit: Optional[str]
     max_resource: float
 
 
@@ -76,7 +74,6 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                         params.max_resource,
                         params.increase_by,
                         keep_the_same,
-                        params.unit,
                     )
                 )
             else:
@@ -96,7 +93,6 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                         params.max_resource,
                         params.increase_by,
                         keep_the_same,
-                        params.unit,
                     )
                 )
         elif container.name in running_containers:
@@ -107,7 +103,6 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                     params.max_resource,
                     params.increase_by,
                     keep_the_same,
-                    params.unit,
                 )
             )
 
@@ -134,7 +129,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
 
 
 # Function to increase resource of the container
-def increase_resource(container, max_resource, increase_by, keep_the_same, unit):
+def increase_resource(container, max_resource, increase_by, keep_the_same):
     # Getting Container attributes
     container = Container(
         name=container.name,
@@ -152,7 +147,7 @@ def increase_resource(container, max_resource, increase_by, keep_the_same, unit)
         envFrom=container.envFrom,
         imagePullPolicy=container.imagePullPolicy,
         resources=memory_increment(
-            container.resources, increase_by, max_resource, keep_the_same, unit
+            container.resources, increase_by, max_resource, keep_the_same,
         )
         if (container.resources.limits and container.resources.requests)
         else None,
@@ -160,7 +155,7 @@ def increase_resource(container, max_resource, increase_by, keep_the_same, unit)
     return container
  
 # Function to increment in memory
-def memory_increment(resources, increase_by, max_resource, keep_the_same, unit):
+def memory_increment(resources, increase_by, max_resource, keep_the_same):
     if keep_the_same:
         return resources
     else: 
@@ -172,12 +167,13 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same, unit):
         split_req, req_unit = split_num_and_str(reqests)
 
         split_memory_increment, memory_unit = split_num_and_str(increase_by)
+        
         print(type(split_memory_increment))
         a = GiB(4)
         print(a)
         
         # Checking if provided unit is same as job's memory unit
-        if req_unit == unit:
+        if req_unit == memory_unit:
             split_req = float(split_req) + float(split_memory_increment)
 
             if split_req > float(split_lim):
