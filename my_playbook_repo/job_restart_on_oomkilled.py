@@ -172,7 +172,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         
         # Checking if provided unit is same as job's memory unit
         if req_unit == split_increased_memory_unit:
-            print("yes")
+      
             split_req = float(split_req) + float(split_increased_memory)
 
             if split_req > float(split_lim):
@@ -191,8 +191,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         else:
             if req_unit == 'Mi':
               if split_increased_memory_unit == 'Gi':
-                print(GiB(int(split_increased_memory)).to_MiB())
-
+                a = GiB(int(split_increased_memory)).to_MiB()
+                print(type(a))
             return resources
 
 
