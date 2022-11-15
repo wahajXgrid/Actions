@@ -205,8 +205,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     split_req = KiB(int(split_increased_memory)).to_KiB() + KiB(int(split_req))
                     req_unit = 'Ki'
                     split_req = int(split_req)
-                    split_lim = int(MiB(int(split_lim)).to_KiB)
-                    if split_req > split_lim:
+                    split_lim = MiB(int(split_lim)).to_KiB
+                    if split_req > int(split_lim):
                         split_lim = split_req
                         lim_unit = 'Ki'
                     if split_req > max_resource:
