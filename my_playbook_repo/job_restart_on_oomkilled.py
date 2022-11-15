@@ -172,28 +172,29 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same, unit):
         split_req, req_unit = split_num_and_str(reqests)
 
         split_memory_increment, memory_unit = split_num_and_str(increase_by)
+        print(increase_by)
         a = GiB(split_memory_increment)
         print(a)
-        # print(split_memory_increment)
-        # print(memory_unit)
+        print(split_memory_increment)
+        print(memory_unit)
 
-        # # Checking if provided unit is same as job's memory unit
-        # if req_unit == unit:
-        #     split_req = float(split_req) + float(split_memory_increment)
+        # Checking if provided unit is same as job's memory unit
+        if req_unit == unit:
+            split_req = float(split_req) + float(split_memory_increment)
 
-        #     if split_req > float(split_lim):
-        #         split_lim = split_req
-        #     if split_req > max_resource:
-        #         split_req = max_resource
-        #     return ResourceRequirements(
-        #         limits={"memory": (str(split_lim) + lim_unit)},
-        #         requests={"memory": (str(split_req) + req_unit)},
-        #     )
-        # else:
-        #     logging.error(
-        #         f"Provided unit is not same as that of Pod resource memory unit. Supported unit:{req_unit}"
-        #     )
-        #     return resources
+            if split_req > float(split_lim):
+                split_lim = split_req
+            if split_req > max_resource:
+                split_req = max_resource
+            return ResourceRequirements(
+                limits={"memory": (str(split_lim) + lim_unit)},
+                requests={"memory": (str(split_req) + req_unit)},
+            )
+        else:
+            logging.error(
+                f"Provided unit is not same as that of Pod resource memory unit. Supported unit:{req_unit}"
+            )
+            return resources
 
 
 
