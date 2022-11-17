@@ -215,23 +215,16 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     return ResourceRequirements(limits={"memory": (str(split_lim) + lim_unit)},requests={"memory": (str(split_req) + req_unit)},)
 
                 elif split_increased_memory_unit == 'Ki' or split_increased_memory_unit == 'KiB':      
-                    split_req = KiB(int(split_increased_memory)).to_GiB() + GiB(int(split_req)) 
-                    unit_converter(split_req) 
-                    # split_req = int(split_req)
-                    # if split_req > int(split_lim):
-                    #     split_lim = split_req
-                    # if split_req > max_resource:
-                    #     split_req = max_resource
-                    # return ResourceRequirements(limits={"memory": (str(split_lim) + lim_unit)},requests={"memory": (str(split_req) + req_unit)},) 
+                    split_req = KiB(int(split_increased_memory)).to_GiB() + GiB(int(split_req))  
+                    split_req = int(split_req)
+                    if split_req > int(split_lim):
+                        split_lim = split_req
+                    if split_req > max_resource:
+                        split_req = max_resource
+                    return ResourceRequirements(limits={"memory": (str(split_lim) + lim_unit)},requests={"memory": (str(split_req) + req_unit)},) 
             else:
                 return resources
-    def unit_converter(split_req):
-        split_req = int(split_req)
-        if split_req > int(split_lim):
-            split_lim = split_req
-        if split_req > max_resource:
-            split_req = max_resource
-        return ResourceRequirements(limits={"memory": (str(split_lim) + lim_unit)},requests={"memory": (str(split_req) + req_unit)},)
+
 
 
 
