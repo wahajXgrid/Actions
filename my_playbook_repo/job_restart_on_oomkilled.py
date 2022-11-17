@@ -205,10 +205,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                         split_req = max_resource
                     return ResourceRequirements(limits={"memory": (str(split_lim) + lim_unit)},requests={"memory": (str(split_req) + req_unit)},)                
             if req_unit == 'Gi':
-                if split_increased_memory_unit == 'Mi' or split_increased_memory_unit == 'MiB':
-                    print(round(MiB(int(split_increased_memory)).to_GiB()))
+                if split_increased_memory_unit == 'Mi' or split_increased_memory_unit == 'MiB':          
                     split_req = MiB(round(int(split_increased_memory))).to_GiB() + GiB(int(split_req))
-                    print(split_increased_memory)
                     split_req = int(split_req)
                     if split_req > int(split_lim):
                         split_lim = split_req
