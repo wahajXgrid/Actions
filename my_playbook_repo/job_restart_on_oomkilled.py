@@ -1,5 +1,6 @@
 from robusta.api import *
 from bitmath import *
+
 CONTROLLER_UID = "controller-uid"
 
 
@@ -147,18 +148,22 @@ def increase_resource(container, max_resource, increase_by, keep_the_same):
         envFrom=container.envFrom,
         imagePullPolicy=container.imagePullPolicy,
         resources=memory_increment(
-            container.resources, increase_by, max_resource, keep_the_same,
+            container.resources,
+            increase_by,
+            max_resource,
+            keep_the_same,
         )
         if (container.resources.limits and container.resources.requests)
         else None,
     )
     return container
- 
+
+
 # Function to increment in memory
 def memory_increment(resources, increase_by, max_resource, keep_the_same):
     if keep_the_same:
         return resources
-    else: 
+    else:
         limits = resources.limits["memory"]
         reqests = resources.requests["memory"]
 
@@ -166,115 +171,126 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         split_lim, lim_unit = split_num_and_str(limits)
         split_req, req_unit = split_num_and_str(reqests)
 
-        split_increased_memory, split_increased_memory_unit = split_num_and_str(increase_by)
-        
-       
-        
+        split_increased_memory, split_increased_memory_unit = split_num_and_str(
+            increase_by
+        )
+
         # Checking if provided unit is same as job's memory unit
         if req_unit == split_increased_memory_unit:
-      
             split_req = float(split_req) + float(split_increased_memory)
-
             if split_req > float(split_lim):
                 split_lim = split_req
             if split_req > max_resource:
                 split_req = max_resource
-            
             return ResourceRequirements(
                 limits={"memory": (str(split_lim) + lim_unit)},
                 requests={"memory": (str(split_req) + req_unit)},
             )
         else:
-            if req_unit == 'Mi':
-                if split_increased_memory_unit == 'Gi' or split_increased_memory_unit == 'GiB':     
-                    split_req = GiB(int(split_increased_memory)).to_MiB() + MiB(int(split_req))
+            if req_unit == "Mi":
+                if (
+                    split_increased_memory_unit == "Gi"
+                    or split_increased_memory_unit == "GiB"
+                ):
+                    split_req = GiB(int(split_increased_memory)).to_MiB() + MiB(
+                        int(split_req)
+                    )
                     split_req = int(split_req)
                     if split_req > int(split_lim):
                         split_lim = split_req
                     if split_req > max_resource:
                         split_req = max_resource
-                    return ResourceRequirements(limits={"memory": (str(split_lim) + lim_unit)},requests={"memory": (str(split_req) + req_unit)},)
+                    return ResourceRequirements(
+                        limits={"memory": (str(split_lim) + lim_unit)},
+                        requests={"memory": (str(split_req) + req_unit)},
+                    )
 
-                elif split_increased_memory_unit == 'Ki' or split_increased_memory_unit == 'KiB':
-                    
-                    split_req = KiB(int(split_increased_memory)).to_MiB() + MiB(int(split_req))  
+                elif (
+                    split_increased_memory_unit == "Ki"
+                    or split_increased_memory_unit == "KiB"
+                ):
+
+                    split_req = KiB(int(split_increased_memory)).to_MiB() + MiB(
+                        int(split_req)
+                    )
                     split_req = int(split_req)
                     if split_req > int(split_lim):
                         split_lim = split_req
                     if split_req > max_resource:
                         split_req = max_resource
-                    return ResourceRequirements(limits={"memory": (str(split_lim) + lim_unit)},requests={"memory": (str(split_req) + req_unit)},)                
-            if req_unit == 'Gi':
-                if split_increased_memory_unit == 'Mi' or split_increased_memory_unit == 'MiB':          
-                    split_req = MiB(round(int(split_increased_memory))).to_GiB() + GiB(int(split_req))
-                    split_req = int(split_req)
-                    if split_req > int(split_lim): split_lim = split_req
-                    if split_req > max_resource: split_req = max_resource
-                    return ResourceRequirements(limits={"memory": (str(split_lim) + lim_unit)},requests={"memory": (str(split_req) + req_unit)},)
+                    return ResourceRequirements(
+                        limits={"memory": (str(split_lim) + lim_unit)},
+                        requests={"memory": (str(split_req) + req_unit)},
+                    )
 
-                elif split_increased_memory_unit == 'Ki' or split_increased_memory_unit == 'KiB':      
-                    split_req = KiB(int(split_increased_memory)).to_GiB() + GiB(int(split_req))  
-                    split_req = int(split_req)
-                    if split_req > int(split_lim): split_lim = split_req
-                    if split_req > max_resource: split_req = max_resource
-                    return ResourceRequirements(limits={"memory": (str(split_lim) + lim_unit)},requests={"memory": (str(split_req) + req_unit)},) 
-            if req_unit == 'Ki':
-                if split_increased_memory_unit == 'Mi' or split_increased_memory_unit == 'MiB':
-                    split_req = MiB(int(split_increased_memory)).to_KiB() + KiB(int(split_req))
+            if req_unit == "Gi":
+                if (
+                    split_increased_memory_unit == "Mi"
+                    or split_increased_memory_unit == "MiB"
+                ):
+                    split_req = MiB(round(int(split_increased_memory))).to_GiB() + GiB(
+                        int(split_req)
+                    )
                     split_req = int(split_req)
                     if split_req > int(split_lim):
                         split_lim = split_req
                     if split_req > max_resource:
                         split_req = max_resource
-                    return ResourceRequirements(limits={"memory": (str(split_lim) + lim_unit)},requests={"memory": (str(split_req) + req_unit)},)
-                elif split_increased_memory_unit == 'Gi' or split_increased_memory_unit == 'GiB':     
-                    split_req = GiB(int(split_increased_memory)).to_KiB() + KiB(int(split_req))
+                    return ResourceRequirements(
+                        limits={"memory": (str(split_lim) + lim_unit)},
+                        requests={"memory": (str(split_req) + req_unit)},
+                    )
+
+                elif (
+                    split_increased_memory_unit == "Ki"
+                    or split_increased_memory_unit == "KiB"
+                ):
+                    split_req = KiB(int(split_increased_memory)).to_GiB() + GiB(
+                        int(split_req)
+                    )
                     split_req = int(split_req)
                     if split_req > int(split_lim):
                         split_lim = split_req
                     if split_req > max_resource:
                         split_req = max_resource
-                    return ResourceRequirements(limits={"memory": (str(split_lim) + lim_unit)},requests={"memory": (str(split_req) + req_unit)},)
-            else:
-                return resources
+                    return ResourceRequirements(
+                        limits={"memory": (str(split_lim) + lim_unit)},
+                        requests={"memory": (str(split_req) + req_unit)},
+                    )
 
-
-
-
-# # Function to increment in memory
-# def memory_increment(resources, increase_by, max_resource, keep_the_same, unit):
-#     if keep_the_same:
-#         return resources
-#     else: 
-#         limits = resources.limits["memory"]
-#         reqests = resources.requests["memory"]
-
-#         # splitting num and str
-#         split_lim, lim_unit = split_num_and_str(limits)
-#         split_req, req_unit = split_num_and_str(reqests)
-
-#         split_memory_increment, memory_unit = split_num_and_str(increase_by)
-#         print(split_memory_increment)
-#         print(memory_unit)
-
-#         # Checking if provided unit is same as job's memory unit
-#         if req_unit == unit:
-#             split_req = float(split_req) + float(split_memory_increment)
-
-#             if split_req > float(split_lim):
-#                 split_lim = split_req
-#             if split_req > max_resource:
-#                 split_req = max_resource
-#             return ResourceRequirements(
-#                 limits={"memory": (str(split_lim) + lim_unit)},
-#                 requests={"memory": (str(split_req) + req_unit)},
-#             )
-#         else:
-#             logging.error(
-#                 f"Provided unit is not same as that of Pod resource memory unit. Supported unit:{req_unit}"
-#             )
-#             return resources
-
+            if req_unit == "Ki":
+                if (
+                    split_increased_memory_unit == "Mi"
+                    or split_increased_memory_unit == "MiB"
+                ):
+                    split_req = MiB(int(split_increased_memory)).to_KiB() + KiB(
+                        int(split_req)
+                    )
+                    split_req = int(split_req)
+                    if split_req > int(split_lim):
+                        split_lim = split_req
+                    if split_req > max_resource:
+                        split_req = max_resource
+                    return ResourceRequirements(
+                        limits={"memory": (str(split_lim) + lim_unit)},
+                        requests={"memory": (str(split_req) + req_unit)},
+                    )
+                elif (
+                    split_increased_memory_unit == "Gi"
+                    or split_increased_memory_unit == "GiB"
+                ):
+                    split_req = GiB(int(split_increased_memory)).to_KiB() + KiB(
+                        int(split_req)
+                    )
+                    split_req = int(split_req)
+                    if split_req > int(split_lim):
+                        split_lim = split_req
+                    if split_req > max_resource:
+                        split_req = max_resource
+                    return ResourceRequirements(
+                        limits={"memory": (str(split_lim) + lim_unit)},
+                        requests={"memory": (str(split_req) + req_unit)},
+                    )
 
 # Function to split number and string from memory[string]
 def split_num_and_str(num_str: str):
