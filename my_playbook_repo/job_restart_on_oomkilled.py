@@ -191,7 +191,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     split_req = GiB(int(split_increased_memory)).to_MiB() + MiB(int(split_req))
                     split_req = int(split_req)
 
-                    if split_req > float(split_lim):
+                    if split_req > int(split_lim):
                         split_lim = split_req
                     if split_req > max_resource:
                         split_req = max_resource
@@ -201,7 +201,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     
                     split_req = KiB(int(split_increased_memory)).to_MiB() + MiB(int(split_req))  
                     split_req = int(split_req)
-                    if split_req > split_lim:
+                    if split_req > int(split_lim):
                         split_lim = split_req
                     if split_req > max_resource:
                         split_req = max_resource
