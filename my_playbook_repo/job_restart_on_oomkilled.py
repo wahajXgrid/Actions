@@ -179,6 +179,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 split_lim = split_req
             if split_req > max_resource:
                 split_req = max_resource
+            print("asd")
             return ResourceRequirements(
                 limits={"memory": (str(split_lim) + lim_unit)},
                 requests={"memory": (str(split_req) + req_unit)},
