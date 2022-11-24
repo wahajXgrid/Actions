@@ -81,7 +81,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                     )
                 )
             else:
-       
+                print("call")
                 finding.title = f"MAX REACHED"
                 finding.add_enrichment(
                     [
