@@ -170,7 +170,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         print(bitmath.parse_string_unsafe(reqests))
         print(type(bitmath.parse_string_unsafe(reqests)))
         print(bitmath.parse_string_unsafe(increase_by))
-
+        print(bitmath.best_prefix('2Gi'))
 
         # splitting num and str
         existing_limit_memory, existing_lim_unit = split_num_and_str(limits)
@@ -179,7 +179,6 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         split_increased_memory, split_increased_memory_unit = split_num_and_str(
             increase_by
         )
-        
         # Checking if provided unit is same as job's memory unit
         if existing_req_unit == split_increased_memory_unit:
             existing_req_memory = float(existing_req_memory) + float(split_increased_memory)
