@@ -71,7 +71,9 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 job_event.spec.template.spec.containers[index]
             ).memory)
             print(max_resorce)
+            print(type(max_resorce))
             print(req_memory)
+            print(type(req_memory))
             # checking if containers has reached the limit or not
             if req_memory < params.max_resource:
                 keep_the_same = False
