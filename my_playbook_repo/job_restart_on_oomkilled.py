@@ -190,8 +190,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
             #     requests={"memory": (str(existing_req_memory) + existing_req_unit)},
             # )
             return ResourceRequirements(
-                limits={"memory": (bitmath.parse_string_unsafe(limits))},
-                requests={"memory": (bitmath.parse_string_unsafe(reqests))},
+                limits={"memory": (str(limits))},
+                requests={"memory": (str(reqests))},
             )
         # else:
         #     if existing_req_unit == "Mi":
