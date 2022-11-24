@@ -22,7 +22,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     """
     function_name = "job_restart_on_oomkilled"
     finding = Finding(
-        title=f"A",
+        title=f"a",
         source=FindingSource.MANUAL,
         aggregation_key=function_name,
         finding_type=FindingType.REPORT,
@@ -77,7 +77,6 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
            
             # checking if containers has reached the limit or not
             if req_memory < max_resource:
-    
                 print("no")
                 keep_the_same = False
                 containers.append(
@@ -88,15 +87,6 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                         keep_the_same,
                     )
                 )
-                finding.title = f" JOB RESTARTED"
-                finding.add_enrichment(
-                    [
-                        MarkdownBlock(
-                            f"*containers memory after restart*\n```\n{containers_memory_list}\n```"
-                        ),
-                    ]
-                )
-                event.add_finding(finding)
             else:
                 print("yes")
                 finding.title = f"MAX REACHED"
@@ -139,7 +129,15 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         containers_memory_list.append(containers.name)
         containers_memory_list.append(containers.resources.requests["memory"])
 
-    
+    finding.title = f" JOB RESTARTED"
+    finding.add_enrichment(
+        [
+            MarkdownBlock(
+                f"*containers memory after restart*\n```\n{containers_memory_list}\n```"
+            ),
+        ]
+    )
+    event.add_finding(finding)
 
 
 # Function to increase resource of the container
