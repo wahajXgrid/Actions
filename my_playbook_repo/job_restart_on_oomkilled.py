@@ -22,7 +22,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     """
     function_name = "job_restart_on_oomkilled"
     finding = Finding(
-        title=f"a",
+        title=f"JOB RESTARTED",
         source=FindingSource.MANUAL,
         aggregation_key=function_name,
         finding_type=FindingType.REPORT,
@@ -129,7 +129,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
         containers_memory_list.append(containers.name)
         containers_memory_list.append(containers.resources.requests["memory"])
 
-    finding.title = f" JOB RESTARTED"
+    
     finding.add_enrichment(
         [
             MarkdownBlock(
