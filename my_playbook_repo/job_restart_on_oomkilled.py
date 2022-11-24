@@ -137,7 +137,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             ),
         ]
     )
-    event.add_finding(finding)
+    
 
 
 # Function to increase resource of the container
