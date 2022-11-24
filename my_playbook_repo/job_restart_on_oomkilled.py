@@ -90,13 +90,6 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             else:
                 print("yes")
                 finding.title = f"MAX REACHED"
-                finding.add_enrichment(
-                    [
-                        MarkdownBlock(
-                            f"*container request memory has reached the limit*\n```\n{container.name}\n```"
-                        ),
-                    ]
-                )
                 
                 keep_the_same = True
                 containers.append(
