@@ -191,11 +191,11 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
             # )
             print(str(reqests.value))
             print(str(reqests.unit))
-            return resources
-            # return ResourceRequirements(
-            #     limits={"memory": (str(limits))},
-            #     requests={"memory": (str(reqests))},
-            # )
+            #return resources
+            return ResourceRequirements(
+                limits={"memory": (str(limits.value) + str(limits.unit))},
+                requests={"memory": (str(reqests.value) + str(reqests.unit))},
+            )
         # else:
         #     if existing_req_unit == "Mi":
         #         if (
