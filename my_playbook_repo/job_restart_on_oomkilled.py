@@ -69,6 +69,8 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             req_memory =  bitmath.parse_string_unsafe(container.resources.requests['memory'])
           
             max_resource = bitmath.parse_string_unsafe(params.max_resource)
+            print(max_resource)
+            print(req_memory)
             # req_memory = bitmath.parse_string_unsafe(PodContainer.get_requests(
             #     job_event.spec.template.spec.containers[index]
             # ).memory)
