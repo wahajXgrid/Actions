@@ -171,7 +171,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         print(type(bitmath.parse_string_unsafe(reqests)))
         a = bitmath.parse_string_unsafe(increase_by)
         print(a)
-        print(bitmath.a)
+        print(a.unit)
 
         # splitting num and str
         existing_limit_memory, existing_lim_unit = split_num_and_str(limits)
