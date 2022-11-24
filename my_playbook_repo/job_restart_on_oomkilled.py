@@ -22,7 +22,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     """
     function_name = "job_restart_on_oomkilled"
     finding = Finding(
-        title=f"JOB RESTART",
+        
         source=FindingSource.MANUAL,
         aggregation_key=function_name,
         finding_type=FindingType.REPORT,
