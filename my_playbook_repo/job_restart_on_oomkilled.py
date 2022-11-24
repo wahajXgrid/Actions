@@ -81,7 +81,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 containers.append(
                     increase_resource(
                         container,
-                        params.max_resource,
+                        max_resource,
                         params.increase_by,
                         keep_the_same,
                     )
@@ -100,7 +100,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                 containers.append(
                     increase_resource(
                         container,
-                        params.max_resource,
+                        max_resource,
                         params.increase_by,
                         keep_the_same,
                     )
@@ -110,7 +110,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             containers.append(
                 increase_resource(
                     container,
-                    params.max_resource,
+                    max_resource,
                     params.increase_by,
                     keep_the_same,
                 )
