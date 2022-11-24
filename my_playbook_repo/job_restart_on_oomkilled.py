@@ -198,6 +198,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         
                     reqests = increase_by.to_MiB() + reqests           
                     if reqests > limits:
+                        print(reqests)
+                        print(limits)
                         print("limit increase")
                         limits = reqests
                     if reqests > max_resource:
