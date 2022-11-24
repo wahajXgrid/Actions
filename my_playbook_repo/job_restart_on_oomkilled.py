@@ -165,10 +165,11 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         return resources
     else:
         limits = resources.limits["memory"]
-        reqests = resources.requests["memory"]
+        #reqests = resources.requests["memory"]
+        reqests = bitmath.parse_string(resources.requests["memory"])
     
-        print(bitmath.parse_string_unsafe(reqests))
-        print(type(bitmath.parse_string_unsafe(reqests)))
+        print(reqests)
+        print(type(reqests))
         a = bitmath.parse_string_unsafe(increase_by)
         print(a)
         print(a.unit)
