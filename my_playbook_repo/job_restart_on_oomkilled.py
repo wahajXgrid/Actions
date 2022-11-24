@@ -179,7 +179,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 requests={"memory": (str(reqests.value) + "Gi")},
             )
         else:
-            print("yes")
+            print("yesyes")
+            print(reqests.unit)
             if reqests.unit == "Mi":
                 print("yes")
                 if (
