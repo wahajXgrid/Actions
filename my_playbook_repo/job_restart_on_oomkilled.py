@@ -158,151 +158,138 @@ def increase_resource(container, max_resource, increase_by, keep_the_same):
     )
     return container
 
-    
+
 # Function to increment in memory
 def memory_increment(resources, increase_by, max_resource, keep_the_same):
     if keep_the_same:
         return resources
     else:
-        #limits = resources.limits["memory"]
-        #reqests = resources.requests["memory"]
         reqests = bitmath.parse_string_unsafe(resources.requests["memory"])
         limits = bitmath.parse_string_unsafe(resources.limits["memory"])
         increase_by = bitmath.parse_string_unsafe(increase_by)
-      
-        # # splitting num and str
-        # existing_limit_memory, existing_lim_unit = split_num_and_str(limits)
-        # existing_req_memory, existing_req_unit = split_num_and_str(reqests)
 
-        # split_increased_memory, split_increased_memory_unit = split_num_and_str(
-        #     increase_by
-        # )
-        # Checking if provided unit is same as job's memory unit
         if reqests.unit == increase_by.unit:
-            #existing_req_memory = float(existing_req_memory) + float(split_increased_memory)
             reqests = reqests + increase_by
             if reqests > limits:
                 limits = reqests
             if reqests.value > max_resource:
                 reqests.value = max_resource
-            # return ResourceRequirements(
-            #     limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
-            #     requests={"memory": (str(existing_req_memory) + existing_req_unit)},
-            # )
-            print(str(reqests.value))
-            print(str(reqests.unit))
-            #return resources
             return ResourceRequirements(
                 limits={"memory": (str(limits.value) + "Gi")},
                 requests={"memory": (str(reqests.value) + "Gi")},
             )
-        # else:
-        #     if existing_req_unit == "Mi":
-        #         if (
-        #             split_increased_memory_unit == "Gi"
-        #             or split_increased_memory_unit == "GiB"
-        #         ):
-        #             existing_req_memory = bitmath.GiB(int(split_increased_memory)).to_MiB() + bitmath.MiB(
-        #                 int(existing_req_memory)
-        #             )
-        #             existing_req_memory = int(existing_req_memory)
-        #             if existing_req_memory > int(existing_limit_memory):
-        #                 existing_limit_memory = existing_req_memory
-        #             if existing_req_memory > max_resource:
-        #                 existing_req_memory = max_resource
-        #             return ResourceRequirements(
-        #                 limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
-        #                 requests={"memory": (str(existing_req_memory) + existing_req_unit)},
-        #             )
+        else:
+            if reqests.unit == "Mi":
+                if (
+                    increase_by.unit == "Gi"
+                    or increase_by.unit == "GiB"
+                ):
+                    # existing_req_memory = bitmath.GiB(int(split_increased_memory)).to_MiB() + bitmath.MiB(
+                    #     int(existing_req_memory)
+                    # )
+                    reqests = increase_by.to_MiB() + reqests
+                    #existing_req_memory = int(existing_req_memory)
+                    if reqests > limits:
+                        limits = reqests
+                    if reqests.value > max_resource:
+                        reqests.value = max_resource
+                    return ResourceRequirements(
+                    limits={"memory": (str(limits.value) + "Mi")},
+                    requests={"memory": (str(reqests.value) + "Mi")},
+                    )
 
-        #         elif (
-        #             split_increased_memory_unit == "Ki"
-        #             or split_increased_memory_unit == "KiB"
-        #         ):
+                # elif (
+                #     split_increased_memory_unit == "Ki"
+                #     or split_increased_memory_unit == "KiB"
+                # ):
 
-        #             existing_req_memory = bitmath.KiB(int(split_increased_memory)).to_MiB() + bitmath.MiB(
-        #                 int(existing_req_memory)
-        #             )
-        #             existing_req_memory = int(existing_req_memory)
-        #             if existing_req_memory > int(existing_limit_memory):
-        #                 existing_limit_memory = existing_req_memory
-        #             if existing_req_memory > max_resource:
-        #                 existing_req_memory = max_resource
-        #             return ResourceRequirements(
-        #                 limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
-        #                 requests={"memory": (str(existing_req_memory) + existing_req_unit)},
-        #             )
+                #     existing_req_memory = bitmath.KiB(int(split_increased_memory)).to_MiB() + bitmath.MiB(
+                #         int(existing_req_memory)
+                #     )
+                #     existing_req_memory = int(existing_req_memory)
+                #     if existing_req_memory > int(existing_limit_memory):
+                #         existing_limit_memory = existing_req_memory
+                #     if existing_req_memory > max_resource:
+                #         existing_req_memory = max_resource
+                #     return ResourceRequirements(
+                #         limits={"memory": (
+                #             str(existing_limit_memory) + existing_lim_unit)},
+                #         requests={"memory": (
+                #             str(existing_req_memory) + existing_req_unit)},
+                #     )
 
-        #     if existing_req_unit == "Gi":
-        #         if (
-        #             split_increased_memory_unit == "Mi"
-        #             or split_increased_memory_unit == "MiB"
-        #         ):
-        #             existing_req_memory = bitmath.MiB(round(int(split_increased_memory))).to_GiB() + bitmath.GiB(
-        #                 int(existing_req_memory)
-        #             )
-        #             existing_req_memory = int(existing_req_memory)
-        #             if existing_req_memory > int(existing_limit_memory):
-        #                 existing_limit_memory = existing_req_memory
-        #             if existing_req_memory > max_resource:
-        #                 existing_req_memory = max_resource
-        #             return ResourceRequirements(
-        #                 limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
-        #                 requests={"memory": (str(existing_req_memory) + existing_req_unit)},
-        #             )
+            # if existing_req_unit == "Gi":
+            #     if (
+            #         split_increased_memory_unit == "Mi"
+            #         or split_increased_memory_unit == "MiB"
+            #     ):
+            #         existing_req_memory = bitmath.MiB(round(int(split_increased_memory))).to_GiB() + bitmath.GiB(
+            #             int(existing_req_memory)
+            #         )
+            #         existing_req_memory = int(existing_req_memory)
+            #         if existing_req_memory > int(existing_limit_memory):
+            #             existing_limit_memory = existing_req_memory
+            #         if existing_req_memory > max_resource:
+            #             existing_req_memory = max_resource
+            #         return ResourceRequirements(
+            #             limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
+            #             requests={"memory": (str(existing_req_memory) + existing_req_unit)},
+            #         )
 
-        #         elif (
-        #             split_increased_memory_unit == "Ki"
-        #             or split_increased_memory_unit == "KiB"
-        #         ):
-        #             existing_req_memory = bitmath.KiB(int(split_increased_memory)).to_GiB() + bitmath.GiB(
-        #                 int(existing_req_memory)
-        #             )
-        #             existing_req_memory = int(existing_req_memory)
-        #             if existing_req_memory > int(existing_limit_memory):
-        #                 existing_limit_memory = existing_req_memory
-        #             if existing_req_memory > max_resource:
-        #                 existing_req_memory = max_resource
-        #             return ResourceRequirements(
-        #                 limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
-        #                 requests={"memory": (str(existing_req_memory) + existing_req_unit)},
-        #             )
+            #     elif (
+            #         split_increased_memory_unit == "Ki"
+            #         or split_increased_memory_unit == "KiB"
+            #     ):
+            #         existing_req_memory = bitmath.KiB(int(split_increased_memory)).to_GiB() + bitmath.GiB(
+            #             int(existing_req_memory)
+            #         )
+            #         existing_req_memory = int(existing_req_memory)
+            #         if existing_req_memory > int(existing_limit_memory):
+            #             existing_limit_memory = existing_req_memory
+            #         if existing_req_memory > max_resource:
+            #             existing_req_memory = max_resource
+            #         return ResourceRequirements(
+            #             limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
+            #             requests={"memory": (str(existing_req_memory) + existing_req_unit)},
+            #         )
 
-        #     if existing_req_unit == "Ki":
-        #         if (
-        #             split_increased_memory_unit == "Mi"
-        #             or split_increased_memory_unit == "MiB"
-        #         ):
-        #             existing_req_memory = bitmath.MiB(int(split_increased_memory)).to_KiB() + bitmath.KiB(
-        #                 int(existing_req_memory)
-        #             )
-        #             existing_req_memory = int(existing_req_memory)
-        #             if existing_req_memory > int(existing_limit_memory):
-        #                 existing_limit_memory = existing_req_memory
-        #             if existing_req_memory > max_resource:
-        #                 existing_req_memory = max_resource
-        #             return ResourceRequirements(
-        #                 limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
-        #                 requests={"memory": (str(existing_req_memory) + existing_req_unit)},
-        #             )
-        #         elif (
-        #             split_increased_memory_unit == "Gi"
-        #             or split_increased_memory_unit == "GiB"
-        #         ):
-        #             existing_req_memory = bitmath.GiB(int(split_increased_memory)).to_KiB() + bitmath.KiB(
-        #                 int(existing_req_memory)
-        #             )
-        #             existing_req_memory = int(existing_req_memory)
-        #             if existing_req_memory > int(existing_limit_memory):
-        #                 existing_limit_memory = existing_req_memory
-        #             if existing_req_memory > max_resource:
-        #                 existing_req_memory = max_resource
-        #             return ResourceRequirements(
-        #                 limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
-        #                 requests={"memory": (str(existing_req_memory) + existing_req_unit)},
-        #             )
+            # if existing_req_unit == "Ki":
+            #     if (
+            #         split_increased_memory_unit == "Mi"
+            #         or split_increased_memory_unit == "MiB"
+            #     ):
+            #         existing_req_memory = bitmath.MiB(int(split_increased_memory)).to_KiB() + bitmath.KiB(
+            #             int(existing_req_memory)
+            #         )
+            #         existing_req_memory = int(existing_req_memory)
+            #         if existing_req_memory > int(existing_limit_memory):
+            #             existing_limit_memory = existing_req_memory
+            #         if existing_req_memory > max_resource:
+            #             existing_req_memory = max_resource
+            #         return ResourceRequirements(
+            #             limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
+            #             requests={"memory": (str(existing_req_memory) + existing_req_unit)},
+            #         )
+            #     elif (
+            #         split_increased_memory_unit == "Gi"
+            #         or split_increased_memory_unit == "GiB"
+            #     ):
+            #         existing_req_memory = bitmath.GiB(int(split_increased_memory)).to_KiB() + bitmath.KiB(
+            #             int(existing_req_memory)
+            #         )
+            #         existing_req_memory = int(existing_req_memory)
+            #         if existing_req_memory > int(existing_limit_memory):
+            #             existing_limit_memory = existing_req_memory
+            #         if existing_req_memory > max_resource:
+            #             existing_req_memory = max_resource
+            #         return ResourceRequirements(
+            #             limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
+            #             requests={"memory": (str(existing_req_memory) + existing_req_unit)},
+            #         )
 
 # Function to split number and string from memory[string]
+
+
 def split_num_and_str(num_str: str):
     num = ""
     index = None
