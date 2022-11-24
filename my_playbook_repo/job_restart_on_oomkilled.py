@@ -189,7 +189,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
             #     limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
             #     requests={"memory": (str(existing_req_memory) + existing_req_unit)},
             # )
-            print(str(reqests))
+            print(str(reqests.value))
+            print(str(reqests.unit))
             return resources
             # return ResourceRequirements(
             #     limits={"memory": (str(limits))},
