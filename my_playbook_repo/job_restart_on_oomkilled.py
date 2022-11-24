@@ -77,6 +77,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
            
             # checking if containers has reached the limit or not
             if req_memory < max_resource:
+                print("no")
                 keep_the_same = False
                 containers.append(
                     increase_resource(
@@ -87,6 +88,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                     )
                 )
             else:
+                print("yes")
                 finding.title = f"MAX REACHED"
                 finding.add_enrichment(
                     [
