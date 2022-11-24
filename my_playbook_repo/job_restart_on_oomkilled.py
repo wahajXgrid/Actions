@@ -12,7 +12,7 @@ class IncreaseResources(ActionParams):
     """
 
     increase_by: Optional[str] = 1
-    max_resource: float
+    max_resource: str
 
 
 @action
@@ -63,9 +63,15 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
     """
     for index, container in enumerate(pod.spec.containers):
         if container.name in oomkilled_containers:
-            req_memory = PodContainer.get_requests(
+            # req_memory = PodContainer.get_requests(
+            #     job_event.spec.template.spec.containers[index]
+            # ).memory
+            max_resorce = bitmath.parse_string_unsafe(max_resorce)
+            req_memory = bitmath.parse_string_unsafe(PodContainer.get_requests(
                 job_event.spec.template.spec.containers[index]
-            ).memory
+            ).memory)
+            print(max_resorce)
+            print(req_memory)
             # checking if containers has reached the limit or not
             if req_memory < params.max_resource:
                 keep_the_same = False
@@ -184,11 +190,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     increase_by.unit == "Gi"
                     or increase_by.unit == "GiB"
                 ):
-                    # existing_req_memory = bitmath.GiB(int(split_increased_memory)).to_MiB() + bitmath.MiB(
-                    #     int(existing_req_memory)
-                    # )
-                    reqests = increase_by.to_MiB() + reqests
-                   
+        
+                    reqests = increase_by.to_MiB() + reqests           
                     if reqests > limits:
                         limits = reqests
                     if reqests.value > max_resource:
