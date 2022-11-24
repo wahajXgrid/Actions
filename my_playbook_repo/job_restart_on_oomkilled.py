@@ -164,16 +164,12 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
     if keep_the_same:
         return resources
     else:
-        limits = resources.limits["memory"]
-        reqests = resources.requests["memory"]
+        #limits = resources.limits["memory"]
+        #reqests = resources.requests["memory"]
         reqests = bitmath.parse_string_unsafe(resources.requests["memory"])
-        #limits = bitmath.parse_string_unsafe(resources.limits["memory"])
+        limits = bitmath.parse_string_unsafe(resources.limits["memory"])
         increase_by = bitmath.parse_string_unsafe(increase_by)
-        print(reqests.unit)
-        print(increase_by.unit)
-        if reqests.unit == increase_by.unit:
-            print("yes")
-        else: print("no")
+      
         # splitting num and str
         existing_limit_memory, existing_lim_unit = split_num_and_str(limits)
         existing_req_memory, existing_req_unit = split_num_and_str(reqests)
@@ -182,15 +178,20 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
             increase_by
         )
         # Checking if provided unit is same as job's memory unit
-        if existing_req_unit == split_increased_memory_unit:
-            existing_req_memory = float(existing_req_memory) + float(split_increased_memory)
-            if existing_req_memory > float(existing_limit_memory):
-                existing_limit_memory = existing_req_memory
-            if existing_req_memory > max_resource:
-                existing_req_memory = max_resource
+        if reqests.unit == increase_by.unit:
+            #existing_req_memory = float(existing_req_memory) + float(split_increased_memory)
+            reqests = reqests + increase_by
+            if reqests > limits:
+                limits = reqests
+            if reqests.value > max_resource:
+                reqests.value = max_resource
+            # return ResourceRequirements(
+            #     limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
+            #     requests={"memory": (str(existing_req_memory) + existing_req_unit)},
+            # )
             return ResourceRequirements(
-                limits={"memory": (str(existing_limit_memory) + existing_lim_unit)},
-                requests={"memory": (str(existing_req_memory) + existing_req_unit)},
+                limits={"memory": (bitmath.parse_string_unsafe(limits))},
+                requests={"memory": (bitmath.parse_string_unsafe(reqests))},
             )
         else:
             if existing_req_unit == "Mi":
