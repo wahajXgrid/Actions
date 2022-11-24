@@ -180,6 +180,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
             )
         else:
             if reqests.unit == "Mi":
+                print("yes")
                 if (
                     increase_by.unit == "Gi"
                     or increase_by.unit == "GiB"
