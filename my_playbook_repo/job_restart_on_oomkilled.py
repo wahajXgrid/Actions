@@ -177,6 +177,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 reqests = max_resource
             if reqests > limits:
                 limits = reqests
+            print("call GB")
             return ResourceRequirements(
                 limits={"memory": (str(limits.value) + "Gi")},
                 requests={"memory": (str(reqests.value) + "Gi")},
