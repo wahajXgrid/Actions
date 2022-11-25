@@ -67,9 +67,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
             req_memory =  bitmath.parse_string_unsafe(container.resources.requests['memory'])
           
             max_resource = bitmath.parse_string_unsafe(params.max_resource)
-            print(req_memory.bytes)
-            print(max_resource.bytes)
-
+        
             if req_memory < max_resource:
 
                 keep_the_same = False
@@ -191,8 +189,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 ):
         
                     reqests = increase_by.to_MiB() + reqests           
-                    if reqests > max_resource:
-                        reqests = max_resource
+                    # if reqests > max_resource:
+                    #     reqests = max_resource
                     if reqests > limits:
                         limits = reqests
                     return ResourceRequirements(
