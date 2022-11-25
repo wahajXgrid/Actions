@@ -180,8 +180,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 limits = reqests
             print("call GB")
             return ResourceRequirements(
-                limits={"memory": (str(limits.value) + "Gi")},
-                requests={"memory": (str(reqests.value) + "Gi")},
+                limits={"memory": (str(limits.value) + str(limits.unit))},
+                requests={"memory": (str(reqests.value) + str(reqests.unit))},
             )
         else:
             if reqests.unit == "MiB":
