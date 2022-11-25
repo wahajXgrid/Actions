@@ -193,6 +193,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     if reqests > max_resource:
                         print("tres")
                         reqests = max_resource.to_MiB()
+                        print(reqests)
                     if reqests > limits:
                         limits = reqests
                     return ResourceRequirements(
