@@ -213,7 +213,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 reqests = increase_by.to_MiB() + reqests
                 print(reqests)
                 reqests = reqests.format("{value:.2f}{unit}")
-                print(reqests)
+                print(type(reqests))
                 if reqests > max_resource:
                     print("no")
                     reqests = max_resource.to_MiB()
