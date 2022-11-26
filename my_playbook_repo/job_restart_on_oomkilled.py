@@ -210,7 +210,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 print("call me")
-                reqests = increase_by.to_MiB().format("{value:.2f}{unit}") + reqests
+                reqests = (increase_by.to_MiB()).format("{value:.2f}{unit}") + reqests
                 print(reqests)
                 if reqests > max_resource:
                     print("no")
