@@ -171,19 +171,6 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         reqests = bitmath.parse_string_unsafe(resources.requests["memory"])
         limits = bitmath.parse_string_unsafe(resources.limits["memory"])
         increase_by = bitmath.parse_string_unsafe(increase_by)
-
-        # if reqests.unit == increase_by.unit:
-        #     reqests = reqests + increase_by
-        #     if reqests > max_resource:
-        #         reqests = max_resource
-        #     if reqests > limits:
-        #         limits = reqests
-        #     print("call GB")
-        #     print(str(limits.unit))
-        #     return ResourceRequirements(
-        #         limits={"memory": (str(limits.value) + str(limits.unit))},
-        #         requests={"memory": (str(reqests.value) + str(reqests.unit))},
-        #     )
         
         if reqests.unit == "MiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
@@ -209,17 +196,12 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 )
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
-                reqests = increase_by.to_MiB() + reqests
-                print(reqests)
+                reqests = increase_by.to_MiB() + reqests          
                 reqests = bitmath.MiB(int(float(reqests)))
-                if reqests > max_resource:
-                    print("no")
+                if reqests > max_resource:          
                     reqests = max_resource.to_MiB()
                 if reqests > limits:
-                    print("yes")
                     limits = reqests
-                print(limits.value)
-                print(reqests.value)
                 return ResourceRequirements(
                     limits={"memory": (str(limits.value) + "Mi")},
                     requests={"memory": (str(reqests.value) + "Mi")},
@@ -228,6 +210,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         if reqests.unit == "GiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
                 reqests = reqests + increase_by.to_GiB()
+                reqests = bitmath.GiB(int(float(reqests)))
                 if reqests > max_resource:
                     reqests = max_resource.to_GiB()
                 if reqests > limits:
