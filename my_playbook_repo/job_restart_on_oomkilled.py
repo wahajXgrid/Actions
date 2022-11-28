@@ -257,7 +257,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 )
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
-                reqests = increase_by + reqests
+                reqests = increase_by.to_KiB() + reqests
                 if reqests > max_resource:
                     reqests = max_resource.to_KiB()
                 if reqests > limits:
