@@ -210,7 +210,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         if reqests.unit == "GiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
                 reqests = reqests + increase_by.to_GiB()
-                reqests = bitmath.GiB(int(float(reqests)))
+                reqests = bitmath.GiB(int(reqests))
                 if reqests > max_resource:
                     reqests = max_resource.to_GiB()
                 if reqests > limits:
@@ -222,6 +222,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
                 reqests = increase_by + reqests
+                reqests = bitmath.GiB(int(float(reqests)))
                 if reqests > max_resource:
                     reqests = max_resource.to_GiB()
                 if reqests > limits:
