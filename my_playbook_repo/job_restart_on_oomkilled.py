@@ -196,10 +196,10 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 if reqests > limits:
                     print("called 2")
                     limits = reqests
-                print(reqests.value)
+                
                 return ResourceRequirements(
-                    limits={"memory": (str(limits.value) + "Mi")},
-                    requests={"memory": (str(reqests.value) + "Mi")},
+                    limits={"memory": (str(limits))},
+                    requests={"memory": (str(reqests))},
                 )
 
         #     elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
