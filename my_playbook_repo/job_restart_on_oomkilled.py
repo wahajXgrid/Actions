@@ -7,11 +7,11 @@ CONTROLLER_UID = "controller-uid"
 class IncreaseResources(ActionParams):
 
     """
-    :var increase_by: (optional).Users will specify how much they want to increase in each restart.
-    :var max_resource: This variable prevent an infinite loop of job's pod crashing and getting more memory.The action won't increase the memory again when the "Max" limit reached.
+    :var increase_by: (optional).Users will specify how much they want to increase in each restart, (e.g: 500MiB).
+    :var max_resource: This variable prevent an infinite loop of job's pod crashing and getting more memory.The action won't increase the memory again when the "Max" limit reached, (eg: 1GiB).
     """
 
-    increase_by: Optional[str] = 1
+    increase_by: Optional[str] = 0
     max_resource: str
 
 
@@ -171,10 +171,11 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         reqests = bitmath.parse_string_unsafe(resources.requests["memory"])
         limits = bitmath.parse_string_unsafe(resources.limits["memory"])
         increase_by = bitmath.parse_string_unsafe(increase_by)
-        
+
         if reqests.unit == "MiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
                 reqests = reqests + increase_by
+                
                 if reqests > max_resource:
                     reqests = max_resource.to_MiB()
                 if reqests > limits:
@@ -185,20 +186,21 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 )
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
-                reqests = increase_by.to_MiB() + reqests
+                reqests = increase_by + reqests             
                 if reqests > max_resource:
                     reqests = max_resource.to_MiB()
                 if reqests > limits:
                     limits = reqests
+
                 return ResourceRequirements(
                     limits={"memory": (str(limits.value) + "Mi")},
                     requests={"memory": (str(reqests.value) + "Mi")},
                 )
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
-                reqests = increase_by.to_MiB() + reqests          
+                reqests = increase_by + reqests
                 reqests = bitmath.MiB(int(reqests))
-                if reqests > max_resource:          
+                if reqests > max_resource:
                     reqests = max_resource.to_MiB()
                 if reqests > limits:
                     limits = reqests
@@ -222,7 +224,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
                 reqests = increase_by + reqests
-                
+
                 if reqests > max_resource:
                     reqests = max_resource.to_GiB()
                 if reqests > limits:
@@ -246,7 +248,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         if reqests.unit == "KiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
                 reqests = reqests + increase_by.to_KiB()
-        
+
                 if reqests > max_resource:
                     reqests = max_resource.to_KiB()
                 if reqests > limits:
@@ -268,7 +270,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 )
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
-                reqests = increase_by + reqests        
+                reqests = increase_by + reqests
                 if reqests > max_resource:
                     reqests = max_resource.to_KiB()
                 if reqests > limits:
