@@ -183,8 +183,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 requests = increase_by + requests
                 #requests = bitmath.MiB(int(requests))
-                print(requests)
-                print("called")
+                
         elif requests.unit == "GiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
                 requests = requests + increase_by.to_GiB()
@@ -192,6 +191,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
                 requests = increase_by + requests
+                print(requests)
+                print("called")
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 requests = increase_by + requests
