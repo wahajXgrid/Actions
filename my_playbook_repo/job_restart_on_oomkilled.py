@@ -175,7 +175,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         if reqests.unit == "MiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
     
-                reqests = max((reqests + increase_by),max_resource)
+                reqests = max((reqests + increase_by),max_resource.to_MiB())
                 limits = max(limits,reqests)
                
                 return ResourceRequirements(
