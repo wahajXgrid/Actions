@@ -172,42 +172,42 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         limits = bitmath.parse_string_unsafe(resources.limits["memory"])
         increase_by = bitmath.parse_string_unsafe(increase_by)
 
-        if requests.unit == "MiB":
-            if increase_by.unit == "Mi" or increase_by.unit == "MiB":
-                requests = requests + increase_by
+        # if requests.unit == "MiB":
+        #     if increase_by.unit == "Mi" or increase_by.unit == "MiB":
+        #         requests = requests + increase_by
 
-            elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
-                requests = increase_by + requests
+        #     elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
+        #         requests = increase_by + requests
                 
 
-            elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
-                requests = increase_by + requests
-                #requests = bitmath.MiB(int(requests))
+        #     elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
+        #         requests = increase_by + requests
+        #         #requests = bitmath.MiB(int(requests))
                 
-        elif requests.unit == "GiB":
-            if increase_by.unit == "Mi" or increase_by.unit == "MiB":
-                requests = requests + increase_by.to_GiB()
-                requests = bitmath.GiB(int(requests))
+        # elif requests.unit == "GiB":
+        #     if increase_by.unit == "Mi" or increase_by.unit == "MiB":
+        #         requests = requests + increase_by.to_GiB()
+        #         requests = bitmath.GiB(int(requests))
 
-            elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
-                requests = increase_by + requests
-                print(requests)
-                print("called")
+        #     elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
+        #         requests = increase_by + requests
+        #         print(requests)
+        #         print("called")
 
-            elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
-                requests = increase_by + requests
-                #requests = bitmath.GiB(int(requests))
+        #     elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
+        #         requests = increase_by + requests
+        #         #requests = bitmath.GiB(int(requests))
 
-        elif requests.unit == "KiB":
-            if increase_by.unit == "Mi" or increase_by.unit == "MiB":
-                requests = requests + increase_by.to_KiB()
+        # elif requests.unit == "KiB":
+        #     if increase_by.unit == "Mi" or increase_by.unit == "MiB":
+        #         requests = requests + increase_by.to_KiB()
 
-            elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
-                requests = increase_by.to_KiB() + requests
+        #     elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
+        #         requests = increase_by.to_KiB() + requests
 
-            elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
-                requests = increase_by + requests
-        
+        #     elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
+        #         requests = increase_by + requests
+        requests = increase_by + requests
         print(requests)
         if requests > max_resource:
             requests = max_resource
