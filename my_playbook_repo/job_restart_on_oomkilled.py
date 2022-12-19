@@ -208,6 +208,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         
         
         if requests > max_resource:
+            print("true")
             requests = max_resource
         if requests > limits:
             limits = requests
