@@ -179,13 +179,17 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     reqests = max_resource.to_MiB()
                 if reqests > limits:
                     limits = reqests
+                formatted_request = requests.format('{value:.0f}{unit}').rstrip('B')
+                formatted_limit = limits.format('{value:.0f}{unit}').rstrip('B')
+                print(formatted_request)
+                print(formatted_limit)
                 return ResourceRequirements(
                     limits={"memory": (str(limits.value) + "Mi")},
                     requests={"memory": (str(reqests.value) + "Mi")},
                 )
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
-                reqests = increase_by + reqests
+                reqests = increase_by.to_MiB() + reqests
                 if reqests > max_resource:
                     reqests = max_resource.to_MiB()
                 if reqests > limits:
