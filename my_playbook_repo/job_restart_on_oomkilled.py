@@ -177,8 +177,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 requests = requests + increase_by
                 if requests > max_resource:
                     requests = max_resource.to_MiB()
-                if requests > limits:
-                    limits = requests
+                
 
                 
 
@@ -186,8 +185,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 requests = increase_by.to_MiB() + requests
                 if requests > max_resource:
                     requests = max_resource.to_MiB()
-                if requests > limits:
-                    limits = requests
+                
                 
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
@@ -195,8 +193,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 requests = bitmath.MiB(int(requests))
                 if requests > max_resource:
                     requests = max_resource.to_MiB()
-                if requests > limits:
-                    limits = requests
+                
                 
 
         if requests.unit == "GiB":
@@ -205,8 +202,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 requests = bitmath.GiB(int(requests))
                 if requests > max_resource:
                     requests = max_resource.to_GiB()
-                if requests > limits:
-                    limits = requests
+                
                 
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
@@ -214,8 +210,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
 
                 if requests > max_resource:
                     requests = max_resource.to_GiB()
-                if requests > limits:
-                    limits = requests
+                
                 
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
@@ -223,8 +218,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                 requests = bitmath.GiB(int(requests))
                 if requests > max_resource:
                     requests = max_resource.to_GiB()
-                if requests > limits:
-                    limits = requests
+                
                 
         if requests.unit == "KiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
@@ -232,26 +226,24 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
 
                 if requests > max_resource:
                     requests = max_resource.to_KiB()
-                if requests > limits:
-                    limits = requests
+                
                 
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
                 requests = increase_by.to_KiB() + requests
                 if requests > max_resource:
                     requests = max_resource.to_KiB()
-                if requests > limits:
-                    limits = requests
+                
                 
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 requests = increase_by + requests
                 if requests > max_resource:
                     requests = max_resource.to_KiB()
-                if requests > limits:
-                    limits = requests
                 
-
+                
+        if requests > limits:
+            limits = requests
         formatted_request = requests.format('{value:.0f}{unit}').rstrip('B')
         formatted_limit = limits.format('{value:.0f}{unit}').rstrip('B')
         
