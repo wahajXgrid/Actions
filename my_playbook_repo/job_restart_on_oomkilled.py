@@ -175,56 +175,38 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         if requests.unit == "MiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
                 requests = requests + increase_by
-                if requests > max_resource:
-                    requests = max_resource
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
                 requests = increase_by.to_MiB() + requests
-                if requests > max_resource:
-                    requests = max_resource
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 requests = increase_by.to_MiB() + requests
                 requests = bitmath.MiB(int(requests))
-                if requests > max_resource:
-                    requests = max_resource.to_MiB()
 
         if requests.unit == "GiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
                 requests = requests + increase_by.to_GiB()
                 requests = bitmath.GiB(int(requests))
-                if requests > max_resource:
-                    requests = max_resource.to_GiB()
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
                 requests = increase_by + requests
 
-                if requests > max_resource:
-                    requests = max_resource.to_GiB()
-
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 requests = increase_by.to_GiB() + requests
                 requests = bitmath.GiB(int(requests))
-                if requests > max_resource:
-                    requests = max_resource.to_GiB()
 
         if requests.unit == "KiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
                 requests = requests + increase_by.to_KiB()
 
-                if requests > max_resource:
-                    requests = max_resource.to_KiB()
-
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
                 requests = increase_by.to_KiB() + requests
-                if requests > max_resource:
-                    requests = max_resource.to_KiB()
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 requests = increase_by + requests
-                if requests > max_resource:
-                    requests = max_resource.to_KiB()
 
+        if requests > max_resource:
+            requests = max_resource
         if requests > limits:
             limits = requests
         formatted_request = requests.format("{value:.0f}{unit}").rstrip("B")
