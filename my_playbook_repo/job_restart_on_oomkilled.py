@@ -188,10 +188,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     requests = max_resource.to_MiB()
                 if requests > limits:
                     limits = requests
-                return ResourceRequirements(
-                    limits={"memory": (str(limits.value) + "Mi")},
-                    requests={"memory": (str(requests.value) + "Mi")},
-                )
+                
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 requests = increase_by.to_MiB() + requests
@@ -200,10 +197,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     requests = max_resource.to_MiB()
                 if requests > limits:
                     limits = requests
-                return ResourceRequirements(
-                    limits={"memory": (str(limits.value) + "Mi")},
-                    requests={"memory": (str(requests.value) + "Mi")},
-                )
+                
 
         if requests.unit == "GiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
@@ -213,10 +207,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     requests = max_resource.to_GiB()
                 if requests > limits:
                     limits = requests
-                return ResourceRequirements(
-                    limits={"memory": (str(limits.value) + "Gi")},
-                    requests={"memory": (str(requests.value) + "Gi")},
-                )
+                
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
                 requests = increase_by + requests
@@ -225,10 +216,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     requests = max_resource.to_GiB()
                 if requests > limits:
                     limits = requests
-                return ResourceRequirements(
-                    limits={"memory": (str(limits.value) + "Gi")},
-                    requests={"memory": (str(requests.value) + "Gi")},
-                )
+                
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 requests = increase_by.to_GiB() + requests
@@ -237,10 +225,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     requests = max_resource.to_GiB()
                 if requests > limits:
                     limits = requests
-                return ResourceRequirements(
-                    limits={"memory": (str(limits.value) + "Gi")},
-                    requests={"memory": (str(requests.value) + "Gi")},
-                )
+                
         if requests.unit == "KiB":
             if increase_by.unit == "Mi" or increase_by.unit == "MiB":
                 requests = requests + increase_by.to_KiB()
@@ -249,10 +234,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     requests = max_resource.to_KiB()
                 if requests > limits:
                     limits = requests
-                return ResourceRequirements(
-                    limits={"memory": (str(limits.value) + "Ki")},
-                    requests={"memory": (str(requests.value) + "Ki")},
-                )
+                
 
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
                 requests = increase_by.to_KiB() + requests
@@ -260,10 +242,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     requests = max_resource.to_KiB()
                 if requests > limits:
                     limits = requests
-                return ResourceRequirements(
-                    limits={"memory": (str(limits.value) + "Ki")},
-                    requests={"memory": (str(requests.value) + "Ki")},
-                )
+                
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 requests = increase_by + requests
@@ -271,11 +250,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
                     requests = max_resource.to_KiB()
                 if requests > limits:
                     limits = requests
-                return ResourceRequirements(
-                    limits={"memory": (str(limits.value) + "Ki")},
-                    requests={"memory": (str(requests.value) + "Ki")},
-                )
                 
+
         formatted_request = requests.format('{value:.0f}{unit}').rstrip('B')
         formatted_limit = limits.format('{value:.0f}{unit}').rstrip('B')
         
