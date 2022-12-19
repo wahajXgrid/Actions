@@ -181,7 +181,7 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
             elif increase_by.unit == "Gi" or increase_by.unit == "GiB":
                 requests = increase_by.to_MiB() + requests
                 if requests > max_resource:
-                    requests = max_resource.to_MiB()
+                    requests = max_resource
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 requests = increase_by.to_MiB() + requests
