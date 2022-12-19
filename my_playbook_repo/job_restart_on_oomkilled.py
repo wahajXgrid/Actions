@@ -204,7 +204,8 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
 
             elif increase_by.unit == "Ki" or increase_by.unit == "KiB":
                 requests = increase_by + requests
-
+        
+        requests = requests + increase_by
         if requests > max_resource:
             requests = max_resource
         if requests > limits:
