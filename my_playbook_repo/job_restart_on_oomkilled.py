@@ -11,7 +11,7 @@ class IncreaseResources(ActionParams):
     :var max_resource: This variable prevent an infinite loop of job's pod crashing and getting more memory.The action won't increase the memory again when the "Max" limit reached, (eg: 1GiB).
     """
 
-    increase_by: Optional[str] = 0
+    increase_by: Optional[str] = '500Mi'
     max_resource: str
 
 
@@ -82,7 +82,7 @@ def job_restart_on_oomkilled(event: JobEvent, params: IncreaseResources):
                     )
                 )
             else:
-                print("call")
+                
                 finding.title = f"MAX REACHED"
                 finding.add_enrichment(
                     [
@@ -185,17 +185,6 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         )
 
 
-# Function to split number and string from memory[string]
-def split_num_and_str(num_str: str):
-    num = ""
-    index = None
-    for ind, char in enumerate(num_str):
-        if char.isdigit() or char is ".":
-            num = num + char
-        else:
-            index = ind
-            break
-    return num, num_str[index:]
 
 
 # Function to get the job's field
