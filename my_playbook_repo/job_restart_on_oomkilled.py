@@ -171,18 +171,11 @@ def memory_increment(resources, increase_by, max_resource, keep_the_same):
         requests = bitmath.parse_string_unsafe(resources.requests["memory"])
         limits = bitmath.parse_string_unsafe(resources.limits["memory"])
         increase_by = bitmath.parse_string_unsafe(increase_by)
-        #requests = increase_by + requests
-        requests = min((increase_by + requests) , max_resource)
-        print(requests)
-        # Restricting requests memory to exceed the max_resource given by user
-        # if requests > max_resource:
-        #     requests = max_resource
-
-        # increasing limits memory accordingly
-        limits = min(requests,limits)
-        print(limits)
-        # if requests > limits:
-        #     limits = requests
+        requests = increase_by + requests
+        if requests > max_resource:
+            requests = max_resource
+        if requests > limits:
+            limits = requests
         formatted_request = requests.format("{value:.0f}{unit}").rstrip("B")
         formatted_limit = limits.format("{value:.0f}{unit}").rstrip("B")
         return ResourceRequirements(
