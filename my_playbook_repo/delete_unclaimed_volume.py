@@ -1,7 +1,22 @@
 from robusta.api import *
 
 @action
-def delete_unclaimed_volume(event: PodEvent):
+def delete_unclaimed_volume(event: PersistentVolumeEvent):
+
+    """
+    Deletes a persistent volume
+    """
+    a = event.get_persistentvolume()
+    print (a)
+    # if not event.get_pod():
+    #     logging.info("Failed to get the pod for deletion")
+    #     return
+
+    # event.get_pod().delete()
+
+
+
+
     function_name = "delete_unclaimed_volume"
     finding = Finding(
         title=f"AD",
