@@ -16,7 +16,7 @@ def delete_persistent_volume(event: PersistentVolumeEvent):
     
     function_name = "delete_persistent_volume"
     finding = Finding(
-        title=f"Persistent volume deleted ${pv_name}",
+        title=f"{pv_name} deleted.",
         source=FindingSource.MANUAL,
         aggregation_key=function_name,
         finding_type=FindingType.REPORT,
