@@ -11,7 +11,7 @@ class IncreaseResources(ActionParams):
     :var max_resource: This variable prevent an infinite loop of job's pod crashing and getting more memory.The action won't increase the memory again when the "Max" limit reached, (eg: 1GiB).
     """
 
-    increase_by: Optional[str] = '500Mi'
+    increase_by: str
     max_resource: str
 
 
