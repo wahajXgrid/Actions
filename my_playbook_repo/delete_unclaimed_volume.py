@@ -16,7 +16,7 @@ def delete_persistent_volume(event: PersistentVolumeEvent):
     
     function_name = "delete_persistent_volume"
     finding = Finding(
-        title=f"{pv_name} deleted.",
+        title=f"*Persistent volume deleted",
         source=FindingSource.MANUAL,
         aggregation_key=function_name,
         finding_type=FindingType.REPORT,
@@ -25,7 +25,7 @@ def delete_persistent_volume(event: PersistentVolumeEvent):
     finding.add_enrichment(
         [
             MarkdownBlock(
-                f"*Persistent volume deleted"
+                f"{pv_name} deleted."
             ),
         ]
     )
