@@ -6,8 +6,10 @@ def delete_unclaimed_volume(event: PersistentVolumeEvent):
     """
     Deletes a persistent volume
     """
-    a = event.get_persistentvolume()
-    print (a)
+    if not event.get_persistentvolume():
+        logging.info("Failed to get the pod for deletion")
+        return
+    event.get_persistentvolume().delete()
     # if not event.get_pod():
     #     logging.info("Failed to get the pod for deletion")
     #     return
